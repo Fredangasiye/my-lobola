@@ -1,0 +1,171 @@
+import type { CalculatorFormData, CalculationResult } from "@shared/schema";
+
+export function calculateLobola(data: CalculatorFormData): CalculationResult {
+  let baseAmount = 30000;
+  let educationBonus = 0;
+  let careerBonus = 0;
+  let locationFactor = 0;
+
+  // Education adjustments
+  switch (data.education) {
+    case 'matric':
+      educationBonus = 5000;
+      break;
+    case 'diploma':
+      educationBonus = 10000;
+      break;
+    case 'degree':
+      educationBonus = 15000;
+      break;
+    case 'honours':
+      educationBonus = 20000;
+      break;
+    case 'masters':
+      educationBonus = 25000;
+      break;
+    case 'phd':
+      educationBonus = 30000;
+      break;
+    case 'prefer-not-say':
+      educationBonus = 10000; // Moderate estimate
+      break;
+  }
+
+  // Employment adjustments
+  switch (data.employment) {
+    case 'employed':
+      careerBonus = 10000;
+      break;
+    case 'self-employed':
+      careerBonus = 15000;
+      break;
+    case 'student':
+      careerBonus = 0;
+      break;
+    case 'unemployed':
+      careerBonus = 0;
+      break;
+    case 'retired':
+      careerBonus = 5000;
+      break;
+    case 'prefer-not-say':
+      careerBonus = 5000;
+      break;
+  }
+
+  // Location adjustments
+  switch (data.location) {
+    case 'rural':
+      locationFactor = 0;
+      break;
+    case 'township':
+      locationFactor = 5000;
+      break;
+    case 'suburb':
+      locationFactor = 10000;
+      break;
+    case 'city':
+      locationFactor = 15000;
+      break;
+    default:
+      locationFactor = 5000; // Default if not specified
+  }
+
+  // Income considerations (optional adjustment)
+  let incomeAdjustment = 0;
+  if (data.income) {
+    switch (data.income) {
+      case 'under-5000':
+        incomeAdjustment = -5000;
+        break;
+      case '5000-10000':
+        incomeAdjustment = 0;
+        break;
+      case '10000-20000':
+        incomeAdjustment = 5000;
+        break;
+      case '20000-35000':
+        incomeAdjustment = 10000;
+        break;
+      case '35000-50000':
+        incomeAdjustment = 15000;
+        break;
+      case '50000-plus':
+        incomeAdjustment = 20000;
+        break;
+    }
+  }
+
+  const totalLower = Math.max(15000, baseAmount + educationBonus + careerBonus + locationFactor + incomeAdjustment);
+  const totalUpper = totalLower + 20000;
+
+  // Cultural insights based on selected group
+  const insights = getCulturalInsights(data.culturalGroup);
+
+  return {
+    amount: `R${totalLower.toLocaleString()} - R${totalUpper.toLocaleString()}`,
+    breakdown: {
+      base: baseAmount,
+      education: educationBonus,
+      career: careerBonus,
+      location: locationFactor,
+      total: {
+        lower: totalLower,
+        upper: totalUpper,
+      },
+    },
+    insights,
+  };
+}
+
+function getCulturalInsights(culturalGroup: string) {
+  const insights = {
+    zulu: {
+      title: "Zulu Traditions",
+      description: "In Zulu culture, lobola represents respect and appreciation for the bride's family. The amount traditionally reflects the groom's ability to provide and his commitment to the union.",
+      culturalNotes: [
+        "Lobola negotiations often involve cattle, with each cow representing value and respect",
+        "The process strengthens relationships between families",
+        "Traditional ceremonies accompany lobola discussions"
+      ],
+      negotiationTips: [
+        "Approach discussions with respect and humility",
+        "Include family elders in negotiations",
+        "Consider both families' circumstances",
+        "Focus on building relationships, not just amounts"
+      ]
+    },
+    xhosa: {
+      title: "Xhosa Traditions",
+      description: "Xhosa lobola practices emphasize the importance of family unity and respect. The negotiations are seen as a way to bring two families together in harmony.",
+      culturalNotes: [
+        "Lobola is viewed as compensation for raising the bride",
+        "Traditional ceremonies mark different stages of the process",
+        "Community elders play important advisory roles"
+      ],
+      negotiationTips: [
+        "Respect traditional protocols and customs",
+        "Engage with community elders for guidance",
+        "Consider the bride's education and accomplishments",
+        "Maintain open and honest communication"
+      ]
+    },
+    default: {
+      title: "General South African Traditions",
+      description: "Across South African cultures, lobola serves as a bridge between families, showing respect for traditions while adapting to modern circumstances.",
+      culturalNotes: [
+        "Each cultural group has unique traditions and customs",
+        "Modern considerations often blend with traditional values",
+        "Education and career achievements are increasingly valued"
+      ],
+      negotiationTips: [
+        "Research your specific cultural traditions",
+        "Consult with cultural elders and advisors",
+        "Balance traditional values with modern realities",
+        "Focus on mutual respect and understanding"
+      ]
+    }
+  };
+
+  return insights[culturalGroup as keyof typeof insights] || insights.default;
+}
