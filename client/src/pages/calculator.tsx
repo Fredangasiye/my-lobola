@@ -36,8 +36,8 @@ export default function Calculator() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
-              <Heart className="h-6 w-6 text-white" />
-              <h1 className="text-2xl md:text-3xl font-bold text-white">
+              <div className="text-2xl">🇿🇦</div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">
                 My Lobola
               </h1>
               <Heart className="h-6 w-6 text-white" />
@@ -47,7 +47,7 @@ export default function Calculator() {
               onLanguageChange={(lang) => setCurrentLanguage(lang as Language)} 
             />
           </div>
-          <p className="text-center text-orange-100 text-sm md:text-base font-light">
+          <p className="text-center text-white text-sm md:text-base font-light drop-shadow-md">
             {t.appSubtitle}
           </p>
         </div>
