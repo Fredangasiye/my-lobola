@@ -27,6 +27,10 @@ export class MemStorage implements IStorage {
       familyType: insertCalculation.familyType || null,
       location: insertCalculation.location || null,
       income: insertCalculation.income || null,
+      age: insertCalculation.age || null,
+      socialStanding: insertCalculation.socialStanding || null,
+      numberOfChildren: insertCalculation.numberOfChildren || null,
+      virginityStatus: insertCalculation.virginityStatus || null,
     };
     this.calculations.set(id, calculation);
     return calculation;

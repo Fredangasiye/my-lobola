@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Users, GraduationCap, Home, Coins, Calculator } from "lucide-react";
+import { Users, GraduationCap, Home, Coins, Calculator, User, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,6 +27,10 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
       familyType: "",
       location: "",
       income: "",
+      age: "",
+      socialStanding: "",
+      numberOfChildren: "",
+      virginityStatus: "",
     },
   });
 
@@ -153,11 +157,122 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
           </div>
         </div>
 
-        {/* Family & Location */}
+        {/* Additional Bride Information */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <User className="text-warm-orange mr-3" />
+            Additional Bride Information
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="age"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bride's Age</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
+                        <SelectValue placeholder="Select age range" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="18-22">18-22 years</SelectItem>
+                      <SelectItem value="23-27">23-27 years</SelectItem>
+                      <SelectItem value="28-32">28-32 years</SelectItem>
+                      <SelectItem value="33-37">33-37 years</SelectItem>
+                      <SelectItem value="38-plus">38+ years</SelectItem>
+                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="socialStanding"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bride's Family Social Standing</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
+                        <SelectValue placeholder="Select social standing" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="working-class">Working Class</SelectItem>
+                      <SelectItem value="middle-class">Middle Class</SelectItem>
+                      <SelectItem value="upper-middle-class">Upper Middle Class</SelectItem>
+                      <SelectItem value="prominent-family">Prominent Family</SelectItem>
+                      <SelectItem value="traditional-leaders">Traditional Leaders</SelectItem>
+                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="numberOfChildren"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of Children</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
+                        <SelectValue placeholder="Select number of children" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                      <SelectItem value="one">1 child</SelectItem>
+                      <SelectItem value="two">2 children</SelectItem>
+                      <SelectItem value="three">3 children</SelectItem>
+                      <SelectItem value="four-plus">4+ children</SelectItem>
+                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="virginityStatus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Virginity Status (Optional)</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
+                        <SelectValue placeholder="Select status (optional)" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="yes">Yes</SelectItem>
+                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500 mt-1">This is optional and based on personal choice</p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Bride's Family & Location */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <Home className="text-warm-orange mr-3" />
-            Family & Location
+            Bride's Family & Location
           </h2>
           <div className="space-y-4">
             <FormField
@@ -266,7 +381,7 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
           disabled={calculateMutation.isPending}
         >
           <Calculator className="mr-2 h-4 w-4" />
-          {calculateMutation.isPending ? "Calculating..." : "Calculate Cultural Guidance"}
+          {calculateMutation.isPending ? "Calculating..." : "Calculate Lobola Price"}
         </Button>
       </form>
     </Form>

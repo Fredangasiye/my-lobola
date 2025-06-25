@@ -33,9 +33,9 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
       </div>
 
       {/* Breakdown */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         <h3 className="font-semibold text-gray-800">Calculation Breakdown:</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Base Amount:</span>
             <span className="font-medium">R{results.breakdown.base.toLocaleString()}</span>

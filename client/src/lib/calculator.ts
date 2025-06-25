@@ -96,7 +96,86 @@ export function calculateLobola(data: CalculatorFormData): CalculationResult {
     }
   }
 
-  const totalLower = Math.max(15000, baseAmount + educationBonus + careerBonus + locationFactor + incomeAdjustment);
+  // Age adjustments
+  let ageAdjustment = 0;
+  if (data.age) {
+    switch (data.age) {
+      case '18-22':
+        ageAdjustment = 5000;
+        break;
+      case '23-27':
+        ageAdjustment = 3000;
+        break;
+      case '28-32':
+        ageAdjustment = 0;
+        break;
+      case '33-37':
+        ageAdjustment = -3000;
+        break;
+      case '38-plus':
+        ageAdjustment = -5000;
+        break;
+    }
+  }
+
+  // Social standing adjustments
+  let socialStandingAdjustment = 0;
+  if (data.socialStanding) {
+    switch (data.socialStanding) {
+      case 'working-class':
+        socialStandingAdjustment = 0;
+        break;
+      case 'middle-class':
+        socialStandingAdjustment = 8000;
+        break;
+      case 'upper-middle-class':
+        socialStandingAdjustment = 15000;
+        break;
+      case 'prominent-family':
+        socialStandingAdjustment = 25000;
+        break;
+      case 'traditional-leaders':
+        socialStandingAdjustment = 35000;
+        break;
+    }
+  }
+
+  // Number of children adjustments
+  let childrenAdjustment = 0;
+  if (data.numberOfChildren) {
+    switch (data.numberOfChildren) {
+      case 'none':
+        childrenAdjustment = 5000;
+        break;
+      case 'one':
+        childrenAdjustment = -2000;
+        break;
+      case 'two':
+        childrenAdjustment = -5000;
+        break;
+      case 'three':
+        childrenAdjustment = -8000;
+        break;
+      case 'four-plus':
+        childrenAdjustment = -12000;
+        break;
+    }
+  }
+
+  // Virginity status adjustments (culturally sensitive)
+  let virginityAdjustment = 0;
+  if (data.virginityStatus) {
+    switch (data.virginityStatus) {
+      case 'yes':
+        virginityAdjustment = 8000;
+        break;
+      case 'no':
+        virginityAdjustment = 0;
+        break;
+    }
+  }
+
+  const totalLower = Math.max(15000, baseAmount + educationBonus + careerBonus + locationFactor + incomeAdjustment + ageAdjustment + socialStandingAdjustment + childrenAdjustment + virginityAdjustment);
   const totalUpper = totalLower + 20000;
 
   // Current market price for a cow in South Africa (average 2024)

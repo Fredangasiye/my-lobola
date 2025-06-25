@@ -36,11 +36,11 @@ export default function Calculator() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
-              <Heart className="h-6 w-6" />
-              <h1 className="text-2xl md:text-3xl font-bold">
-                {t.appTitle}
+              <Heart className="h-6 w-6 text-white" />
+              <h1 className="text-2xl md:text-3xl font-bold text-white">
+                My Lobola
               </h1>
-              <Heart className="h-6 w-6" />
+              <Heart className="h-6 w-6 text-white" />
             </div>
             <LanguageSelector 
               currentLanguage={currentLanguage} 

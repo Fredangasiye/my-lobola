@@ -10,6 +10,10 @@ export const calculations = pgTable("calculations", {
   familyType: text("family_type"),
   location: text("location"),
   income: text("income"),
+  age: text("age"),
+  socialStanding: text("social_standing"),
+  numberOfChildren: text("number_of_children"),
+  virginityStatus: text("virginity_status"),
   result: text("result").notNull(),
   breakdown: text("breakdown").notNull(), // JSON string
   createdAt: text("created_at").notNull(),
@@ -31,6 +35,10 @@ export const calculatorFormSchema = z.object({
   familyType: z.string().optional(),
   location: z.string().optional(),
   income: z.string().optional(),
+  age: z.string().optional(),
+  socialStanding: z.string().optional(),
+  numberOfChildren: z.string().optional(),
+  virginityStatus: z.string().optional(),
 });
 
 export type CalculatorFormData = z.infer<typeof calculatorFormSchema>;
