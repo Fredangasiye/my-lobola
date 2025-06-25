@@ -100,3 +100,10 @@
     --tw-ring-color: hsl(var(--warm-orange));
   }
 }
+
+/* Button Poppins Font */
+@layer components {
+  button, .btn, [role="button"] {
+    font-family: 'Poppins', sans-serif;
+  }
+}
