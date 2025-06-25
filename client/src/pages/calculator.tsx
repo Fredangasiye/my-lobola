@@ -5,11 +5,14 @@ import CalculatorForm from "@/components/calculator-form";
 import ResultsDisplay from "@/components/results-display";
 import CulturalInsights from "@/components/cultural-insights";
 import ShareSection from "@/components/share-section";
+import LanguageSelector from "@/components/language-selector";
+import { getTranslation, type Language } from "@/lib/translations";
 import type { CalculationResult } from "@shared/schema";
 
 export default function Calculator() {
   const [results, setResults] = useState<CalculationResult | null>(null);
   const [showResults, setShowResults] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('zu');
 
   const handleCalculationComplete = (calculationResults: CalculationResult) => {
     setResults(calculationResults);
@@ -24,20 +27,28 @@ export default function Calculator() {
     }, 100);
   };
 
+  const t = getTranslation(currentLanguage);
+
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
       <header className="bg-warm-orange text-white py-6 px-4 shadow-lg">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center space-x-3 mb-2">
-            <Heart className="h-6 w-6" />
-            <h1 className="text-2xl md:text-3xl font-bold text-center">
-              Ubuntu Lobola Guide
-            </h1>
-            <Heart className="h-6 w-6" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <Heart className="h-6 w-6" />
+              <h1 className="text-2xl md:text-3xl font-bold">
+                {t.appTitle}
+              </h1>
+              <Heart className="h-6 w-6" />
+            </div>
+            <LanguageSelector 
+              currentLanguage={currentLanguage} 
+              onLanguageChange={(lang) => setCurrentLanguage(lang as Language)} 
+            />
           </div>
           <p className="text-center text-orange-100 text-sm md:text-base font-light">
-            A respectful cultural guidance tool for South African traditions
+            {t.appSubtitle}
           </p>
         </div>
       </header>

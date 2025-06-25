@@ -47,6 +47,12 @@ export interface CalculationResult {
       upper: number;
     };
   };
+  cowEquivalent: {
+    lowerCows: number;
+    upperCows: number;
+    pricePerCow: number;
+    displayText: string;
+  };
   insights: {
     title: string;
     description: string;

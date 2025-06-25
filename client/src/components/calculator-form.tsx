@@ -62,7 +62,7 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <Users className="text-warm-orange mr-3" />
-            Cultural Heritage
+            Bride's Cultural Heritage
           </h2>
           <FormField
             control={form.control}
@@ -79,14 +79,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
                   <SelectContent>
                     <SelectItem value="zulu">Zulu</SelectItem>
                     <SelectItem value="xhosa">Xhosa</SelectItem>
+                    <SelectItem value="pedi">Pedi (Northern Sotho)</SelectItem>
                     <SelectItem value="tswana">Tswana</SelectItem>
                     <SelectItem value="sotho">Sotho</SelectItem>
-                    <SelectItem value="venda">Venda</SelectItem>
-                    <SelectItem value="tsonga">Tsonga</SelectItem>
-                    <SelectItem value="ndebele">Ndebele</SelectItem>
-                    <SelectItem value="pedi">Pedi</SelectItem>
-                    <SelectItem value="swazi">Swazi</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-gray-500">Different cultural groups have varying traditions and customs</p>
@@ -100,7 +95,7 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <GraduationCap className="text-warm-orange mr-3" />
-            Education & Career
+            Bride's Education & Career
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             <FormField
@@ -233,7 +228,7 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <Coins className="text-warm-orange mr-3" />
-            Income Information
+            Groom's Income Information
           </h2>
           <FormField
             control={form.control}
@@ -267,7 +262,7 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
         {/* Calculate Button */}
         <Button 
           type="submit" 
-          className="w-full bg-warm-orange hover:bg-orange-600 text-white font-semibold py-4 px-6 shadow-lg transition-colors duration-200"
+          className="w-full bg-orange-600 hover:bg-orange-700 border-2 border-orange-800 text-white font-semibold py-4 px-6 shadow-lg transition-colors duration-200"
           disabled={calculateMutation.isPending}
         >
           <Calculator className="mr-2 h-4 w-4" />

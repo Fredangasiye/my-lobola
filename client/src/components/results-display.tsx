@@ -1,4 +1,4 @@
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, Beef } from "lucide-react";
 import type { CalculationResult } from "@shared/schema";
 
 interface ResultsDisplayProps {
@@ -18,6 +18,18 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
         <div className="text-sm font-medium mb-2">Suggested Range</div>
         <div className="text-3xl font-bold mb-2">{results.amount}</div>
         <div className="text-sm opacity-90">Based on cultural traditions and modern considerations</div>
+      </div>
+
+      {/* Cow Equivalent */}
+      <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-lg p-6 mb-6 text-center">
+        <div className="flex items-center justify-center mb-2">
+          <Beef className="mr-2 h-5 w-5" />
+          <div className="text-sm font-medium">Traditional Cattle Equivalent</div>
+        </div>
+        <div className="text-2xl font-bold mb-2">{results.cowEquivalent.displayText}</div>
+        <div className="text-sm opacity-90">
+          Based on current market price of R{results.cowEquivalent.pricePerCow.toLocaleString()} per cow
+        </div>
       </div>
 
       {/* Breakdown */}

@@ -24,6 +24,9 @@ export class MemStorage implements IStorage {
       ...insertCalculation,
       id,
       createdAt: new Date().toISOString(),
+      familyType: insertCalculation.familyType || null,
+      location: insertCalculation.location || null,
+      income: insertCalculation.income || null,
     };
     this.calculations.set(id, calculation);
     return calculation;

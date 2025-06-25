@@ -99,6 +99,11 @@ export function calculateLobola(data: CalculatorFormData): CalculationResult {
   const totalLower = Math.max(15000, baseAmount + educationBonus + careerBonus + locationFactor + incomeAdjustment);
   const totalUpper = totalLower + 20000;
 
+  // Current market price for a cow in South Africa (average 2024)
+  const pricePerCow = 15000;
+  const lowerCows = Math.round(totalLower / pricePerCow * 10) / 10;
+  const upperCows = Math.round(totalUpper / pricePerCow * 10) / 10;
+
   // Cultural insights based on selected group
   const insights = getCulturalInsights(data.culturalGroup);
 
@@ -114,6 +119,12 @@ export function calculateLobola(data: CalculatorFormData): CalculationResult {
         upper: totalUpper,
       },
     },
+    cowEquivalent: {
+      lowerCows,
+      upperCows,
+      pricePerCow,
+      displayText: `${lowerCows} - ${upperCows} cattle`,
+    },
     insights,
   };
 }
@@ -126,7 +137,8 @@ function getCulturalInsights(culturalGroup: string) {
       culturalNotes: [
         "Lobola negotiations often involve cattle, with each cow representing value and respect",
         "The process strengthens relationships between families",
-        "Traditional ceremonies accompany lobola discussions"
+        "Traditional ceremonies accompany lobola discussions",
+        "Umabo ceremony follows the lobola negotiations"
       ],
       negotiationTips: [
         "Approach discussions with respect and humility",
@@ -141,7 +153,8 @@ function getCulturalInsights(culturalGroup: string) {
       culturalNotes: [
         "Lobola is viewed as compensation for raising the bride",
         "Traditional ceremonies mark different stages of the process",
-        "Community elders play important advisory roles"
+        "Community elders play important advisory roles",
+        "Ukuthwala and other customs may be involved"
       ],
       negotiationTips: [
         "Respect traditional protocols and customs",
@@ -150,13 +163,62 @@ function getCulturalInsights(culturalGroup: string) {
         "Maintain open and honest communication"
       ]
     },
+    pedi: {
+      title: "Pedi (Northern Sotho) Traditions",
+      description: "In Pedi culture, magadi (bride price) is an important tradition that symbolizes the union of two families and respect for the bride's lineage.",
+      culturalNotes: [
+        "Magadi traditionally involves cattle and other valuable items",
+        "The amount reflects the bride's family's status and education",
+        "Extended family participation is crucial in negotiations",
+        "Traditional ceremonies celebrate the agreement"
+      ],
+      negotiationTips: [
+        "Respect the role of family elders and traditional leaders",
+        "Consider the bride's achievements and potential",
+        "Engage in respectful dialogue with both families",
+        "Honor traditional customs while adapting to modern circumstances"
+      ]
+    },
+    tswana: {
+      title: "Tswana Traditions",
+      description: "Tswana bogadi customs emphasize mutual respect between families and the symbolic value of bringing communities together through marriage.",
+      culturalNotes: [
+        "Bogadi traditionally consists of cattle as the primary currency",
+        "The practice strengthens kinship ties between families",
+        "Community participation in negotiations is valued",
+        "Educational achievements are increasingly recognized"
+      ],
+      negotiationTips: [
+        "Involve respected community members in discussions",
+        "Show appreciation for traditional customs",
+        "Consider modern economic realities",
+        "Focus on long-term family relationships"
+      ]
+    },
+    sotho: {
+      title: "Sotho Traditions",
+      description: "Sotho bohali traditions emphasize the importance of family honor and the ceremonial aspect of bringing two families together in marriage.",
+      culturalNotes: [
+        "Bohali negotiations involve extended family members",
+        "Traditional ceremonies mark important milestones",
+        "The practice reflects family values and respect",
+        "Modern adaptations accommodate contemporary lifestyles"
+      ],
+      negotiationTips: [
+        "Respect traditional family hierarchies",
+        "Include cultural advisors in negotiations",
+        "Balance tradition with modern considerations",
+        "Emphasize mutual respect and understanding"
+      ]
+    },
     default: {
       title: "General South African Traditions",
       description: "Across South African cultures, lobola serves as a bridge between families, showing respect for traditions while adapting to modern circumstances.",
       culturalNotes: [
         "Each cultural group has unique traditions and customs",
         "Modern considerations often blend with traditional values",
-        "Education and career achievements are increasingly valued"
+        "Education and career achievements are increasingly valued",
+        "Community participation varies by cultural group"
       ],
       negotiationTips: [
         "Research your specific cultural traditions",
