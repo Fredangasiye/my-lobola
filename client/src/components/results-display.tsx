@@ -1,16 +1,19 @@
 import { TrendingUp, Beef } from "lucide-react";
 import type { CalculationResult } from "@shared/schema";
+import { getSimpleTranslation } from "@/lib/simple-translations";
 
 interface ResultsDisplayProps {
   results: CalculationResult;
 }
 
 export default function ResultsDisplay({ results }: ResultsDisplayProps) {
+  const t = getSimpleTranslation('en'); // Use English for now
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
         <TrendingUp className="text-forest-green mr-3" />
-        Cultural Guidance Results
+        {t.culturalGuidanceResults}
       </h2>
       
       {/* Main Result */}
@@ -33,7 +36,7 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
       </div>
 
       {/* Breakdown */}
-      <div className="space-y-3">
+      <div className="space-y-3 mt-4">
         <h3 className="font-semibold text-gray-800">Calculation Breakdown:</h3>
         <div className="space-y-2">
           <div className="flex justify-between p-3 bg-forest-green/10 rounded-lg">

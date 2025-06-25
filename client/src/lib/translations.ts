@@ -1,4 +1,4 @@
-export type Language = 'zu' | 'xh' | 'nso' | 'tn' | 'st';
+export type Language = 'en' | 'zu' | 'xh' | 'nso' | 'tn' | 'st';
 
 export interface Translations {
   appTitle: string;
@@ -20,6 +20,11 @@ export interface Translations {
     monthlyIncome: string;
     calculateButton: string;
     calculating: string;
+    additionalBrideInfo: string;
+    brideAge: string;
+    socialStanding: string;
+    numberOfChildren: string;
+    virginityStatus: string;
   };
   results: {
     title: string;
@@ -29,8 +34,11 @@ export interface Translations {
     basedOnMarketPrice: string;
     culturalInsights: string;
     shareResults: string;
+    calculationBreakdown: string;
+    baseAmount: string;
   };
   education: {
+    noMatric: string;
     matric: string;
     diploma: string;
     degree: string;
@@ -57,10 +65,175 @@ export interface Translations {
     suburb: string;
     city: string;
   };
+  nonBlackGuidance: {
+    title: string;
+    content: string;
+    tips: string[];
+  };
 }
 
 export const translations: Record<Language, Translations> = {
+  en: {
+    appTitle: "My Lobola",
+    appSubtitle: "Cultural guidance for respectful lobola traditions across South African communities",
+    culturalDisclaimer: {
+      title: "Cultural Respect Notice",
+      content: "This tool provides educational guidance based on cultural traditions. Always consult with family elders and cultural advisors for important decisions. Every family and situation is unique."
+    },
+    form: {
+      brideHeritage: "Bride's Cultural Heritage",
+      brideEducationCareer: "Bride's Education & Career",
+      groomIncome: "Groom's Financial Standing",
+      familyLocation: "Bride's Family & Location",
+      culturalGroup: "Cultural Group",
+      educationLevel: "Education Level",
+      employmentStatus: "Employment Status",
+      familyType: "Family Type",
+      locationType: "Location Type",
+      monthlyIncome: "Monthly Income Range",
+      calculateButton: "Calculate Lobola Price",
+      calculating: "Calculating...",
+      additionalBrideInfo: "Additional Bride Information",
+      brideAge: "Bride's Age",
+      socialStanding: "Bride's Family Social Standing",
+      numberOfChildren: "Number of Children",
+      virginityStatus: "Virginity Status (Optional)"
+    },
+    results: {
+      title: "Cultural Guidance Results",
+      suggestedRange: "Suggested Range",
+      cattleEquivalent: "Traditional Cattle Equivalent",
+      basedOnTraditions: "Based on cultural traditions and modern considerations",
+      basedOnMarketPrice: "Market price",
+      culturalInsights: "Cultural Insights",
+      shareResults: "Share Results",
+      calculationBreakdown: "Calculation Breakdown:",
+      baseAmount: "Base Amount:"
+    },
+    education: {
+      noMatric: "No Matric",
+      matric: "Matric/Grade 12",
+      diploma: "Diploma/Certificate",
+      degree: "Bachelor's Degree",
+      honours: "Honours Degree",
+      masters: "Master's Degree",
+      phd: "PhD/Doctorate",
+      preferNotSay: "Prefer not to say"
+    },
+    employment: {
+      student: "Student",
+      employed: "Employed",
+      selfEmployed: "Self-employed",
+      unemployed: "Unemployed",
+      retired: "Retired",
+      preferNotSay: "Prefer not to say"
+    },
+    family: {
+      nuclear: "Nuclear Family",
+      extended: "Extended Family"
+    },
+    location: {
+      rural: "Rural Area",
+      township: "Township",
+      suburb: "Suburb",
+      city: "City Center"
+    },
+    nonBlackGuidance: {
+      title: "Guidance for Non-Black Partners",
+      content: "If you are not of African heritage and are entering a lobola negotiation, here are important considerations:",
+      tips: [
+        "Approach with deep respect and humility for African traditions",
+        "Engage a cultural mediator or elder who can guide you through the process",
+        "Learn about the specific cultural group's traditions and customs",
+        "Understand that lobola is not a purchase but a bridge between families",
+        "Be prepared for extended family involvement in the negotiation process",
+        "Show genuine interest in learning and embracing the culture",
+        "Consider learning basic phrases in the relevant African language",
+        "Respect that some families may have higher expectations due to cultural differences"
+      ]
+    }
+  },
   zu: {
+    appTitle: "Ubuntu Lobola Umhlahlandlela",
+    appSubtitle: "Isixhobo sokuphatha ngokuhlonipha amasiko aseNingizimu Afrika",
+    culturalDisclaimer: {
+      title: "Isaziso Sokuphatha Amasiko",
+      content: "Leli thuluzi lakhiwe ukuze linikeze ukuqondisisa ngemfundo ngamasiko obuntu baseNingizimu Afrika."
+    },
+    form: {
+      brideHeritage: "Amasiko Omakoti",
+      brideEducationCareer: "Imfundo Nomsebenzi Womakoti",
+      groomIncome: "Imali Engenayo Yomkhwenyana",
+      familyLocation: "Umndeni Nendawo",
+      culturalGroup: "Iqembu lamasiko",
+      educationLevel: "Izinga lemfundo",
+      employmentStatus: "Isimo somsebenzi",
+      familyType: "Uhlobo lomndeni",
+      locationType: "Uhlobo lwendawo",
+      monthlyIncome: "Imali engenayo ngenyanga",
+      calculateButton: "Bala Ukuqondisisa Kwamasiko",
+      calculating: "Iyabala...",
+      additionalBrideInfo: "Ulwazi olwengeziwe lomakoti",
+      brideAge: "Iminyaka yomakoti",
+      socialStanding: "Isimo somndeni womakoti",
+      numberOfChildren: "Inani lezingane",
+      virginityStatus: "Isimo sobuqhokqhokazi (okukhethekayo)"
+    },
+    results: {
+      title: "Imiphumela Yokuqondisisa Kwamasiko",
+      suggestedRange: "Ububanzi Obuphakanyisiwe",
+      cattleEquivalent: "Izinkomo Zendabuko",
+      basedOnTraditions: "Ngokusekwe kumasiko endabuko nezinto zanamuhla",
+      basedOnMarketPrice: "Intengiso yamanje",
+      culturalInsights: "Ukuqonda Kwamasiko",
+      shareResults: "Yabelana Ngomiphumela",
+      calculationBreakdown: "Ukuhlukaniswa Kokubala:",
+      baseAmount: "Imali Eyisisekelo:"
+    },
+    education: {
+      noMatric: "Akukho Matric",
+      matric: "Imatrikhi",
+      diploma: "Idiploma",
+      degree: "Iziqu Zokuqala",
+      honours: "Udumo",
+      masters: "Iziqu Zobuchwepheshe",
+      phd: "PhD/Udokotela",
+      preferNotSay: "Ngingathanda ukungatsho"
+    },
+    employment: {
+      student: "Umfundi",
+      employed: "Uqashiwe",
+      selfEmployed: "Uziqashile",
+      unemployed: "Akaqashiwe",
+      retired: "Usebenzile",
+      preferNotSay: "Ngingathanda ukungatsho"
+    },
+    family: {
+      nuclear: "Umndeni Omncane",
+      extended: "Umndeni Omkhulu"
+    },
+    location: {
+      rural: "Emakhaya",
+      township: "Elokishini",
+      suburb: "Emasabhabini",
+      city: "Edolobheni"
+    },
+    nonBlackGuidance: {
+      title: "Izeluleko Zabantu Abangeyona AmAfrika",
+      content: "Uma ungeyena umAfrika futhi ungenela izingxoxo ze-lobola, lezi yizizinto ezisemqoka:",
+      tips: [
+        "Sondela ngokuhlonipha okukhulu namasiko ama-Afrika",
+        "Sebenzisa umlamuli wamasiko noma induna",
+        "Funda ngemithetho yeqembu lamasiko",
+        "Qonda ukuthi lobola ayikho ukuthenga kodwa ibhuloho phakathi kwemindeni",
+        "Zilungiselele ukuthi umndeni uzobe ubandakanyeka",
+        "Bonakalisa ukuthanda ukufunda amasiko",
+        "Cabanga ukufunda amazwi emvelo",
+        "Hlonipha ukuthi eminye imindeni ingaba nezinhloso eziphezulu"
+      ]
+    }
+  },
+  xh: {
     appTitle: "Ubuntu Lobola Umhlahlandlela",
     appSubtitle: "Isixhobo sokuphatha ngokuhlonipha amasiko aseNingizimu Afrika",
     culturalDisclaimer: {
@@ -79,7 +252,12 @@ export const translations: Record<Language, Translations> = {
       locationType: "Uhlobo lwendawo",
       monthlyIncome: "Imali engenayo ngenyanga",
       calculateButton: "Bala Ukuqondisisa Kwamasiko",
-      calculating: "Iyabala..."
+      calculating: "Iyabala...",
+      additionalBrideInfo: "Ulwazi olwengeziwe lomakoti",
+      brideAge: "Iminyaka yomakoti",
+      socialStanding: "Isimo somndeni womakoti",
+      numberOfChildren: "Inani lezingane",
+      virginityStatus: "Isimo sobuqhokqhokazi (okukhethekayo)"
     },
     results: {
       title: "Imiphumela Yokuqondisisa Kwamasiko",
@@ -88,9 +266,12 @@ export const translations: Record<Language, Translations> = {
       basedOnTraditions: "Ngokusekwe kumasiko endabuko nezinto zanamuhla",
       basedOnMarketPrice: "Ngokusekwe kwintengiso yamanje ka-R{price} ngenkomo",
       culturalInsights: "Ukuqonda Kwamasiko",
-      shareResults: "Yabelana Ngomiphumela"
+      shareResults: "Yabelana Ngomiphumela",
+      calculationBreakdown: "Ukuhlukaniswa Kokubala:",
+      baseAmount: "Imali Eyisisekelo:"
     },
     education: {
+      noMatric: "Akukho Matric",
       matric: "Imatrikhi",
       diploma: "Idiploma",
       degree: "Iziqu Zokuqala",
@@ -116,6 +297,11 @@ export const translations: Record<Language, Translations> = {
       township: "Elokishini",
       suburb: "Esuburb",
       city: "Edolobheni"
+    },
+    nonBlackGuidance: {
+      title: "Izeluleko Zabantu Abangeyona AmAfrika",
+      content: "Uma ungeyena umAfrika futhi ungenela izingxoxo ze-lobola:",
+      tips: ["Hlonipha amasiko", "Sebenzisa umlamuli", "Funda ngamasiko"]
     }
   },
   xh: {
@@ -353,5 +539,5 @@ export const translations: Record<Language, Translations> = {
 };
 
 export function getTranslation(language: Language): Translations {
-  return translations[language] || translations.zu;
+  return translations[language] || translations.en;
 }

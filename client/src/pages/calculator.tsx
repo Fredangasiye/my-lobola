@@ -6,13 +6,14 @@ import ResultsDisplay from "@/components/results-display";
 import CulturalInsights from "@/components/cultural-insights";
 import ShareSection from "@/components/share-section";
 import LanguageSelector from "@/components/language-selector";
+import NonBlackGuidance from "@/components/non-black-guidance";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { CalculationResult } from "@shared/schema";
 
 export default function Calculator() {
   const [results, setResults] = useState<CalculationResult | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState<Language>('zu');
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
 
   const handleCalculationComplete = (calculationResults: CalculationResult) => {
     setResults(calculationResults);
@@ -32,7 +33,7 @@ export default function Calculator() {
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
-      <header className="bg-warm-orange text-white py-6 px-4 shadow-lg">
+      <header className="bg-primary-green text-white py-6 px-4 shadow-lg">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -71,6 +72,9 @@ export default function Calculator() {
                 <ShareSection results={results} />
               </>
             )}
+
+            {/* Non-Black Guidance Section */}
+            <NonBlackGuidance currentLanguage={currentLanguage} />
 
             {/* Educational Content */}
             <div className="bg-white rounded-xl shadow-lg p-6">

@@ -115,6 +115,7 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                      <SelectItem value="no-matric">No Matric</SelectItem>
                       <SelectItem value="matric">Matric</SelectItem>
                       <SelectItem value="diploma">Diploma</SelectItem>
                       <SelectItem value="degree">Bachelor's Degree</SelectItem>

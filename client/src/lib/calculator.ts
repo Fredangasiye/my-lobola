@@ -8,6 +8,9 @@ export function calculateLobola(data: CalculatorFormData): CalculationResult {
 
   // Education adjustments
   switch (data.education) {
+    case 'no-matric':
+      educationBonus = 0;
+      break;
     case 'matric':
       educationBonus = 5000;
       break;

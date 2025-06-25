@@ -8,6 +8,7 @@ interface LanguageSelectorProps {
 
 export default function LanguageSelector({ currentLanguage, onLanguageChange }: LanguageSelectorProps) {
   const languages = [
+    { code: 'en', name: 'English', nativeName: 'English' },
     { code: 'zu', name: 'isiZulu', nativeName: 'isiZulu' },
     { code: 'xh', name: 'isiXhosa', nativeName: 'isiXhosa' },
     { code: 'nso', name: 'Sepedi', nativeName: 'Sepedi (Northern Sotho)' },
@@ -17,9 +18,9 @@ export default function LanguageSelector({ currentLanguage, onLanguageChange }: 
 
   return (
     <div className="flex items-center space-x-2">
-      <Languages className="h-4 w-4 text-warm-orange" />
+      <Languages className="h-4 w-4 text-black" />
       <Select value={currentLanguage} onValueChange={onLanguageChange}>
-        <SelectTrigger className="w-48 focus:ring-2 focus:ring-warm-orange focus:border-transparent">
+        <SelectTrigger className="w-48 focus:ring-2 focus:ring-green-600 focus:border-transparent text-black">
           <SelectValue placeholder="Select language" />
         </SelectTrigger>
         <SelectContent>
