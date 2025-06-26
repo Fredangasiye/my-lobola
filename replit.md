@@ -102,7 +102,12 @@ Ubuntu Lobola Guide is a culturally sensitive web application that provides educ
 ## Changelog
 
 Changelog:
-- June 25, 2025. Initial setup
+- June 26, 2025: Enhanced visual design and user experience
+  - Made cattle equivalent section prominent with golden background and bold styling
+  - Reduced spacing between results sections for better visual flow
+  - Added red asterisks to highlight all required form fields
+  - Implemented complete translation system across entire application interface
+- June 25, 2025: Initial setup
 
 ## User Preferences
 
