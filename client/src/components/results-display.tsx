@@ -37,7 +37,7 @@ export default function ResultsDisplay({ results, currentLanguage = 'en' }: Resu
       </div>
 
       {/* Breakdown */}
-      <div className="space-y-3 mt-2">
+      <div className="space-y-2 mt-1">
         <h3 className="font-semibold text-gray-800">{t.calculationBreakdown}</h3>
         <div className="space-y-2">
           <div className="flex justify-between p-3 bg-forest-green/10 rounded-lg">
@@ -57,9 +57,9 @@ export default function ResultsDisplay({ results, currentLanguage = 'en' }: Resu
               <span className="text-gray-600">{t.locationFactor}</span>
               <span className="font-medium">R{results.breakdown.location.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between col-span-full mt-2 pt-2 border-t border-gray-200">
-              <span className="text-gray-600">{t.cattleEquivalent}</span>
-              <span className="font-medium text-forest-green">{results.cowEquivalent.displayText}</span>
+            <div className="flex justify-between col-span-full mt-3 pt-3 border-t-2 border-golden-yellow bg-golden-yellow/10 rounded-lg p-3">
+              <span className="text-gray-800 font-semibold">{t.cattleEquivalent}</span>
+              <span className="font-bold text-lg text-forest-green">{results.cowEquivalent.displayText}</span>
             </div>
           </div>
         </div>

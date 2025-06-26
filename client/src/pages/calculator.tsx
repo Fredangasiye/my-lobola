@@ -64,7 +64,7 @@ export default function Calculator() {
           </div>
 
           {/* Results Section */}
-          <div className="space-y-3" id="results-section">
+          <div className="space-y-1" id="results-section">
             {showResults && results && (
               <>
                 <ResultsDisplay results={results} currentLanguage={currentLanguage} />

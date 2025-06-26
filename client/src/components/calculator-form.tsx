@@ -73,7 +73,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
             name="culturalGroup"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cultural Group</FormLabel>
+                <FormLabel className="text-gray-700 font-medium">
+                  Cultural Group <span className="text-red-500">*</span>
+                </FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
@@ -107,7 +109,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="education"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Education Level</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Education Level <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
@@ -135,7 +139,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="employment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Employment Status</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Employment Status <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
@@ -170,7 +176,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="age"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bride's Age</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Bride's Age <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
@@ -196,7 +204,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="socialStanding"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bride's Family Social Standing</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Bride's Family Social Standing <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
@@ -222,7 +232,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="numberOfChildren"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Number of Children</FormLabel>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Number of Children <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
@@ -281,7 +293,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="familyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="mb-3">Family Type</FormLabel>
+                  <FormLabel className="mb-3 text-gray-700 font-medium">
+                    Family Type <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -308,7 +322,9 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
               name="location"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="mb-3">Location Type</FormLabel>
+                  <FormLabel className="mb-3 text-gray-700 font-medium">
+                    Location Type <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
