@@ -13,9 +13,10 @@ import { calculatorFormSchema, type CalculatorFormData, type CalculationResult }
 
 interface CalculatorFormProps {
   onCalculationComplete: (results: CalculationResult) => void;
+  onCulturalGroupChange?: (culturalGroup: string) => void;
 }
 
-export default function CalculatorForm({ onCalculationComplete }: CalculatorFormProps) {
+export default function CalculatorForm({ onCalculationComplete, onCulturalGroupChange }: CalculatorFormProps) {
   const { toast } = useToast();
   
   const form = useForm<CalculatorFormData>({
@@ -76,7 +77,10 @@ export default function CalculatorForm({ onCalculationComplete }: CalculatorForm
                 <FormLabel className="text-gray-700 font-medium">
                   Cultural Group <span className="text-red-500">*</span>
                 </FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={(value) => {
+                  field.onChange(value);
+                  onCulturalGroupChange?.(value);
+                }} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
                       <SelectValue placeholder="Select your cultural group" />

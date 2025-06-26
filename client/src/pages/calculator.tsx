@@ -7,6 +7,7 @@ import CulturalInsights from "@/components/cultural-insights";
 import ShareSection from "@/components/share-section";
 import LanguageSelector from "@/components/language-selector";
 import NonBlackGuidance from "@/components/non-black-guidance";
+import UncleWisdom from "@/components/uncle-wisdom";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { CalculationResult } from "@shared/schema";
 
@@ -14,6 +15,7 @@ export default function Calculator() {
   const [results, setResults] = useState<CalculationResult | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
+  const [selectedCulturalGroup, setSelectedCulturalGroup] = useState<string>('');
 
   const handleCalculationComplete = (calculationResults: CalculationResult) => {
     setResults(calculationResults);
@@ -60,8 +62,19 @@ export default function Calculator() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Form Section */}
           <div className="space-y-6">
-            <CalculatorForm onCalculationComplete={handleCalculationComplete} />
+            <CalculatorForm 
+              onCalculationComplete={handleCalculationComplete}
+              onCulturalGroupChange={setSelectedCulturalGroup}
+            />
           </div>
+
+          {/* Uncle Wisdom Section */}
+          {selectedCulturalGroup && (
+            <UncleWisdom 
+              culturalGroup={selectedCulturalGroup}
+              currentLanguage={currentLanguage}
+            />
+          )}
 
           {/* Results Section */}
           <div className="space-y-1" id="results-section">
