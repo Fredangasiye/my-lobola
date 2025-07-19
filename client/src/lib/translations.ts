@@ -233,7 +233,7 @@ export const translations: Record<Language, Translations> = {
       ]
     }
   },
-  xh: {
+  zu: {
     appTitle: "Ubuntu Lobola Umhlahlandlela",
     appSubtitle: "Isixhobo sokuphatha ngokuhlonipha amasiko aseNingizimu Afrika",
     culturalDisclaimer: {
