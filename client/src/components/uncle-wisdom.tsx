@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { MessageCircle, Heart, Lightbulb, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { getSimpleTranslation, type Language } from "@/lib/simple-translations";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { getSimpleTranslation, type Language } from "../lib/simple-translations";
 
 interface UncleWisdomProps {
   culturalGroup?: string;

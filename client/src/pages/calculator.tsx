@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Heart } from "lucide-react";
-import CulturalDisclaimer from "@/components/cultural-disclaimer";
-import CalculatorForm from "@/components/calculator-form";
-import ResultsDisplay from "@/components/results-display";
-import CulturalInsights from "@/components/cultural-insights";
-import ShareSection from "@/components/share-section";
-import LanguageSelector from "@/components/language-selector";
-import NonBlackGuidance from "@/components/non-black-guidance";
-import UncleWisdom from "@/components/uncle-wisdom";
-import { getTranslation, type Language } from "@/lib/translations";
-import type { CalculationResult } from "@shared/schema";
+import CulturalDisclaimer from "../components/cultural-disclaimer";
+import CalculatorForm from "../components/calculator-form";
+import ResultsDisplay from "../components/results-display";
+import CulturalInsights from "../components/cultural-insights";
+import ShareSection from "../components/share-section";
+import LanguageSelector from "../components/language-selector";
+import NonBlackGuidance from "../components/non-black-guidance";
+import UncleWisdom from "../components/uncle-wisdom";
+import { getTranslation, type Language } from "../lib/translations";
+import type { CalculationResult } from "..shared/schema";
 
 export default function Calculator() {
   const [results, setResults] = useState<CalculationResult | null>(null);
