@@ -10,11 +10,11 @@ export default defineConfig({
   // The root of our frontend is the 'client' folder
   root: path.resolve(rootDir, 'client'),
   
-  // This is the COMPLETE "dictionary"
+  // This is the COMPLETE "dictionary" for shortcuts
   resolve: {
     alias: {
       '@': path.resolve(rootDir, 'client/src'),
-      '@shared': path.resolve(rootDir, 'shared') // <-- THIS IS THE MISSING DEFINITION
+      '@shared': path.resolve(rootDir, 'shared')
     }
   },
   
@@ -24,10 +24,15 @@ export default defineConfig({
     emptyOutDir: true,
   },
 
-  // This tells the dev server how to talk to your backend API
+  //
+  // THIS IS THE CORRECT, WORKING PROXY CONFIGURATION
+  //
   server: {
     proxy: {
-      '/api': 'http://localhost:5001'
-    }
-  }
+      '/api': {
+        target: 'http://localhost:5001', // The full address of your backend server
+        changeOrigin: true,
+      },
+    },
+  },
 })

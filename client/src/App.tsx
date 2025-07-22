@@ -1,36 +1,31 @@
+// client/src/App.tsx
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// We MUST import the pages we are using!
-import Calculator from "./pages/calculator";
+import AppLayout from "./pages/app-layout";
+import SignInPage from "./pages/sign-in";
+import SignUpPage from "./pages/sign-up";
 import NotFound from "./pages/not-found";
+import PricingPage from "./pages/pricing"; // <-- ADD THIS IMPORT
 
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Calculator} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+// Create the client for React Query
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen">
-        <main>
-          {/* The main router that shows your pages */}
-          <Router />
-        </main>
-      </div>
-      
-      {/* 
-        We will leave the Toaster and TooltipProvider disabled for now.
-        We can add them back later once the main page is working.
-      */}
+      <Switch>
+        <Route path="/" component={AppLayout} />
+        
+        {/* THIS IS THE NEW ROUTE FOR YOUR PRICING PAGE */}
+        <Route path="/pricing" component={PricingPage} />
+        
+        <Route path="/sign-in/:rest*" component={SignInPage} />
+        <Route path="/sign-up/:rest*" component={SignUpPage} />
+        <Route component={NotFound} />
+      </Switch>
     </QueryClientProvider>
   );
 }
 
-export default App; // It's good practice to add this line
+export default App;

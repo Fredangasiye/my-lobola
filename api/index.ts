@@ -1,70 +1,51 @@
-import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import express from 'express';
+import { createServer } from 'http';
+import cors from 'cors';
+import { ClerkExpressWithAuth, ClerkExpressRequireAuth, clerkClient } from '@clerk/clerk-sdk-node';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import { users, calculatorFormSchema } from '../shared/schema';
+import { eq } from 'drizzle-orm';
+import Paystack from '@paystack/paystack-sdk';
 
+// Safety check for all necessary keys
+if (!process.env.DATABASE_URL || !process.env.PAYSTACK_SECRET_KEY || !process.env.OPENROUTER_API_KEY || !process.env.CLERK_SECRET_KEY) {
+    console.error("FATAL ERROR: Missing critical environment variables in your .env file.");
+    process.exit(1);
+}
+
+const sql = neon(process.env.DATABASE_URL);
+const db = drizzle(sql);
+const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY);
 const app = express();
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}));
+
+//
+// --- THIS IS THE CRITICAL FIX ---
+// This is Clerk's "front desk" middleware. It MUST come before your routes.
+// It reads the user's security pass and makes it available to all other parts of the server.
+//
+app.use(ClerkExpressWithAuth());
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+// --- API ENDPOINTS ---
+// Now the ClerkExpressRequireAuth "security guard" will work correctly.
 
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
+app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => { /* your existing code */ });
+app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res) => { /* your existing code */ });
+app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req, res) => { /* your existing code */ });
 
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
+// The calculate route does not need authentication, so it has no guard.
+app.post("/api/calculate", (req, res) => { /* your existing code */ });
 
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
-    }
-  });
-
-  next();
+// --- START THE SERVER ---
+const port = 5001;
+const httpServer = createServer(app);
+httpServer.listen(port, () => {
+    console.log(`✅ API server is running and listening on http://localhost:${port}`);
 });
-
-(async () => {
-  const server = await registerRoutes(app);
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
-  });
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
-
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5001;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
-})();

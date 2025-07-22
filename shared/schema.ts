@@ -68,3 +68,9 @@ export interface CalculationResult {
     negotiationTips: string[];
   };
 }
+// Add this new table definition to shared/schema.ts
+
+export const users = pgTable("users", {
+  id: text("id").primaryKey(), // This will store the Clerk User ID
+  isSubscribed: boolean("is_subscribed").default(false).notNull(),
+});
