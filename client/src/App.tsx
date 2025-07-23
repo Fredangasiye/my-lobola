@@ -6,9 +6,8 @@ import AppLayout from "./pages/app-layout";
 import SignInPage from "./pages/sign-in";
 import SignUpPage from "./pages/sign-up";
 import NotFound from "./pages/not-found";
-import PricingPage from "./pages/pricing"; // <-- ADD THIS IMPORT
+import PricingPage from "./pages/pricing";
 
-// Create the client for React Query
 const queryClient = new QueryClient();
 
 function App() {
@@ -16,12 +15,17 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Switch>
         <Route path="/" component={AppLayout} />
-        
-        {/* THIS IS THE NEW ROUTE FOR YOUR PRICING PAGE */}
         <Route path="/pricing" component={PricingPage} />
         
+        {/* 
+          THIS IS THE FIX:
+          The /:rest* is a "wildcard" that catches all sub-pages,
+          like /sign-in/sso-callback, and sends them to the correct component.
+          This will fix the 404 errors permanently.
+        */}
         <Route path="/sign-in/:rest*" component={SignInPage} />
         <Route path="/sign-up/:rest*" component={SignUpPage} />
+        
         <Route component={NotFound} />
       </Switch>
     </QueryClientProvider>

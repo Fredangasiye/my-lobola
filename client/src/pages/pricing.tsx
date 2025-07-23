@@ -4,9 +4,10 @@ import { Link, useLocation } from "wouter";
 import { Button } from '@/components/ui/button';
 import { Check, ArrowLeft } from 'lucide-react';
 
-// IMPORTANT: Remember to replace these with your real Plan Codes from Paystack
-const SMALL_COW_PLAN_CODE = 'PLN_...your_small_cow_plan_code_here';
-const BIG_BULL_PLAN_CODE = 'PLN_...your_big_bull_plan_code_here';
+// IMPORTANT: You MUST replace these placeholder strings
+// with your actual Plan Codes from your Paystack Dashboard.
+const SMALL_COW_PLAN_CODE = 'PLN_cpoexced39d97th';
+const BIG_BULL_PLAN_CODE = 'PLN_lt0u0d703k5o9j3';
 
 const tiers = [
     { name: 'Free', price: 'R0', questions: '1 Question', features: ['Lobola Calculator'], buttonText: 'Return Home', isFree: true },
@@ -23,19 +24,20 @@ export default function PricingPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ planCode }),
-        // THE FIX: Add credentials: 'include' to send the user's "security pass"
         credentials: 'include',
     }).then(res => res.json()),
     onSuccess: (data) => {
-        if (data.url) {
-            window.location.href = data.url; // Redirect to Paystack
+        console.log("Received data from server:", data);
+        if (data && data.url) {
+            console.log("Redirecting to Paystack:", data.url);
+            window.location.href = data.url;
         } else {
-            console.error("Failed to get redirect URL:", data);
+            console.error("Server did not return a valid URL.", data);
             alert('Could not start payment. Please try again.');
         }
     },
     onError: (error) => {
-      console.error("Checkout mutation error:", error);
+      console.error("Checkout mutation failed:", error);
       alert('An error occurred. Please try again.');
     }
   });
