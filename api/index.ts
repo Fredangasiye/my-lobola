@@ -15,20 +15,18 @@ if (!process.env.DATABASE_URL || !process.env.PAYSTACK_SECRET_KEY || !process.en
     process.exit(1);
 }
 
-// --- INITIALIZE SERVICES ---
 const sql = neon(process.env.DATABASE_URL);
 const db = drizzle(sql);
 const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY);
 const app = express();
 
-// --- SETUP MIDDLEWARE ---
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(ClerkExpressWithAuth());
 app.use(express.json());
 
 // --- API ENDPOINTS ---
 
-// Endpoint 1: The Lobola Calculator
+// Endpoint 1: The Lobola Calculator (POST)
 app.post("/api/calculate", (req, res) => {
   try {
     const validatedData = calculatorFormSchema.parse(req.body);
@@ -47,7 +45,7 @@ app.post("/api/calculate", (req, res) => {
   }
 });
 
-// Endpoint 2: The User Subscription Status
+// Endpoint 2: The User Subscription Status (GET)
 app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => {
     try {
         const userId = req.auth.userId;
@@ -62,7 +60,7 @@ app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => {
     }
 });
 
-// Endpoint 3: The Paystack Checkout
+// Endpoint 3: The Paystack Checkout (POST)
 app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res) => {
     try {
         const { planCode } = req.body;
@@ -83,7 +81,7 @@ app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res)
     }
 });
 
-// Endpoint 4: The AI Uncle
+// Endpoint 4: The AI Uncle (POST) <-- This was the broken one
 app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req, res) => {
     try {
         const { question } = req.body;

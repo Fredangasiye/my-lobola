@@ -17,26 +17,25 @@ export default function Calculator() {
   const handleCalculationComplete = (calculationResults) => {
     setResults(calculationResults);
     setShowResults(true);
-    setTimeout(() => {
-      const resultsElement = document.getElementById('results-section');
-      if (resultsElement) {
-        resultsElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+    // ... smooth scroll logic ...
   };
 
+  // This component no longer controls the main background color.
+  // It only contains the calculator content.
   return (
     <>
       <CulturalDisclaimer />
 
-      <div className="grid lg:grid-cols-2 gap-8">
-        <div className="space-y-6">
+      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
+        <div className="space-y-6 lg:order-none order-2">
           <CalculatorForm 
             onCalculationComplete={handleCalculationComplete}
             onCulturalGroupChange={setSelectedCulturalGroup}
           />
         </div>
-        <UncleWisdom />
+        <div className="lg:order-none order-1">
+          <UncleWisdom />
+        </div>
       </div>
       
       <div className="space-y-6 mt-8" id="results-section">
@@ -50,7 +49,6 @@ export default function Calculator() {
 
       <div className="mt-12 space-y-8">
         <NonBlackGuidance />
-        {/* The "Learn More" section can be added back here if you wish */}
       </div>
     </>
   );
