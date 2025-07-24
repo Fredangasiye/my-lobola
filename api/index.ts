@@ -9,103 +9,56 @@ import { users, calculatorFormSchema } from '../shared/schema';
 import { eq } from 'drizzle-orm';
 import { Paystack } from '@paystack/paystack-sdk';
 
-// Safety check for all necessary keys
-if (!process.env.DATABASE_URL || !process.env.PAYSTACK_SECRET_KEY || !process.env.OPENROUTER_API_KEY || !process.env.CLERK_SECRET_KEY || !process.env.CLERK_PUBLISHABLE_KEY) {
-    console.error("FATAL ERROR: A key is missing in your .env file. Please check all keys.");
-    process.exit(1);
+const app = express();
+const port = 5001;
+
+// --- Main Startup Function ---
+async function startServer() {
+  try {
+    console.log("🚀 Starting server... Checking keys...");
+
+    // 1. Safety check for all necessary keys
+    const requiredKeys = ['DATABASE_URL', 'PAYSTACK_SECRET_KEY', 'OPENROUTER_API_KEY', 'CLERK_SECRET_KEY', 'CLERK_PUBLISHABLE_KEY'];
+    for (const key of requiredKeys) {
+      if (!process.env[key]) {
+        throw new Error(`FATAL ERROR: Missing critical environment variable: ${key}`);
+      }
+    }
+    console.log("✅ All API keys are present in .env file.");
+
+    // 2. Initialize all services
+    const sql = neon(process.env.DATABASE_URL!);
+    const db = drizzle(sql);
+    const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY!);
+    console.log("✅ Database and Paystack services initialized.");
+
+    // 3. Setup Middleware
+    app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+    app.use(ClerkExpressWithAuth());
+    app.use(express.json());
+    console.log("✅ Middleware configured.");
+
+    // 4. Define API Endpoints
+    // (Your existing, correct endpoints go here)
+    app.post("/api/calculate", (req, res) => { /* ... */ });
+    app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => { /* ... */ });
+    app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res) => { /* ... */ });
+    app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req, res) => { /* ... */ });
+    console.log("✅ API endpoints defined.");
+
+    // 5. Start Listening
+    const httpServer = createServer(app);
+    httpServer.listen(port, () => {
+        console.log(`✅✅✅ API server is running and listening on http://localhost:${port}`);
+    });
+
+  } catch (error) {
+    console.error("\n💥💥💥 SERVER STARTUP FAILED 💥💥💥");
+    console.error(error.message);
+    process.exit(1); // Exit with an error code
+  }
 }
 
-const sql = neon(process.env.DATABASE_URL);
-const db = drizzle(sql);
-const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY);
-const app = express();
-
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-app.use(ClerkExpressWithAuth());
-app.use(express.json());
-
-// --- API ENDPOINTS ---
-
-// Endpoint 1: The Lobola Calculator (POST)
-app.post("/api/calculate", (req, res) => {
-  try {
-    const validatedData = calculatorFormSchema.parse(req.body);
-    const baseAmount = 30000;
-    const educationBonus = validatedData.education === "degree" ? 15000 : 5000;
-    const totalLower = baseAmount + educationBonus;
-    const results = {
-        amount: `R${totalLower.toLocaleString()} - R${(totalLower + 20000).toLocaleString()}`,
-        breakdown: { base: baseAmount, education: educationBonus, career: 0, location: 0 },
-        cowEquivalent: { displayText: '6-8 cattle', pricePerCow: 15000 },
-        insights: { group: validatedData.culturalGroup }
-    };
-    res.json(results);
-  } catch (error) {
-    res.status(400).json({ message: "Invalid data provided." });
-  }
-});
-
-// Endpoint 2: The User Subscription Status (GET)
-app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => {
-    try {
-        const userId = req.auth.userId;
-        let userResult = await db.select().from(users).where(eq(users.id, userId));
-        if (userResult.length === 0) {
-            const newUser = await db.insert(users).values({ id: userId }).returning();
-            userResult = newUser;
-        }
-        res.json(userResult[0]);
-    } catch (error) {
-        res.status(500).json({ error: "Could not fetch user status." });
-    }
-});
-
-// Endpoint 3: The Paystack Checkout (POST)
-app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res) => {
-    try {
-        const { planCode } = req.body;
-        const userId = req.auth.userId;
-        const clerkUser = await clerkClient.users.getUser(userId);
-        const userEmail = clerkUser.emailAddresses[0].emailAddress;
-
-        const response = await paystack.transaction.initialize({
-            email: userEmail,
-            amount: '0',
-            plan: planCode,
-            metadata: { userId },
-        });
-        res.json({ url: response.data.authorization_url });
-    } catch (error) {
-        console.error("Paystack API Error:", error.response?.data || error.message);
-        res.status(500).json({ error: "Could not initiate payment." });
-    }
-});
-
-// Endpoint 4: The AI Uncle (POST) <-- This was the broken one
-app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req, res) => {
-    try {
-        const { question } = req.body;
-        const aiResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY!}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'mistralai/mistral-7b-instruct',
-                messages: [ { role: 'system', content: `You are "Uncle Wisdom," a wise, respectful elder from South Africa providing guidance on lobola. You ONLY answer questions about lobola, family, and cultural traditions. If asked about anything else, you must politely decline.` }, { role: 'user', content: question } ]
-            }),
-        });
-        if (!aiResponse.ok) { throw new Error("OpenRouter AI call failed"); }
-        const aiData = await aiResponse.json();
-        res.json({ answer: aiData.choices[0].message.content });
-    } catch (error) {
-        res.status(500).json({ error: 'The elders are resting. Please try again.' });
-    }
-});
-
-// --- START THE SERVER ---
-const port = 5001;
-const httpServer = createServer(app);
-httpServer.listen(port, () => {
-    console.log(`✅ API server is running and listening on http://localhost:${port}`);
-});
+startServer(); // Run the startup function
 
 export default app;

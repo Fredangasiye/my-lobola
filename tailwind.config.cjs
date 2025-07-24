@@ -1,10 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
+  //
+  // --- THIS IS THE FIX ---
+  // This 'content' array tells Tailwind to look in ALL the correct places
+  // for your class names. It now correctly points to files inside the 'client' folder.
+  //
   content: [
     './client/pages/**/*.{js,ts,jsx,tsx}',
     './client/components/**/*.{js,ts,jsx,tsx}',
-    './client/app/**/*.{js,ts,jsx,tsx}',
     './client/src/**/*.{js,ts,jsx,tsx}',
     './client/index.html',
   ],

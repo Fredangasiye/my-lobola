@@ -63,6 +63,7 @@ export default function PricingPage() {
             </p>
         </div>
 
+        <div className="bg-card text-card-foreground rounded-xl shadow-lg p-8">
         <div className="grid md:grid-cols-3 gap-8">
             {tiers.map(tier => (
                 <div key={tier.name} className={`border rounded-lg p-6 flex flex-col ${tier.name === 'Big Bull' ? 'border-primary shadow-lg' : ''}`}>
