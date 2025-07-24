@@ -4,10 +4,9 @@ import { Link, useLocation } from "wouter";
 import { Button } from '@/components/ui/button';
 import { Check, ArrowLeft } from 'lucide-react';
 
-// IMPORTANT: You MUST replace these placeholder strings
-// with your actual Plan Codes from your Paystack Dashboard.
-const SMALL_COW_PLAN_CODE = 'PLN_cpoexced39d97th';
-const BIG_BULL_PLAN_CODE = 'PLN_lt0u0d703k5o9j3';
+// IMPORTANT: Make sure you have replaced these with your real Plan Codes
+const SMALL_COW_PLAN_CODE = 'PLN_...your_small_cow_plan_code_here';
+const BIG_BULL_PLAN_CODE = 'PLN_...your_big_bull_plan_code_here';
 
 const tiers = [
     { name: 'Free', price: 'R0', questions: '1 Question', features: ['Lobola Calculator'], buttonText: 'Return Home', isFree: true },
@@ -27,17 +26,13 @@ export default function PricingPage() {
         credentials: 'include',
     }).then(res => res.json()),
     onSuccess: (data) => {
-        console.log("Received data from server:", data);
-        if (data && data.url) {
-            console.log("Redirecting to Paystack:", data.url);
+        if (data.url) {
             window.location.href = data.url;
         } else {
-            console.error("Server did not return a valid URL.", data);
             alert('Could not start payment. Please try again.');
         }
     },
-    onError: (error) => {
-      console.error("Checkout mutation failed:", error);
+    onError: () => {
       alert('An error occurred. Please try again.');
     }
   });
@@ -64,36 +59,38 @@ export default function PricingPage() {
         </div>
 
         <div className="bg-card text-card-foreground rounded-xl shadow-lg p-8">
-        <div className="grid md:grid-cols-3 gap-8">
-            {tiers.map(tier => (
-                <div key={tier.name} className={`border rounded-lg p-6 flex flex-col ${tier.name === 'Big Bull' ? 'border-primary shadow-lg' : ''}`}>
-                    <h2 className="text-2xl font-semibold">{tier.name}</h2>
-                    <p className="text-3xl font-bold mt-2">{tier.price}<span className="text-sm font-normal text-muted-foreground">/month</span></p>
-                    <p className="text-muted-foreground mt-1">{tier.questions}</p>
-                    <ul className="space-y-2 mt-6 mb-8 flex-grow">
-                        {tier.features.map(feature => ( <li key={feature} className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> {feature}</li> ))}
-                    </ul>
-                    {tier.isFree ? (
-                        <Link href="/"><Button variant="outline" className="w-full">Return Home</Button></Link>
-                    ) : (
-                        <Button 
-                          onClick={() => {
-                            if (!isSignedIn) {
-                              navigate('/sign-in');
-                              return;
-                            }
-                            checkoutMutation.mutate(tier.planCode!)
-                          }} 
-                          disabled={checkoutMutation.isPending} 
-                          className="w-full"
-                          variant={tier.name === 'Big Bull' ? 'default' : 'outline'}
-                        >
-                            {checkoutMutation.isPending ? 'Redirecting...' : tier.buttonText}
-                        </Button>
-                    )}
-                </div>
-            ))}
+            <div className="grid md:grid-cols-3 gap-8">
+                {tiers.map(tier => (
+                    <div key={tier.name} className={`border rounded-lg p-6 flex flex-col ${tier.name === 'Big Bull' ? 'border-primary shadow-lg' : ''}`}>
+                        <h2 className="text-2xl font-semibold">{tier.name}</h2>
+                        <p className="text-3xl font-bold mt-2">{tier.price}<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                        <p className="text-muted-foreground mt-1">{tier.questions}</p>
+                        <ul className="space-y-2 mt-6 mb-8 flex-grow">
+                            {tier.features.map(feature => ( <li key={feature} className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> {feature}</li> ))}
+                        </ul>
+                        {tier.isFree ? (
+                            <Link href="/"><Button variant="outline" className="w-full">Return Home</Button></Link>
+                        ) : (
+                            <Button 
+                              onClick={() => {
+                                if (!isSignedIn) {
+                                  navigate('/sign-in');
+                                  return;
+                                }
+                                checkoutMutation.mutate(tier.planCode!)
+                              }} 
+                              disabled={checkoutMutation.isPending} 
+                              className="w-full"
+                              variant={tier.name === 'Big Bull' ? 'default' : 'outline'}
+                            >
+                                {checkoutMutation.isPending ? 'Redirecting...' : tier.buttonText}
+                            </Button>
+                        )}
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
+        
+    </div> // This was the main closing div that was likely mismatched
   );
 }
