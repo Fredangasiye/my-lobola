@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { SignInButton, SignUpButton } from "@clerk/clerk-react"; // Import Clerk's buttons
 import { Heart } from "lucide-react";
 
 export default function WelcomePage() {
@@ -7,9 +7,7 @@ export default function WelcomePage() {
       <div className="max-w-2xl">
         <div className="flex items-center justify-center space-x-3 mb-4">
           <div className="text-4xl">🇿🇦</div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
-            My Lobola
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800">My Lobola</h1>
           <Heart className="h-10 w-10 text-red-500" />
         </div>
         <p className="text-lg text-gray-600 mb-8">
@@ -22,16 +20,19 @@ export default function WelcomePage() {
             To access the calculator and AI-powered guidance, please sign in or create a free account. It's quick, easy, and only happens once.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/sign-in">
-              <a className="bg-green-700 text-white font-semibold py-3 px-8 rounded-lg w-full sm:w-auto hover:bg-green-800 transition-colors">
+            {/* 
+              THIS IS THE FIX: We are now using Clerk's special buttons.
+            */}
+            <SignInButton mode="modal">
+              <button className="bg-green-700 text-white font-semibold py-3 px-8 rounded-lg w-full sm:w-auto hover:bg-green-800 transition-colors">
                 Sign In
-              </a>
-            </Link>
-            <Link href="/sign-up">
-              <a className="bg-gray-200 text-gray-800 font-semibold py-3 px-8 rounded-lg w-full sm:w-auto hover:bg-gray-300 transition-colors">
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+               <button className="bg-gray-200 text-gray-800 font-semibold py-3 px-8 rounded-lg w-full sm:w-auto hover:bg-gray-300 transition-colors">
                 Sign Up
-              </a>
-            </Link>
+              </button>
+            </SignUpButton>
           </div>
         </div>
       </div>
