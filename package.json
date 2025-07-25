@@ -4,19 +4,13 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "dev": "concurrently --kill-others \"npm:dev:api\" \"npm:dev:client\"",
     "dev:client": "dotenv -e .env -- vite",
-    "dev:server": "npm-watch build:server",
-    "build:server": "tsx api/index.ts",
+    "dev:api": "nodemon",
     "build": "vite build && esbuild api/index.ts --platform=node --packages=external --bundle --format=esm --outfile=api/index.js",
     "start": "NODE_ENV=production node api/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push --config=drizzle.config.ts"
-  },
-  "watch": {
-    "build:server": {
-      "patterns": [ "api" ], "extensions": "ts", "quiet": false
-    }
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.2.8",
@@ -42,11 +36,9 @@
     "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
     "lucide-react": "^0.309.0",
-    "npm-watch": "^0.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
-    "stripe": "^16.2.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "wouter": "^3.3.0",
@@ -61,6 +53,7 @@
     "autoprefixer": "^10.4.19",
     "drizzle-kit": "^0.22.8",
     "esbuild": "^0.21.5",
+    "nodemon": "^3.1.4",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.16.2",
