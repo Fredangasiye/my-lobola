@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { calculatorFormSchema, type CalculatorFormData, type CalculationResult } from "@shared/schema";
+import { calculatorFormSchema, type CalculatorFormData, type CalculationResult } from "api/shared/schema";
 
 interface CalculatorFormProps {
   onCalculationComplete: (results: CalculationResult) => void;
