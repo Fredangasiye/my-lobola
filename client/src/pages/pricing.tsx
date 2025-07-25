@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Check, ArrowLeft } from 'lucide-react';
 
 // IMPORTANT: Make sure you have replaced these with your real Plan Codes
-const SMALL_COW_PLAN_CODE = 'PLN_...your_small_cow_plan_code_here';
-const BIG_BULL_PLAN_CODE = 'PLN_...your_big_bull_plan_code_here';
+const SMALL_COW_PLAN_CODE = 'PLN_cpoexced39d97th';
+const BIG_BULL_PLAN_CODE = 'PLN_lt0u0d703k5o9j3';
 
 const tiers = [
     { name: 'Free', price: 'R0', questions: '1 Question', features: ['Lobola Calculator'], buttonText: 'Return Home', isFree: true },

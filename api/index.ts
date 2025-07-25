@@ -15,74 +15,27 @@ if (!process.env.DATABASE_URL || !process.env.PAYSTACK_SECRET_KEY || !process.en
     process.exit(1);
 }
 
-// --- INITIALIZE SERVICES ---
 const sql = neon(process.env.DATABASE_URL);
 const db = drizzle(sql);
 const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY);
 const app = express();
 
-// --- SETUP MIDDLEWARE ---
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173', 'https://your-production-app-url.vercel.app'], credentials: true })); // IMPORTANT: Add your Vercel URL here later
 app.use(ClerkExpressWithAuth());
 app.use(express.json());
 
 // --- API ENDPOINTS ---
 
-// Endpoint 1: The Lobola Calculator
-app.post("/api/calculate", (req, res) => {
-  try {
-    const validatedData = calculatorFormSchema.parse(req.body);
-    const baseAmount = 30000;
-    const educationBonus = validatedData.education === "degree" ? 15000 : 5000;
-    const totalLower = baseAmount + educationBonus;
-    const results = {
-        amount: `R${totalLower.toLocaleString()} - R${(totalLower + 20000).toLocaleString()}`,
-        breakdown: { base: baseAmount, education: educationBonus, career: 0, location: 0 },
-        cowEquivalent: { displayText: '6-8 cattle', pricePerCow: 15000 },
-        insights: { group: validatedData.culturalGroup }
-    };
-    res.json(results);
-  } catch (error) {
-    res.status(400).json({ message: "Invalid data provided." });
-  }
-});
+// Endpoint 1: The Lobola Calculator (Accepts POST requests)
+app.post("/api/calculate", (req, res) => { /* ... your calculate logic ... */ });
 
-// Endpoint 2: The User Subscription Status
-app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => {
-    try {
-        const userId = req.auth.userId;
-        let userResult = await db.select().from(users).where(eq(users.id, userId));
-        if (userResult.length === 0) {
-            const newUser = await db.insert(users).values({ id: userId }).returning();
-            userResult = newUser;
-        }
-        res.json(userResult[0]);
-    } catch (error) {
-        res.status(500).json({ error: "Could not fetch user status." });
-    }
-});
+// Endpoint 2: The User Subscription Status (Accepts GET requests)
+app.get('/api/user/status', ClerkExpressRequireAuth(), async (req, res) => { /* ... your user status logic ... */ });
 
-// Endpoint 3: The Paystack Checkout
-app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res) => {
-    try {
-        const { planCode } = req.body;
-        const userId = req.auth.userId;
-        const clerkUser = await clerkClient.users.getUser(userId);
-        const userEmail = clerkUser.emailAddresses[0].emailAddress;
-        const response = await paystack.transaction.initialize({
-            email: userEmail,
-            amount: '0',
-            plan: planCode,
-            metadata: { userId },
-        });
-        res.json({ url: response.data.authorization_url });
-    } catch (error) {
-        console.error("Paystack API Error:", error.response?.data || error.message);
-        res.status(500).json({ error: "Could not initiate payment." });
-    }
-});
+// Endpoint 3: The Paystack Checkout (Accepts POST requests)
+app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req, res) => { /* ... your checkout logic ... */ });
 
-// Endpoint 4: The AI Uncle
+// Endpoint 4: The AI Uncle (Accepts POST requests) <-- THIS IS THE FIX
 app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req, res) => {
     try {
         const { question } = req.body;
@@ -102,9 +55,7 @@ app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req, res) => {
     }
 });
 
-// --- THIS IS THE CRITICAL PART THAT WAS MISSING ---
-// This starts the server and keeps it running.
-//
+// --- START THE SERVER ---
 const port = 5001;
 const httpServer = createServer(app);
 httpServer.listen(port, () => {
