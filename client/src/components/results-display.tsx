@@ -1,5 +1,5 @@
 import { TrendingUp, Cow } from "lucide-react";
-import type { CalculationResult } from "api/shared/schema";
+import type { CalculationResult } from "shared/schema";
 import { getSimpleTranslation, type Language } from "../lib/simple-translations";
 import CulturalWisdom from "./cultural-wisdom"; // The new component
 

@@ -1,4 +1,4 @@
-import { calculations, type Calculation, type InsertCalculation } from "@shared/schema";
+import { calculations, type Calculation, type InsertCalculation } from "shared/schema";
 
 export interface IStorage {
   createCalculation(calculation: InsertCalculation): Promise<Calculation>;

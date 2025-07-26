@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Share2, MessageCircle, Link } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import type { CalculationResult } from "api/shared/schema";
+import type { CalculationResult } from "shared/schema";
 
 interface ShareSectionProps {
   results: CalculationResult;

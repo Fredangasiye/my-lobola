@@ -5,7 +5,7 @@ import cors from 'cors';
 import { ClerkExpressWithAuth, ClerkExpressRequireAuth, clerkClient } from '@clerk/clerk-sdk-node';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { users, calculatorFormSchema } from './shared/schema';
+import { users, calculatorFormSchema } from '../shared/schema';
 import { eq } from 'drizzle-orm';
 import { Paystack } from '@paystack/paystack-sdk';
 

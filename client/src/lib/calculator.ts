@@ -1,4 +1,4 @@
-import type { CalculatorFormData, CalculationResult } from "api/shared/schema";
+import type { CalculatorFormData, CalculationResult } from "shared/schema";
 
 export function calculateLobola(data: CalculatorFormData): CalculationResult {
   let baseAmount = 30000;
