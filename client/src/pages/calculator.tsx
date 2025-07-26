@@ -1,12 +1,12 @@
-// client/src/pages/calculator.tsx
 import { useState } from "react";
 import CulturalDisclaimer from "../components/cultural-disclaimer";
 import CalculatorForm from "../components/calculator-form";
 import ResultsDisplay from "../components/results-display";
 import ShareSection from "../components/share-section";
 import UncleWisdom from "../components/uncle-wisdom";
+import { Toaster } from "@/components/ui/toaster"; // Import the toaster for error messages
 
-// Simple placeholder for now
+// A simple placeholder for now
 function NonBlackGuidance() { return null; }
 
 export default function Calculator() {
@@ -17,11 +17,14 @@ export default function Calculator() {
   const handleCalculationComplete = (calculationResults) => {
     setResults(calculationResults);
     setShowResults(true);
-    // ... smooth scroll logic ...
+    setTimeout(() => {
+      const resultsElement = document.getElementById('results-section');
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
-  // This component no longer controls the main background color.
-  // It only contains the calculator content.
   return (
     <>
       <CulturalDisclaimer />
@@ -50,6 +53,9 @@ export default function Calculator() {
       <div className="mt-12 space-y-8">
         <NonBlackGuidance />
       </div>
+      
+      {/* Add the Toaster component for notifications */}
+      <Toaster />
     </>
   );
 }

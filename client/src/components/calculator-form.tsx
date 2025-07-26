@@ -3,26 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { calculatorFormSchema, type CalculationResult } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-//
-// --- THIS IS THE FIX ---
-// This import line was completely missing. It is the root cause of the crash.
-//
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
 const culturalGroups = ["zulu", "xhosa", "pedi", "tswana", "sotho"];
@@ -51,16 +34,24 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
         if (!res.ok) throw new Error("Calculation failed");
         return res.json();
       }),
-    onSuccess: (data) => { onCalculationComplete(data); },
+    onSuccess: (data) => {
+      onCalculationComplete(data);
+    },
     onError: () => {
-      toast({ title: "Error", description: "Could not complete the calculation. Please try again.", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Could not complete the calculation. Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
-  const onSubmit = (data: any) => { mutation.mutate(data); };
+  const onSubmit = (data: any) => {
+    mutation.mutate(data);
+  };
 
   return (
-    <Card className="bg-card text-card-foreground p-6 shadow-lg rounded-lg">
+    <Card className="bg-card text-card-foreground shadow-lg rounded-lg">
         <CardHeader>
             <CardTitle className="text-2xl font-bold text-center">Lobola Calculator</CardTitle>
         </CardHeader>
