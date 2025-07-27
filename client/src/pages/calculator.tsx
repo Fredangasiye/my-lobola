@@ -21,11 +21,6 @@ export default function Calculator() {
     }, 100);
   };
 
-  //
-  // --- THIS IS THE FIX ---
-  // The entire component is now wrapped in a single <div> instead of a Fragment (<>).
-  // This satisfies the "single child" requirement for the <SignedIn> component.
-  //
   return (
     <div>
       <CulturalDisclaimer />
