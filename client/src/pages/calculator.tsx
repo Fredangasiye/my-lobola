@@ -1,10 +1,10 @@
 import { useState } from "react";
-import CulturalDisclaimer from "../components/cultural-disclaimer";
-import CalculatorForm from "../components/calculator-form";
-import ResultsDisplay from "../components/results-display";
-import ShareSection from "../components/share-section";
-import UncleWisdom from "../components/uncle-wisdom";
-import { Toaster } from "@/components/ui/toaster"; // Required for error/success messages
+import CulturalDisclaimer from "@/components/cultural-disclaimer";
+import CalculatorForm from "@/components/calculator-form";
+import ResultsDisplay from "@/components/results-display";
+import ShareSection from "@/components/share-section";
+import UncleWisdom from "@/components/uncle-wisdom";
+import { Toaster } from "@/components/ui/toaster";
 
 function NonBlackGuidance() { return null; }
 
@@ -21,8 +21,13 @@ export default function Calculator() {
     }, 100);
   };
 
+  //
+  // --- THIS IS THE FIX ---
+  // The entire component is now wrapped in a single <div> instead of a Fragment (<>).
+  // This satisfies the "single child" requirement for the <SignedIn> component.
+  //
   return (
-    <>
+    <div>
       <CulturalDisclaimer />
       <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
         <div className="space-y-6 lg:order-none order-2">
@@ -47,6 +52,6 @@ export default function Calculator() {
         <NonBlackGuidance />
       </div>
       <Toaster />
-    </>
+    </div>
   );
 }
