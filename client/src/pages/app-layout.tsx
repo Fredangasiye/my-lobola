@@ -4,12 +4,17 @@ import WelcomePage from "./welcome";
 import { Heart } from "lucide-react";
 
 export default function AppLayout() {
+  // This hook safely tells us if Clerk is done loading and if the user is signed in.
   const { isLoaded, isSignedIn } = useUser();
 
   // THIS IS THE FIX: While Clerk is initializing, we show a simple loading state.
   // This prevents any rendering crashes.
   if (!isLoaded) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-cream">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
@@ -21,6 +26,7 @@ export default function AppLayout() {
             <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">My Lobola</h1>
           </div>
           <div className="flex items-center gap-4">
+            {/* We use a simple, direct check for the button */}
             {isSignedIn ? (
               <UserButton afterSignOutUrl="/"/>
             ) : (
