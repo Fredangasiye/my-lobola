@@ -4,9 +4,8 @@ import CalculatorForm from "../components/calculator-form";
 import ResultsDisplay from "../components/results-display";
 import ShareSection from "../components/share-section";
 import UncleWisdom from "../components/uncle-wisdom";
-import { Toaster } from "@/components/ui/toaster"; // Import the toaster for error messages
+import { Toaster } from "@/components/ui/toaster"; // Required for error/success messages
 
-// A simple placeholder for now
 function NonBlackGuidance() { return null; }
 
 export default function Calculator() {
@@ -14,14 +13,11 @@ export default function Calculator() {
   const [showResults, setShowResults] = useState(false);
   const [selectedCulturalGroup, setSelectedCulturalGroup] = useState('');
 
-  const handleCalculationComplete = (calculationResults) => {
+  const handleCalculationComplete = (calculationResults: any) => {
     setResults(calculationResults);
     setShowResults(true);
     setTimeout(() => {
-      const resultsElement = document.getElementById('results-section');
-      if (resultsElement) {
-        resultsElement.scrollIntoView({ behavior: 'smooth' });
-      }
+      document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
 
