@@ -7,7 +7,7 @@
     "dev": "concurrently --kill-others \"npm:dev:api\" \"npm:dev:client\"",
     "dev:client": "dotenv -e .env -- vite",
     "dev:api": "nodemon",
-    "build": "vite build && esbuild api/index.ts --platform=node --bundle --format=esm --outfile=api/index.js",
+    "build": "vite build && esbuild api/index.ts --platform=node --bundle --format=esm --outfile=dist/api/index.js",
     "start": "NODE_ENV=production node api/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push --config=drizzle.config.ts"
@@ -63,7 +63,6 @@
     "input-otp": "^1.2.4",
     "lucide-react": "^0.309.0",
     "react": "^18.3.1",
-    "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-resizable-panels": "^2.0.19",
