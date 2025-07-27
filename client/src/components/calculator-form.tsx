@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
+
 const culturalGroups = ["zulu", "xhosa", "pedi", "tswana", "sotho"];
 const educationLevels = ["no-matric", "matric", "diploma", "degree", "honours", "masters", "phd"];
 const employmentOptions = ["employed", "self-employed", "student", "unemployed"];

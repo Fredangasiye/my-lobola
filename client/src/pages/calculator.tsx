@@ -28,7 +28,6 @@ export default function Calculator() {
   return (
     <>
       <CulturalDisclaimer />
-
       <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
         <div className="space-y-6 lg:order-none order-2">
           <CalculatorForm 
@@ -40,7 +39,6 @@ export default function Calculator() {
           <UncleWisdom />
         </div>
       </div>
-      
       <div className="space-y-6 mt-8" id="results-section">
         {showResults && results && (
           <>
@@ -49,12 +47,9 @@ export default function Calculator() {
           </>
         )}
       </div>
-
       <div className="mt-12 space-y-8">
         <NonBlackGuidance />
       </div>
-      
-      {/* Add the Toaster component for notifications */}
       <Toaster />
     </>
   );
