@@ -6,7 +6,6 @@ import { Heart } from "lucide-react";
 export default function AppLayout() {
   const { isLoaded, isSignedIn } = useUser();
 
-  // This is the critical fix: It prevents rendering until Clerk is ready.
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cream">
@@ -36,7 +35,6 @@ export default function AppLayout() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* This simple, crash-proof check replaces the fragile <SignedIn>/<SignedOut> components */}
         {isSignedIn ? <Calculator /> : <WelcomePage />}
       </main>
       
