@@ -1,4 +1,3 @@
-// client/src/pages/app-layout.tsx
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Link } from "wouter";
 import Calculator from "./calculator";
@@ -6,7 +5,6 @@ import WelcomePage from "./welcome";
 import { Heart } from "lucide-react";
 
 export default function AppLayout() {
-  // This is the Supabase way of asking: "Is a user logged in?"
   const session = useSession();
   const supabase = useSupabaseClient();
 
@@ -19,10 +17,6 @@ export default function AppLayout() {
             <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">My Lobola</h1>
           </div>
           <div className="flex items-center gap-4">
-            {/* 
-              THIS IS THE FIX: We now check for a `session`.
-              If there's a session, the user is logged in.
-            */}
             {session ? (
               <button 
                 onClick={() => supabase.auth.signOut()} 
@@ -45,7 +39,7 @@ export default function AppLayout() {
       
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">
         <div className="max-w-4xl mx-auto text-center">
-            {/* ... your footer ... */}
+            {/* Footer content */}
         </div>
       </footer>
     </div>
