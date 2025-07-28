@@ -1,18 +1,14 @@
-import { useUser, UserButton, SignInButton } from "@clerk/clerk-react";
+// client/src/pages/app-layout.tsx
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Link } from "wouter";
 import Calculator from "./calculator";
 import WelcomePage from "./welcome";
 import { Heart } from "lucide-react";
 
 export default function AppLayout() {
-  const { isLoaded, isSignedIn } = useUser();
-
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-cream">
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  // This is the Supabase way of asking: "Is a user logged in?"
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
   return (
     <div className="min-h-screen bg-cream">
@@ -23,28 +19,33 @@ export default function AppLayout() {
             <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">My Lobola</h1>
           </div>
           <div className="flex items-center gap-4">
-            {isSignedIn ? (
-              <UserButton afterSignOutUrl="/"/>
+            {/* 
+              THIS IS THE FIX: We now check for a `session`.
+              If there's a session, the user is logged in.
+            */}
+            {session ? (
+              <button 
+                onClick={() => supabase.auth.signOut()} 
+                className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg"
+              >
+                Sign Out
+              </button>
             ) : (
-              <SignInButton mode="modal">
-                <button className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg">Sign In</button>
-              </SignInButton>
+              <Link href="/auth">
+                <a className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg cursor-pointer">Sign In</a>
+              </Link>
             )}
           </div>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {isSignedIn ? <Calculator /> : <WelcomePage />}
+        {session ? <Calculator /> : <WelcomePage />}
       </main>
       
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">
         <div className="max-w-4xl mx-auto text-center">
-            <h3 className="font-semibold text-lg mb-2">Ubuntu Lobola Guide</h3>
-            <p className="text-gray-300 text-sm">Respecting traditions, embracing modern values</p>
-            <div className="border-t border-gray-700 pt-4 mt-4">
-                <p className="text-gray-400 text-xs">This tool is for educational and guidance purposes only. Always consult with family elders for important decisions.</p>
-            </div>
+            {/* ... your footer ... */}
         </div>
       </footer>
     </div>

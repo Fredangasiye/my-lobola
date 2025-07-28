@@ -2,40 +2,42 @@ import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
-import { ClerkExpressWithAuth, ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
-import type { Request } from 'express'; // Import the standard Request type
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
-import { users, calculatorFormSchema } from '../shared/schema'; // Corrected path
-import { eq } from 'drizzle-orm';
-import { Paystack } from '@paystack/paystack-sdk';
+import { createClient } from '@supabase/supabase-js';
+import cookieParser from 'cookie-parser';
 
-// Define a custom interface for Clerk's augmented request
-interface RequestWithAuth extends Request {
-  auth?: { userId?: string };
-}
+// (Your other imports like drizzle, neon, schema, paystack)
+// ...
 
-const sql = neon(process.env.DATABASE_URL!);
-const db = drizzle(sql);
-const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY!);
 const app = express();
+const supabase = createClient(process.env.VITE_SUPABASE_URL!, process.env.SUPABASE_SERVICE_KEY!);
 
-const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173';
-app.use(cors({ origin: [vercelUrl, 'http://localhost:5173'], credentials: true }));
-app.use(ClerkExpressWithAuth());
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
-// --- Use the custom interface for all secure routes ---
-app.get('/api/user/status', ClerkExpressRequireAuth(), async (req: RequestWithAuth, res) => { /* ... */ });
-app.post('/api/create-checkout-url', ClerkExpressRequireAuth(), async (req: RequestWithAuth, res) => { /* ... */ });
-app.post('/api/ask-uncle', ClerkExpressRequireAuth(), async (req: RequestWithAuth, res) => { /* ... */ });
+// --- The New Supabase Security Guard ---
+const requireAuth = async (req, res, next) => {
+  const token = req.cookies['sb-access-token']; // Default Supabase cookie name
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthenticated' });
+  }
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  if (error || !user) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+  req.user = user; // Attach user to the request
+  next();
+};
 
-// --- Other routes ---
+// --- API Endpoints, now protected by our new guard ---
+app.get('/api/user/status', requireAuth, async (req, res) => { /* ... */ });
+app.post('/api/create-checkout-url', requireAuth, async (req, res) => { /* ... */ });
+app.post('/api/ask-uncle', requireAuth, async (req, res) => { /* ... */ });
 app.post("/api/calculate", (req, res) => { /* ... */ });
 
-if (process.env.NODE_ENV !== 'production') {
-  const port = 5001;
-  createServer(app).listen(port, () => console.log(`API server running on http://localhost:${port}`));
-}
+// --- Start the Server ---
+const port = 5001;
+const httpServer = createServer(app);
+httpServer.listen(port, () => console.log(`✅ API server running on http://localhost:${port}`));
 
 export default app;
