@@ -1,21 +1,52 @@
-// Test 3: Adding back the UncleWisdom component.
-
+import { useState } from "react";
 import CulturalDisclaimer from "@/components/cultural-disclaimer";
-import UncleWisdom from "@/components/uncle-wisdom"; // The component we are testing
+import CalculatorForm from "@/components/calculator-form";
+import ResultsDisplay from "@/components/results-display";
+import ShareSection from "@/components/share-section";
+import UncleWisdom from "@/components/uncle-wisdom";
+import { Toaster } from "@/components/ui/toaster";
+
+function NonBlackGuidance() { return null; }
 
 export default function Calculator() {
+  const [results, setResults] = useState(null);
+  const [showResults, setShowResults] = useState(false);
+  const [selectedCulturalGroup, setSelectedCulturalGroup] = useState('');
+
+  const handleCalculationComplete = (calculationResults: any) => {
+    setResults(calculationResults);
+    setShowResults(true);
+    setTimeout(() => {
+      document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <div>
       <CulturalDisclaimer />
-      <UncleWisdom />
-
-      <div className="p-8 bg-purple-100 border border-purple-300 rounded-lg mt-8">
-        <h1 className="text-2xl font-bold text-center">Test 3: AI Uncle Loaded</h1>
-        <p className="text-center text-gray-600 mt-2">
-          If you can see this, it means the UncleWisdom component is also working correctly.
-          This would prove the crash is happening inside the CalculatorForm.
-        </p>
+      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
+        <div className="space-y-6 lg:order-none order-2">
+          <CalculatorForm 
+            onCalculationComplete={handleCalculationComplete}
+            onCulturalGroupChange={setSelectedCulturalGroup}
+          />
+        </div>
+        <div className="lg:order-none order-1">
+          <UncleWisdom />
+        </div>
       </div>
+      <div className="space-y-6 mt-8" id="results-section">
+        {showResults && results && (
+          <>
+            <ResultsDisplay results={results} culturalGroup={selectedCulturalGroup} />
+            <ShareSection results={results} />
+          </>
+        )}
+      </div>
+      <div className="mt-12 space-y-8">
+        <NonBlackGuidance />
+      </div>
+      <Toaster />
     </div>
   );
 }
