@@ -4,13 +4,16 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function AuthPage() {
   const supabaseClient = useSupabaseClient()
+  
   return (
     <div className="max-w-md mx-auto py-12">
       <Auth
         supabaseClient={supabaseClient}
         appearance={{ theme: ThemeSupa }}
         providers={['google']}
-        redirectTo="/"
+        redirectTo={`${window.location.origin}/auth/callback`}
+        showLinks={true}
+        view="sign_in"
       />
     </div>
   )
