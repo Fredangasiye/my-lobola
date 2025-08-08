@@ -19,11 +19,9 @@ export default function WelcomePage() {
             To access the calculator and AI-powered guidance, please sign in or create a free account.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth">
-              <a className="bg-green-700 text-white font-semibold py-3 px-8 rounded-lg w-full sm:w-auto hover:bg-green-800 transition-colors cursor-pointer">
+            <Link href="/auth" className="bg-green-700 text-white font-semibold py-3 px-8 rounded-lg w-full sm:w-auto hover:bg-green-800 transition-colors cursor-pointer">
                 Sign In or Sign Up
-              </a>
-            </Link>
+              </Link>
           </div>
         </div>
       </div>

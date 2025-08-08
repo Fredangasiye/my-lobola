@@ -43,7 +43,7 @@ export default function PricingPage() {
                         {tier.features.map(feature => ( <li key={feature} className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> {feature}</li> ))}
                     </ul>
                     {tier.isFree ? (
-                        <Link href="/"><Button variant="outline" className="w-full">Return Home</Button></Link>
+                        <Button variant="outline" className="w-full" onClick={() => navigate(\'/\')}>Return Home</Button>
                     ) : (
                         <Button 
                           onClick={() => {

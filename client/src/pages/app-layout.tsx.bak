@@ -25,7 +25,9 @@ export default function AppLayout() {
                 Sign Out
               </button>
             ) : (
-              <Link href="/auth" className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg cursor-pointer">Sign In</Link>
+              <Link href="/auth">
+                <a className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg cursor-pointer">Sign In</a>
+              </Link>
             )}
           </div>
         </div>
