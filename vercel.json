@@ -23,6 +23,10 @@
       "dest": "/api/index.ts"
     },
     {
+      "src": "/health",
+      "dest": "/api/health.ts"
+    },
+    {
       "handle": "filesystem"
     },
     {
