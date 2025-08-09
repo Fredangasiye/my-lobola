@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "npm ci --no-optional",
+  "installCommand": "npm ci",
   "builds": [
     {
       "src": "api/*.ts",
@@ -14,7 +14,7 @@
   ],
   "build": {
     "env": {
-      "NPM_CONFIG_OPTIONAL": "false"
+      "NPM_CONFIG_ROLLUP_NATIVE": "skip"
     }
   },
   "routes": [
