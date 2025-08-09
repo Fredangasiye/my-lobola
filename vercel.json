@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "npm install",
+  "installCommand": "npm ci --no-optional",
   "builds": [
     {
       "src": "api/index.ts",
@@ -12,8 +12,10 @@
       "config": { "distDir": "dist" }
     }
   ],
-  "env": {
-    "NPM_CONFIG_OPTIONAL": "false"
+  "build": {
+    "env": {
+      "NPM_CONFIG_OPTIONAL": "false"
+    }
   },
   "routes": [
     {
