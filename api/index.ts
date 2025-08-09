@@ -6,7 +6,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import cookieParser from 'cookie-parser';
 import { drizzle, type NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { users, calculatorFormSchema } from '../shared/schema.js';
+import { users, calculatorFormSchema } from '../shared/schema';
 import { eq } from 'drizzle-orm';
 import { Paystack } from '@paystack/paystack-sdk';
 import { registerRoutes } from './routes.js';
@@ -98,4 +98,7 @@ if (!process.env.VERCEL) {
   });
 }
 
-export default app;
+// Export a Vercel-compatible handler
+export default function handler(req: any, res: any) {
+  return (app as any)(req, res);
+}
