@@ -23,6 +23,10 @@
       "dest": "/api/index.ts"
     },
     {
+      "src": "/api/calculate",
+      "dest": "/api/calculate.ts"
+    },
+    {
       "src": "/health",
       "dest": "/api/health.ts"
     },
