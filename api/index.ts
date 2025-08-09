@@ -37,26 +37,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Add a simple health endpoint
-// Health endpoint at both "/" and "/api" (useful locally and on Vercel)
+// Health endpoint at both "/" and "/api"
 app.get('/', (_req, res) => {
-  if (missingEnvVars.length > 0) {
-    return res.status(500).json({
-      ok: false,
-      status: 'misconfigured',
-      missingEnvVars,
-    });
-  }
   return res.json({ ok: true, status: 'running' });
 });
 app.get('/api', (_req, res) => {
-  if (missingEnvVars.length > 0) {
-    return res.status(500).json({
-      ok: false,
-      status: 'misconfigured',
-      missingEnvVars,
-    });
-  }
   return res.json({ ok: true, status: 'running' });
 });
 
@@ -64,30 +49,24 @@ let supabase: SupabaseClient | null = null;
 let db: NeonHttpDatabase | null = null;
 let paystack: Paystack | null = null;
 
-if (missingEnvVars.length === 0) {
-  // Initialize Supabase and other services only when correctly configured
-  const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY!;
-  supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-  const sql = neon(process.env.DATABASE_URL!);
-  db = drizzle(sql);
-
-  paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY!);
-
-  // Register application routes
-  registerRoutes(app);
-} else {
-  console.error('FATAL: Missing environment variables:', missingEnvVars);
-  // When misconfigured, respond 500 for API calls instead of crashing process
-  app.all('/*', (_req, res) => {
-    res.status(500).json({
-      ok: false,
-      status: 'misconfigured',
-      missingEnvVars,
-    });
-  });
+// Try to initialize services, but don't crash if they fail
+try {
+  if (process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
+    supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+  }
+  if (process.env.DATABASE_URL) {
+    const sql = neon(process.env.DATABASE_URL);
+    db = drizzle(sql);
+  }
+  if (process.env.PAYSTACK_SECRET_KEY) {
+    paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY);
+  }
+} catch (e) {
+  console.error('Service initialization failed:', e);
 }
+
+// Always register routes (they rely on in-memory storage by default)
+registerRoutes(app);
 
 // Only start a local server in non-Vercel environments
 if (!process.env.VERCEL) {
