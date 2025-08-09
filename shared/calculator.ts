@@ -1,4 +1,5 @@
 // Keep this module free of any imports to avoid bundling DB/ORM deps in serverless functions
+export {};
 
 export function calculateLobola(data: any): any {
   let baseAmount = 30000;

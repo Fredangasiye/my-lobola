@@ -9,7 +9,7 @@ import { neon } from '@neondatabase/serverless';
 import { users, calculatorFormSchema } from '../shared/schema';
 import { eq } from 'drizzle-orm';
 import { Paystack } from '@paystack/paystack-sdk';
-import { registerRoutes } from './routes';
+import { registerRoutes } from './routes.js';
 
 // Gather required env vars
 const requiredEnvVars = [
