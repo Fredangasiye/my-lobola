@@ -2,59 +2,89 @@ import 'dotenv/config'; // THIS IS THE FIX FOR THE BACKEND. It loads your .env f
 import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import cookieParser from 'cookie-parser';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { drizzle, type NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 import { users, calculatorFormSchema } from '../shared/schema';
 import { eq } from 'drizzle-orm';
 import { Paystack } from '@paystack/paystack-sdk';
 import { registerRoutes } from './routes';
 
-// Safety check now works because .env is loaded first
-if (!process.env.VITE_SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
-    console.error("FATAL ERROR: A Supabase key is missing in your .env file for the backend server.");
-    console.error("Required environment variables:");
-    console.error("- VITE_SUPABASE_URL");
-    console.error("- SUPABASE_SERVICE_KEY");
-    console.error("- DATABASE_URL");
-    console.error("- PAYSTACK_SECRET_KEY");
-    process.exit(1);
-}
+// Gather required env vars
+const requiredEnvVars = [
+  'VITE_SUPABASE_URL',
+  'SUPABASE_SERVICE_KEY',
+  'DATABASE_URL',
+  'PAYSTACK_SECRET_KEY',
+];
+const missingEnvVars = requiredEnvVars.filter((name) => !process.env[name]);
 
-// Initialize Supabase for the backend
-const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-const sql = neon(process.env.DATABASE_URL!);
-const db = drizzle(sql);
-const paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY!);
+// Initialize app first so we can export even if misconfigured
 const app = express();
 
-app.use(cors({ 
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : true
-    : 'http://localhost:5173', 
-  credentials: true 
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : true
+        : 'http://localhost:5173',
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
-// The Supabase Security Guard
-const requireAuth = async (req: any, res: any, next: any) => { /* ... your logic ... */ };
-
-// --- API Endpoints ---
-app.get('/api/user/status', requireAuth, async (req: any, res: any) => { /* ... your logic ... */ });
-app.post('/api/create-checkout-url', requireAuth, async (req: any, res: any) => { /* ... your logic ... */ });
-app.post('/api/ask-uncle', requireAuth, async (req: any, res: any) => { /* ... your logic ... */ });
-
-// Register the main routes
-registerRoutes(app);
-
-const port = 5001;
-const httpServer = createServer(app);
-httpServer.listen(port, () => {
-    console.log(`✅ API server is running and listening on http://localhost:${port}`);
+// Add a simple health endpoint
+app.get('/api', (_req, res) => {
+  if (missingEnvVars.length > 0) {
+    return res.status(500).json({
+      ok: false,
+      status: 'misconfigured',
+      missingEnvVars,
+    });
+  }
+  return res.json({ ok: true, status: 'running' });
 });
+
+let supabase: SupabaseClient | null = null;
+let db: NeonHttpDatabase | null = null;
+let paystack: Paystack | null = null;
+
+if (missingEnvVars.length === 0) {
+  // Initialize Supabase and other services only when correctly configured
+  const supabaseUrl = process.env.VITE_SUPABASE_URL!;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY!;
+  supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+  const sql = neon(process.env.DATABASE_URL!);
+  db = drizzle(sql);
+
+  paystack = new Paystack(process.env.PAYSTACK_SECRET_KEY!);
+
+  // Register application routes
+  registerRoutes(app);
+} else {
+  console.error('FATAL: Missing environment variables:', missingEnvVars);
+  // When misconfigured, respond 500 for API calls instead of crashing process
+  app.all('/api/*', (_req, res) => {
+    res.status(500).json({
+      ok: false,
+      status: 'misconfigured',
+      missingEnvVars,
+    });
+  });
+}
+
+// Only start a local server in non-Vercel environments
+if (!process.env.VERCEL) {
+  const port = process.env.PORT ? Number(process.env.PORT) : 5001;
+  const httpServer = createServer(app);
+  httpServer.listen(port, () => {
+    console.log(`✅ API server is running and listening on http://localhost:${port}`);
+  });
+}
 
 export default app;
