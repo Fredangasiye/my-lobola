@@ -1,6 +1,6 @@
-import type { CalculatorFormData, CalculationResult } from "./schema";
+// Keep this module free of any imports to avoid bundling DB/ORM deps in serverless functions
 
-export function calculateLobola(data: CalculatorFormData): CalculationResult {
+export function calculateLobola(data: any): any {
   let baseAmount = 30000;
   let educationBonus = 0;
   let careerBonus = 0;
@@ -115,7 +115,7 @@ export function calculateLobola(data: CalculatorFormData): CalculationResult {
       displayText: `${lowerCows} - ${upperCows} cattle`,
     },
     insights,
-  };
+  } as const;
 }
 
 function getCulturalInsights(culturalGroup: string) {
