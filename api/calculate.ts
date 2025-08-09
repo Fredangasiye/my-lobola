@@ -1,5 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
 // Inline calculator to avoid build/import issues in serverless
 function calculateLobola(data: any) {
   let baseAmount = 30000;
@@ -106,7 +104,7 @@ function calculateLobola(data: any) {
   };
 }
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default function handler(req: any, res: any) {
   try {
     res.status(200).json({ ok: true });
   } catch {
