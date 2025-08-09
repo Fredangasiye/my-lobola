@@ -6,10 +6,10 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import cookieParser from 'cookie-parser';
 import { drizzle, type NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { users, calculatorFormSchema } from '../shared/schema';
+import { users, calculatorFormSchema } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 import { Paystack } from '@paystack/paystack-sdk';
-import { registerRoutes } from './routes';
+import { registerRoutes } from './routes.js';
 
 // Gather required env vars
 const requiredEnvVars = [
@@ -38,6 +38,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Add a simple health endpoint
+// Health endpoint at both "/" and "/api" (useful locally and on Vercel)
+app.get('/', (_req, res) => {
+  if (missingEnvVars.length > 0) {
+    return res.status(500).json({
+      ok: false,
+      status: 'misconfigured',
+      missingEnvVars,
+    });
+  }
+  return res.json({ ok: true, status: 'running' });
+});
 app.get('/api', (_req, res) => {
   if (missingEnvVars.length > 0) {
     return res.status(500).json({
@@ -69,7 +80,7 @@ if (missingEnvVars.length === 0) {
 } else {
   console.error('FATAL: Missing environment variables:', missingEnvVars);
   // When misconfigured, respond 500 for API calls instead of crashing process
-  app.all('/api/*', (_req, res) => {
+  app.all('/*', (_req, res) => {
     res.status(500).json({
       ok: false,
       status: 'misconfigured',
