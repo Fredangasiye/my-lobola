@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useSession } from '@supabase/auth-helpers-react';
+import { useSession } from '../App';
 import { Link, useLocation } from "wouter";
 import { Button } from '@/components/ui/button';
 import { Check, ArrowLeft } from 'lucide-react';
@@ -43,7 +43,7 @@ export default function PricingPage() {
                         {tier.features.map(feature => ( <li key={feature} className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> {feature}</li> ))}
                     </ul>
                     {tier.isFree ? (
-                        <Button variant="outline" className="w-full" onClick={() => navigate(\'/\')}>Return Home</Button>
+                        <Button variant="outline" className="w-full" onClick={() => navigate('/')}>Return Home</Button>
                     ) : (
                         <Button 
                           onClick={() => {

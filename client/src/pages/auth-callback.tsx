@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation, useRoute } from 'wouter'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useSupabaseClient } from '../App'
 
 export default function AuthCallback() {
   const [location, setLocation] = useLocation()

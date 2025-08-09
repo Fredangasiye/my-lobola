@@ -1,4 +1,4 @@
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSession, useSupabaseClient } from '../App';
 import { Link } from "wouter";
 import Calculator from "./calculator";
 import WelcomePage from "./welcome";
