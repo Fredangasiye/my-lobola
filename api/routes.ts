@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { calculatorFormSchema } from "../shared/schema";
-import { calculateLobola } from "../client/src/lib/calculator";
+import { calculateLobola } from "../shared/calculator";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
