@@ -4,9 +4,106 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Lobola Guide</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+      .container { text-align: center; }
+      .form { max-width: 500px; margin: 0 auto; text-align: left; }
+      .form-group { margin-bottom: 15px; }
+      label { display: block; margin-bottom: 5px; font-weight: bold; }
+      select, input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+      button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+      button:hover { background: #0056b3; }
+      .result { margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="container">
+      <h1>My Lobola Guide</h1>
+      <p>Traditional lobola calculation tool</p>
+      
+      <div class="form">
+        <form id="lobolaForm">
+          <div class="form-group">
+            <label for="culturalGroup">Cultural Group:</label>
+            <select id="culturalGroup" name="culturalGroup" required>
+              <option value="">Select...</option>
+              <option value="Zulu">Zulu</option>
+              <option value="Xhosa">Xhosa</option>
+              <option value="Sotho">Sotho</option>
+              <option value="Tswana">Tswana</option>
+              <option value="Ndebele">Ndebele</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="education">Education Level:</label>
+            <select id="education" name="education" required>
+              <option value="">Select...</option>
+              <option value="High School">High School</option>
+              <option value="Diploma">Diploma</option>
+              <option value="Bachelors">Bachelor's Degree</option>
+              <option value="Masters">Master's Degree</option>
+              <option value="PhD">PhD</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="employment">Employment Status:</label>
+            <select id="employment" name="employment" required>
+              <option value="">Select...</option>
+              <option value="Student">Student</option>
+              <option value="Unemployed">Unemployed</option>
+              <option value="Employed">Employed</option>
+              <option value="Self-employed">Self-employed</option>
+              <option value="Professional">Professional</option>
+            </select>
+          </div>
+          
+          <button type="submit">Calculate Lobola</button>
+        </form>
+      </div>
+      
+      <div id="result" class="result" style="display: none;">
+        <h3>Lobola Calculation Result</h3>
+        <div id="resultContent"></div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('lobolaForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+        
+        try {
+          const response = await fetch('/api/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok) {
+            document.getElementById('resultContent').innerHTML = `
+              <p><strong>Estimated Amount:</strong> ${result.amount}</p>
+              <p><strong>Cow Equivalent:</strong> ${result.cowEquivalent.displayText}</p>
+              <p><strong>Cultural Group:</strong> ${data.culturalGroup}</p>
+              <p><strong>Education Level:</strong> ${data.education}</p>
+              <p><strong>Employment:</strong> ${data.employment}</p>
+            `;
+            document.getElementById('result').style.display = 'block';
+          } else {
+            throw new Error(result.error || 'Calculation failed');
+          }
+        } catch (error) {
+          document.getElementById('resultContent').innerHTML = `
+            <p style="color: red;"><strong>Error:</strong> ${error.message}</p>
+          `;
+          document.getElementById('result').style.display = 'block';
+        }
+      });
+    </script>
   </body>
 </html>
