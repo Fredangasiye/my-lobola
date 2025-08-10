@@ -16,8 +16,14 @@ export default defineConfig({
   build: {
     outDir: path.resolve(rootDir, 'dist'),
     emptyOutDir: true,
+    rollupOptions: {
+      external: process.env.ROLLUP_NO_NATIVE ? ['@rollup/rollup-linux-x64-gnu'] : []
+    }
   },
   server: {
     proxy: { '/api': 'http://localhost:5001' }
+  },
+  define: {
+    'process.env.ROLLUP_NO_NATIVE': JSON.stringify(process.env.ROLLUP_NO_NATIVE || '1')
   }
 })
