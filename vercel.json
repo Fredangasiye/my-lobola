@@ -7,7 +7,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "api/health.ts",
+      "src": "api/health.js",
       "use": "@vercel/node"
     },
     {
@@ -30,7 +30,7 @@
   "routes": [
     {
       "src": "/api$",
-      "dest": "/api/health.ts"
+      "dest": "/api/health.js"
     },
     {
       "src": "/api/calculate",
@@ -38,7 +38,7 @@
     },
     {
       "src": "/health",
-      "dest": "/api/health.ts"
+      "dest": "/api/health.js"
     },
     {
       "handle": "filesystem"
