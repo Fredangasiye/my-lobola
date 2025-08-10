@@ -3,8 +3,10 @@
   "outputDirectory": "dist",
   "build": {
     "env": {
-      "VITE_ROLLUP_NO_NATIVE": "1",
-      "ROLLUP_NO_NATIVE": "1"
+      "NODE_OPTIONS": "--max-old-space-size=4096",
+      "ROLLUP_NO_NATIVE": "true",
+      "DISABLE_NATIVE_DEPS": "true"
     }
-  }
+  },
+  "installCommand": "npm ci --omit=optional"
 }

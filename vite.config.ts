@@ -17,13 +17,21 @@ export default defineConfig({
     outDir: path.resolve(rootDir, 'dist'),
     emptyOutDir: true,
     rollupOptions: {
-      external: process.env.ROLLUP_NO_NATIVE ? ['@rollup/rollup-linux-x64-gnu'] : []
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['@radix-ui/react-slot', '@radix-ui/react-dialog']
+        }
+      }
     }
   },
   server: {
     proxy: { '/api': 'http://localhost:5001' }
   },
+  optimizeDeps: {
+    exclude: ['@rollup/rollup-linux-x64-gnu']
+  },
   define: {
-    'process.env.ROLLUP_NO_NATIVE': JSON.stringify(process.env.ROLLUP_NO_NATIVE || '1')
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
   }
 })
