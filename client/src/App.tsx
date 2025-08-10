@@ -8,6 +8,7 @@ import AuthCallback from './pages/auth-callback'
 import NotFound from './pages/not-found'
 import PricingPage from './pages/pricing'
 import { queryClient } from './lib/queryClient'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 // Create contexts for Supabase
 const SupabaseContext = createContext<SupabaseClient | null>(null)
@@ -65,19 +66,21 @@ function SupabaseProvider({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SupabaseProvider>
-        <Router>
-          <Switch>
-            <Route path="/" component={AppLayout} />
-            <Route path="/auth" component={AuthPage} />
-            <Route path="/auth/callback" component={AuthCallback} />
-            <Route path="/pricing" component={PricingPage} />
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
-      </SupabaseProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <SupabaseProvider>
+          <Router>
+            <Switch>
+              <Route path="/" component={AppLayout} />
+              <Route path="/auth" component={AuthPage} />
+              <Route path="/auth/callback" component={AuthCallback} />
+              <Route path="/pricing" component={PricingPage} />
+              <Route component={NotFound} />
+            </Switch>
+          </Router>
+        </SupabaseProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 
