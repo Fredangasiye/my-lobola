@@ -2,5 +2,5 @@
   "watch": ["api/"],
   "ext": "ts,json",
   "ignore": ["*.test.ts"],
-  "exec": "tsx api/index.ts"
+  "exec": "tsx api/dev-server.ts"
 }
