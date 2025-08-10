@@ -20,33 +20,34 @@ export default function ResultsDisplay({ results, culturalGroup, currentLanguage
       
       <h2 className="text-xl font-semibold mb-4 flex items-center">
         <TrendingUp className="text-primary mr-3" />
-        {t.culturalGuidanceResults}
+        Cultural Guidance Results
       </h2>
       <div className="text-center mb-6">
-        <div className="text-sm font-medium text-muted-foreground">{t.suggestedRange}</div>
+        <div className="text-sm font-medium text-muted-foreground">Suggested Range</div>
         <div className="text-4xl font-bold text-primary my-1">{results.amount}</div>
-        <div className="text-sm text-muted-foreground">{t.basedOnTraditions}</div>
+        <div className="text-sm text-muted-foreground">Based on traditions and modern considerations</div>
       </div>
       <div className="mt-4 pt-4 border-t-2 text-center mb-6">
         <div className="flex items-center justify-center font-semibold text-muted-foreground">
           <span role="img" aria-label="cow" className="mr-2">🐄</span>
-          <span>{t.cattleEquivalent}</span>
+          <span>Cattle Equivalent</span>
         </div>
-        <div className="text-2xl font-bold mt-1">{results.cowEquivalent.displayText}</div>
+        <div className="text-2xl font-bold mt-1">
+          {Math.round(parseInt(results.amount.replace(/[^\d]/g, '')) / 15000)} - {Math.round(parseInt(results.amount.split(' - ')[1]?.replace(/[^\d]/g, '')) / 15000)} cattle
+        </div>
         <div className="text-xs text-muted-foreground">
-          {t.marketPrice} R{results.cowEquivalent.pricePerCow.toLocaleString()} {t.perCow}
+          Market price: R15,000 per cow
         </div>
       </div>
       
       {/* Breakdown Section */}
       <div className="space-y-4 border-t-2 pt-6">
-        <h3 className="font-semibold text-lg pb-2 text-center">{t.calculationBreakdown}</h3>
-        {/* ... breakdown rows ... */}
+        <h3 className="font-semibold text-lg pb-2 text-center">Calculation Breakdown</h3>
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between"><span>{t.baseAmount}</span><span className="font-medium">R{results.breakdown.base.toLocaleString()}</span></div>
-          <div className="flex justify-between"><span>{t.educationBonus}</span><span className="font-medium">R{results.breakdown.education.toLocaleString()}</span></div>
-          <div className="flex justify-between"><span>{t.careerConsideration}</span><span className="font-medium">R{results.breakdown.career.toLocaleString()}</span></div>
-          <div className="flex justify-between"><span>{t.locationFactor}</span><span className="font-medium">R{results.breakdown.location.toLocaleString()}</span></div>
+          <div className="flex justify-between"><span>Base Amount</span><span className="font-medium">R{results.breakdown.base.toLocaleString()}</span></div>
+          <div className="flex justify-between"><span>Education Bonus</span><span className="font-medium">R{results.breakdown.education.toLocaleString()}</span></div>
+          <div className="flex justify-between"><span>Career Consideration</span><span className="font-medium">R{results.breakdown.career.toLocaleString()}</span></div>
+          <div className="flex justify-between"><span>Location Factor</span><span className="font-medium">R{results.breakdown.regional.toLocaleString()}</span></div>
         </div>
       </div>
       

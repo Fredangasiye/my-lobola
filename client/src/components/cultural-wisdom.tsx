@@ -24,10 +24,10 @@ const wisdomMessages = {
 };
 // --- END OF YOUR DATA ---
 
-export default function CulturalWisdom({ insights }) {
+export default function CulturalWisdom({ culturalGroup }) {
   // Safely get the selected cultural group, defaulting if necessary
-  const culturalGroup = (insights && insights.group) ? insights.group.toLowerCase() : 'default';
-  const wisdomList = wisdomMessages[culturalGroup] || wisdomMessages.default;
+  const group = culturalGroup ? culturalGroup.toLowerCase() : 'default';
+  const wisdomList = wisdomMessages[group] || wisdomMessages.default;
 
   // Use state to show one piece of wisdom at a time
   const [currentIndex, setCurrentIndex] = useState(0);
