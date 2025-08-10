@@ -21,6 +21,12 @@
       "NPM_CONFIG_ROLLUP_NATIVE": "skip"
     }
   },
+  "functions": {
+    "api/*.ts": {
+      "runtime": "nodejs20.x",
+      "includeFiles": "shared/**"
+    }
+  },
   "routes": [
     {
       "src": "/api$",
