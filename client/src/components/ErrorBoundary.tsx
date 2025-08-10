@@ -17,11 +17,26 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Specifically handle React.Children.only errors
+    if (error.message.includes('React.Children.only')) {
+      console.warn('React.Children.only error caught, attempting recovery...');
+      // Try to recover by forcing a re-render
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+    
+    // Auto-recover from React.Children.only errors
+    if (error.message.includes('React.Children.only')) {
+      setTimeout(() => {
+        this.setState({ hasError: false });
+      }, 2000);
+    }
   }
 
   render() {
