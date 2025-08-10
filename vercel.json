@@ -1,21 +1,8 @@
 {
   "version": 2,
   "installCommand": "npm ci",
-  "builds": [
-    {
-      "src": "api/calculate.ts",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/health.cjs",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "build": {
     "env": {
       "NPM_CONFIG_ROLLUP_NATIVE": "skip"
@@ -27,25 +14,10 @@
       "includeFiles": "shared/**"
     }
   },
-  "routes": [
-    {
-      "src": "/api$",
-      "dest": "/api/health.cjs"
-    },
-    {
-      "src": "/api/calculate",
-      "dest": "/api/calculate.ts"
-    },
-    {
-      "src": "/health",
-      "dest": "/api/health.cjs"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/api", "destination": "/api/health.cjs" },
+    { "source": "/api/calculate", "destination": "/api/calculate.ts" },
+    { "source": "/health", "destination": "/api/health.cjs" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
