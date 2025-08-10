@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "concurrently --kill-others \"npm:dev:api\" \"npm:dev:client\"",
     "dev:client": "dotenv -e .env -- vite",
@@ -94,5 +96,9 @@
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "vite": "^5.3.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-x64": "^4.46.2",
+    "@rollup/rollup-linux-x64-gnu": "^4.46.2"
   }
 }

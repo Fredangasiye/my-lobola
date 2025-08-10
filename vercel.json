@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "rm -rf package-lock.json && npm install --no-optional && npm run build",
   "outputDirectory": "dist",
   "build": {
     "env": {
@@ -8,5 +8,5 @@
       "DISABLE_NATIVE_DEPS": "true"
     }
   },
-  "installCommand": "npm ci --omit=optional"
+  "installCommand": "npm install --no-optional"
 }
