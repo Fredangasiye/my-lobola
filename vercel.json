@@ -22,7 +22,7 @@
     }
   },
   "functions": {
-    "api/*.ts": {
+    "api/**": {
       "runtime": "nodejs20.x",
       "includeFiles": "shared/**"
     }
