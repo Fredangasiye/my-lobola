@@ -18,6 +18,9 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
+        entryFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
+        chunkFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
+        assetFileNames: `assets/[name]-[hash]-${Date.now()}.[ext]`,
         manualChunks: {
           vendor: ['react', 'react-dom'],
           ui: ['@radix-ui/react-slot', '@radix-ui/react-dialog']
@@ -32,6 +35,7 @@ export default defineConfig({
     exclude: ['@rollup/rollup-linux-x64-gnu']
   },
   define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    'process.env.VITE_BUILD_TIMESTAMP': JSON.stringify(Date.now().toString())
   }
 })

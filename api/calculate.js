@@ -1,177 +1,171 @@
+// Vercel Serverless Function for Lobola Calculation
 export default function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   try {
-    const { culturalGroup, education, employment } = req.body;
-    
+    const { culturalGroup, education, employment, region = 'kwazulu-natal', age = 25 } = req.body;
+
+    // Input validation
     if (!culturalGroup || !education || !employment) {
-      return res.status(400).json({ error: 'Missing required fields: culturalGroup, education, employment' });
+      res.status(400).json({ error: 'Missing required fields: culturalGroup, education, employment' });
+      return;
     }
 
-    // Calculate lobola using embedded logic
-    const result = calculateLobola(req.body);
+    // Base amounts by cultural group (in Rands)
+    const BASE_AMOUNTS = {
+      zulu: 50000,
+      xhosa: 45000,
+      sotho: 40000,
+      tswana: 42000,
+      venda: 35000,
+      tsonga: 38000,
+      ndebele: 40000,
+      swazi: 48000,
+      pedi: 38000,
+      other: 40000
+    };
+
+    // Education multipliers
+    const EDUCATION_BONUSES = {
+      'high-school': 0,
+      'diploma': 10000,
+      'bachelor': 20000,
+      'honours': 25000,
+      'masters': 30000,
+      'phd': 35000
+    };
+
+    // Career bonuses
+    const CAREER_BONUSES = {
+      'student': 0,
+      'unemployed': 0,
+      'employed': 15000,
+      'professional': 25000,
+      'executive': 35000,
+      'self-employed': 20000,
+      'government': 22000
+    };
+
+    // Regional adjustments
+    const REGIONAL_MULTIPLIERS = {
+      'gauteng': 1.3,
+      'western-cape': 1.25,
+      'kwazulu-natal': 1.0,
+      'eastern-cape': 0.85,
+      'free-state': 0.9,
+      'limpopo': 0.8,
+      'mpumalanga': 0.85,
+      'north-west': 0.9,
+      'northern-cape': 0.8
+    };
+
+    // Cultural insights by group
+    const CULTURAL_INSIGHTS = {
+      zulu: {
+        title: "Ukuthwala - Zulu Lobola Tradition",
+        description: "In Zulu culture, lobola represents respect and appreciation for the bride's family. It's a sacred covenant that binds two families together.",
+        traditions: [
+          "Cattle were traditionally the primary form of lobola payment",
+          "The groom's family presents gifts to show serious intentions",
+          "Negotiations involve extended family members and elders",
+          "The process can take several meetings to complete"
+        ],
+        modernConsiderations: [
+          "Cash payments are now commonly accepted alongside cattle",
+          "Education and career achievements influence the amount",
+          "Both families work together to find a fair arrangement",
+          "The focus remains on respect and family unity"
+        ]
+      },
+      xhosa: {
+        title: "Ubuntu - Xhosa Dowry Customs",
+        description: "Xhosa lobola embodies Ubuntu - the belief that we are all connected. It's about building relationships between families.",
+        traditions: [
+          "Negotiations begin with the 'opener of the mouth' ceremony",
+          "Cattle remain an important symbol of wealth and respect",
+          "The bride's family guides the negotiation process",
+          "Traditional beer is shared to seal agreements"
+        ],
+        modernConsiderations: [
+          "Modern Xhosa families adapt amounts to contemporary circumstances",
+          "Professional achievements are highly valued",
+          "Payment plans are often arranged for convenience",
+          "Cultural ceremonies remain central to the process"
+        ]
+      },
+      default: {
+        title: "Traditional Lobola Calculation",
+        description: "Lobola is a beautiful African tradition that honors both families and creates lasting bonds.",
+        traditions: [
+          "Represents appreciation for raising the bride",
+          "Involves negotiation between families",
+          "Creates formal relationship between families",
+          "Includes ceremonial elements and celebrations"
+        ],
+        modernConsiderations: [
+          "Amounts adapted to modern economic realities",
+          "Education and career valued highly",
+          "Flexible payment arrangements common",
+          "Balance between tradition and practicality"
+        ]
+      }
+    };
+
+    // Calculate base amount
+    const baseAmount = BASE_AMOUNTS[culturalGroup] || BASE_AMOUNTS.other;
     
+    // Calculate bonuses
+    const educationBonus = EDUCATION_BONUSES[education] || 0;
+    const careerBonus = CAREER_BONUSES[employment] || 0;
+    
+    // Regional adjustment
+    const regionalMultiplier = REGIONAL_MULTIPLIERS[region] || 1.0;
+    const regionalAdjustment = Math.round((baseAmount + educationBonus + careerBonus) * (regionalMultiplier - 1));
+    
+    // Cultural group bonus (additional respect for certain achievements)
+    const culturalBonus = Math.round(baseAmount * 0.1);
+    
+    // Calculate total
+    const total = baseAmount + educationBonus + careerBonus + regionalAdjustment + culturalBonus;
+    
+    // Format amount range
+    const lowerBound = Math.round(total * 0.8);
+    const upperBound = Math.round(total * 1.2);
+    const amountRange = `R${lowerBound.toLocaleString()} - R${upperBound.toLocaleString()}`;
+
+    // Get cultural insights
+    const insights = CULTURAL_INSIGHTS[culturalGroup] || CULTURAL_INSIGHTS.default;
+
+    const result = {
+      amount: amountRange,
+      breakdown: {
+        base: baseAmount,
+        education: educationBonus,
+        career: careerBonus,
+        cultural: culturalBonus,
+        regional: regionalAdjustment
+      },
+      insights,
+      timestamp: new Date().toISOString()
+    };
+
     res.status(200).json(result);
   } catch (error) {
     console.error('Calculation error:', error);
-    res.status(500).json({ error: 'Calculation failed' });
+    res.status(500).json({ error: 'Internal server error', timestamp: new Date().toISOString() });
   }
-}
-
-function calculateLobola(data) {
-  let baseAmount = 30000;
-  let educationBonus = 0;
-  let careerBonus = 0;
-  let locationFactor = 5000; // default
-
-  switch (data.education) {
-    case 'no-matric': educationBonus = 0; break;
-    case 'matric': educationBonus = 5000; break;
-    case 'diploma': educationBonus = 10000; break;
-    case 'degree': educationBonus = 15000; break;
-    case 'honours': educationBonus = 20000; break;
-    case 'masters': educationBonus = 25000; break;
-    case 'phd': educationBonus = 30000; break;
-    case 'prefer-not-say': educationBonus = 10000; break;
-  }
-
-  switch (data.employment) {
-    case 'employed': careerBonus = 10000; break;
-    case 'self-employed': careerBonus = 15000; break;
-    case 'student': careerBonus = 0; break;
-    case 'unemployed': careerBonus = 0; break;
-    case 'retired': careerBonus = 5000; break;
-    case 'prefer-not-say': careerBonus = 5000; break;
-  }
-
-  const totalLower = Math.max(15000, baseAmount + educationBonus + careerBonus + locationFactor);
-  const totalUpper = totalLower + 20000;
-
-  const pricePerCow = 15000;
-  const lowerCows = Math.round((totalLower / pricePerCow) * 10) / 10;
-  const upperCows = Math.round((totalUpper / pricePerCow) * 10) / 10;
-
-  const insights = getCulturalInsights(data.culturalGroup);
-
-  return {
-    amount: `R${totalLower.toLocaleString()} - R${totalUpper.toLocaleString()}`,
-    breakdown: {
-      base: baseAmount,
-      education: educationBonus,
-      career: careerBonus,
-      location: locationFactor,
-      total: { lower: totalLower, upper: totalUpper },
-    },
-    cowEquivalent: {
-      lowerCows,
-      upperCows,
-      pricePerCow,
-      displayText: `${lowerCows} - ${upperCows} cattle`,
-    },
-    insights,
-  };
-}
-
-function getCulturalInsights(culturalGroup) {
-  const insights = {
-    zulu: {
-      title: 'Zulu Traditions',
-      description: "In Zulu culture, lobola represents respect and appreciation for the bride's family. The amount traditionally reflects the groom's ability to provide and his commitment to the union.",
-      culturalNotes: [
-        'Lobola negotiations often involve cattle, with each cow representing value and respect',
-        'The process strengthens relationships between families',
-        'Traditional ceremonies accompany lobola discussions',
-        'Umabo ceremony follows the lobola negotiations',
-      ],
-      negotiationTips: [
-        'Approach discussions with respect and humility',
-        'Include family elders in negotiations',
-        "Consider both families' circumstances",
-        'Focus on building relationships, not just amounts',
-      ],
-    },
-    xhosa: {
-      title: 'Xhosa Traditions',
-      description: 'Xhosa lobola practices emphasize the importance of family unity and respect. The negotiations are seen as a way to bring two families together in harmony.',
-      culturalNotes: [
-        'Lobola is viewed as compensation for raising the bride',
-        'Traditional ceremonies mark different stages of the process',
-        'Community elders play important advisory roles',
-        'Ukuthwala and other customs may be involved',
-      ],
-      negotiationTips: [
-        'Respect traditional protocols and customs',
-        'Engage with community elders for guidance',
-        "Consider the bride's education and accomplishments",
-        'Maintain open and honest communication',
-      ],
-    },
-    pedi: {
-      title: 'Pedi (Northern Sotho) Traditions',
-      description: "In Pedi culture, magadi (bride price) is an important tradition that symbolizes the union of two families and respect for the bride's lineage.",
-      culturalNotes: [
-        'Magadi traditionally involves cattle and other valuable items',
-        "The amount reflects the bride's family's status and education",
-        'Extended family participation is crucial in negotiations',
-        'Traditional ceremonies celebrate the agreement',
-      ],
-      negotiationTips: [
-        'Respect the role of family elders and traditional leaders',
-        "Consider the bride's achievements and potential",
-        'Engage in respectful dialogue with both families',
-        'Honor traditional customs while adapting to modern circumstances',
-      ],
-    },
-    tswana: {
-      title: 'Tswana Traditions',
-      description: 'Tswana bogadi customs emphasize mutual respect between families and the symbolic value of bringing communities together through marriage.',
-      culturalNotes: [
-        'Bogadi traditionally consists of cattle as the primary currency',
-        'The practice strengthens kinship ties between families',
-        'Community participation in negotiations is valued',
-        'Educational achievements are increasingly recognized',
-      ],
-      negotiationTips: [
-        'Involve respected community members in discussions',
-        'Show appreciation for traditional customs',
-        'Consider modern economic realities',
-        'Focus on long-term family relationships',
-      ],
-    },
-    sotho: {
-      title: 'Sotho Traditions',
-      description: 'Sotho bohali traditions emphasize the importance of family honor and the ceremonial aspect of bringing two families together in marriage.',
-      culturalNotes: [
-        'Bohali negotiations involve extended family members',
-        'Traditional ceremonies mark important milestones',
-        'The practice reflects family values and respect',
-        'Modern adaptations accommodate contemporary lifestyles',
-      ],
-      negotiationTips: [
-        'Respect traditional family hierarchies',
-        'Include cultural advisors in negotiations',
-        'Balance tradition with modern considerations',
-        'Emphasize mutual respect and understanding',
-      ],
-    },
-  };
-
-  return insights[culturalGroup] || {
-    title: 'General South African Traditions',
-    description: 'Across South African cultures, lobola serves as a bridge between families, showing respect for traditions while adapting to modern circumstances.',
-    culturalNotes: [
-      'Each cultural group has unique traditions and customs',
-      'Modern considerations often blend with traditional values',
-      'Education and career achievements are increasingly valued',
-      'Community participation varies by cultural group',
-    ],
-    negotiationTips: [
-      'Research your specific cultural traditions',
-      'Consult with cultural elders and advisors',
-      'Balance traditional values with modern realities',
-      'Focus on mutual respect and understanding',
-    ],
-  };
 }
