@@ -1,4 +1,12 @@
 export default function handler(_req, res) {
-  res.status(200).json({ ok: true });
+  try {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ ok: true }));
+  } catch (e) {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ ok: false }));
+  }
 }
 
