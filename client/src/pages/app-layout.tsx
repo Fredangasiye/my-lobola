@@ -1,12 +1,7 @@
-import { useSession, useSupabaseClient } from '../App';
-import { Link } from "wouter";
 import Calculator from "./calculator";
-import WelcomePage from "./welcome";
 import { Heart } from "lucide-react";
 
 export default function AppLayout() {
-  const session = useSession();
-  const supabase = useSupabaseClient();
 
   return (
     <div className="min-h-screen bg-cream">
@@ -17,22 +12,13 @@ export default function AppLayout() {
             <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">My Lobola</h1>
           </div>
           <div className="flex items-center gap-4">
-            {session ? (
-              <button 
-                onClick={() => supabase.auth.signOut()} 
-                className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg"
-              >
-                Sign Out
-              </button>
-            ) : (
-              <Link href="/auth" className="bg-white text-primary-green font-semibold py-2 px-4 rounded-lg cursor-pointer">Sign In</Link>
-            )}
+            <span className="text-white text-sm">Demo Mode</span>
           </div>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {session ? <Calculator /> : <WelcomePage />}
+        <Calculator />
       </main>
       
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">

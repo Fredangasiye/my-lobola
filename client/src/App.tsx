@@ -68,17 +68,12 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <SupabaseProvider>
-          <Router>
-            <Switch>
-              <Route path="/" component={AppLayout} />
-              <Route path="/auth" component={AuthPage} />
-              <Route path="/auth/callback" component={AuthCallback} />
-              <Route path="/pricing" component={PricingPage} />
-              <Route component={NotFound} />
-            </Switch>
-          </Router>
-        </SupabaseProvider>
+        <Router>
+          <Switch>
+            <Route path="/" component={AppLayout} />
+            <Route component={NotFound} />
+          </Switch>
+        </Router>
       </QueryClientProvider>
     </ErrorBoundary>
   )
