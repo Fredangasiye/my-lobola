@@ -1,5 +1,5 @@
-import { calculateLobola } from "../shared/calculator.js";
-import { calculatorFormSchema } from "../shared/schema.js";
+import { calculateLobola } from "../shared/calculator";
+import { calculatorFormSchema } from "../shared/schema";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
