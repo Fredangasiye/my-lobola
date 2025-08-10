@@ -1,12 +1,28 @@
 {
-  "buildCommand": "rm -rf package-lock.json && npm install --no-optional && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "build": {
     "env": {
-      "NODE_OPTIONS": "--max-old-space-size=4096",
-      "ROLLUP_NO_NATIVE": "true",
-      "DISABLE_NATIVE_DEPS": "true"
+      "NODE_OPTIONS": "--max-old-space-size=4096"
     }
   },
-  "installCommand": "npm install --no-optional"
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    }
+  ]
 }
