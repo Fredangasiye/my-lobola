@@ -23,7 +23,7 @@
   },
   "functions": {
     "api/**": {
-      "runtime": "nodejs20.x",
+      "runtime": "nodejs22.x",
       "includeFiles": "shared/**"
     }
   },
