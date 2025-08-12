@@ -23,7 +23,7 @@ export default function Calculator() {
 
   return (
     <div>
-      <CulturalDisclaimer />
+      <CulturalDisclaimer currentLanguage={currentLanguage} />
       <CalculatorForm 
         onCalculationComplete={handleCalculationComplete}
         onCulturalGroupChange={setSelectedCulturalGroup}

@@ -19,7 +19,8 @@ export const simpleTranslations = {
     marketPrice: "Market price:",
     perCow: "per cow",
     culturalInsights: "Cultural Insights",
-    shareResults: "Share Results",
+    culturalSensitivityNotice: "Cultural Sensitivity Notice",
+    culturalSensitivityDescription: "This tool is designed to provide educational guidance about lobola traditions across South African cultures. It should not replace family discussions or cultural elders advice. Every family and situation is unique, and this calculator serves as a starting point for respectful dialogue.",    shareResults: "Share Results",
     nonBlackGuidanceTitle: "Guidance for Non-Black Partners",
     nonBlackGuidanceContent: "If you are not of African heritage and are entering a lobola negotiation, here are important considerations:",
     nonBlackTips: [
@@ -104,7 +105,9 @@ export const simpleTranslations = {
     marketPrice: "Intengiso yamanje:",
     perCow: "ngenkomo",
     culturalInsights: "Ukuqonda Kwamasiko",
-    shareResults: "Yabelana Ngomiphumela",
+    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
+    culturalSensitivityDescription: "Esi sixhobo senzelwe ukunikezela isikhokelo semfundo malunga nemasiko e-lobola kuzo zonke iinkcubeko zaseMzantsi Afrika. Akufanele kuthatha indawo iingxoxo zosapho okanye izeluleko zamadoda amadala. Wonke usapho kunye nesimo siyahluka, kwaye le calculator isebenza njengendlela yokuqala yengxoxo enobuntu.",    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
+    culturalSensitivityDescription: "Leli thuluzi lenzelwe ukunikezela ukuqondisisa okufundisayo mayelana namasiko e-lobola kuzo zonke izizwe zaseNingizimu Afrika. Akufanele kushintshe izingxoxo zomndeni noma izeluleko zamadoda amadala. Wonke umndeni nesimo sihlukile, futhi le calculator isebenza njengendlela yokuqala yengxoxo enhlonipho.",    shareResults: "Yabelana Ngomiphumela",
     nonBlackGuidanceTitle: "Izeluleko Zabantu Abangeyona AmAfrika",
     nonBlackGuidanceContent: "Uma ungeyena umAfrika futhi ungenela izingxoxo ze-lobola:",
     nonBlackTips: [
@@ -184,7 +187,9 @@ export const simpleTranslations = {
     marketPrice: "Ixabiso lemarike:",
     perCow: "ngenkomo",
     culturalInsights: "Ukuqonda Kwamasiko",
-    shareResults: "Yabelana Ngeziphumo",
+    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
+    culturalSensitivityDescription: "Esi sixhobo senzelwe ukunikezela isikhokelo semfundo malunga nemasiko e-lobola kuzo zonke iinkcubeko zaseMzantsi Afrika. Akufanele kuthatha indawo iingxoxo zosapho okanye izeluleko zamadoda amadala. Wonke usapho kunye nesimo siyahluka, kwaye le calculator isebenza njengendlela yokuqala yengxoxo enobuntu.",    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
+    culturalSensitivityDescription: "Leli thuluzi lenzelwe ukunikezela ukuqondisisa okufundisayo mayelana namasiko e-lobola kuzo zonke izizwe zaseNingizimu Afrika. Akufanele kushintshe izingxoxo zomndeni noma izeluleko zamadoda amadala. Wonke umndeni nesimo sihlukile, futhi le calculator isebenza njengendlela yokuqala yengxoxo enhlonipho.",    shareResults: "Yabelana Ngeziphumo",
     nonBlackGuidanceTitle: "Izeluleko Zabantu Abangeyona AmAfrika",
     nonBlackGuidanceContent: "Uma ungeyena umAfrika futhi ungenela izingxoxo ze-lobola:",
     nonBlackTips: [
