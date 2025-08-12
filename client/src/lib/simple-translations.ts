@@ -105,9 +105,7 @@ export const simpleTranslations = {
     marketPrice: "Intengiso yamanje:",
     perCow: "ngenkomo",
     culturalInsights: "Ukuqonda Kwamasiko",
-    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
-    culturalSensitivityDescription: "Esi sixhobo senzelwe ukunikezela isikhokelo semfundo malunga nemasiko e-lobola kuzo zonke iinkcubeko zaseMzantsi Afrika. Akufanele kuthatha indawo iingxoxo zosapho okanye izeluleko zamadoda amadala. Wonke usapho kunye nesimo siyahluka, kwaye le calculator isebenza njengendlela yokuqala yengxoxo enobuntu.",    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
-    culturalSensitivityDescription: "Leli thuluzi lenzelwe ukunikezela ukuqondisisa okufundisayo mayelana namasiko e-lobola kuzo zonke izizwe zaseNingizimu Afrika. Akufanele kushintshe izingxoxo zomndeni noma izeluleko zamadoda amadala. Wonke umndeni nesimo sihlukile, futhi le calculator isebenza njengendlela yokuqala yengxoxo enhlonipho.",    shareResults: "Yabelana Ngomiphumela",
+    shareResults: "Yabelana Ngomiphumela",
     nonBlackGuidanceTitle: "Izeluleko Zabantu Abangeyona AmAfrika",
     nonBlackGuidanceContent: "Uma ungeyena umAfrika futhi ungenela izingxoxo ze-lobola:",
     nonBlackTips: [
@@ -187,9 +185,7 @@ export const simpleTranslations = {
     marketPrice: "Ixabiso lemarike:",
     perCow: "ngenkomo",
     culturalInsights: "Ukuqonda Kwamasiko",
-    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
-    culturalSensitivityDescription: "Esi sixhobo senzelwe ukunikezela isikhokelo semfundo malunga nemasiko e-lobola kuzo zonke iinkcubeko zaseMzantsi Afrika. Akufanele kuthatha indawo iingxoxo zosapho okanye izeluleko zamadoda amadala. Wonke usapho kunye nesimo siyahluka, kwaye le calculator isebenza njengendlela yokuqala yengxoxo enobuntu.",    culturalSensitivityNotice: "Isaziso Sokuqonda Kwamasiko",
-    culturalSensitivityDescription: "Leli thuluzi lenzelwe ukunikezela ukuqondisisa okufundisayo mayelana namasiko e-lobola kuzo zonke izizwe zaseNingizimu Afrika. Akufanele kushintshe izingxoxo zomndeni noma izeluleko zamadoda amadala. Wonke umndeni nesimo sihlukile, futhi le calculator isebenza njengendlela yokuqala yengxoxo enhlonipho.",    shareResults: "Yabelana Ngeziphumo",
+    shareResults: "Yabelana Ngeziphumo",
     nonBlackGuidanceTitle: "Izeluleko Zabantu Abangeyona AmAfrika",
     nonBlackGuidanceContent: "Uma ungeyena umAfrika futhi ungenela izingxoxo ze-lobola:",
     nonBlackTips: [
