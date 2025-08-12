@@ -40,7 +40,7 @@ Please provide guidance on this lobola-related question. Remember to be cultural
         'X-Title': 'My Lobola Calculator'
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3.5-sonnet',
+        model: 'mistralai/mistral-7b-instruct',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
