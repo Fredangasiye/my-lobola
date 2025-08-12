@@ -10,9 +10,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Question is required' });
     }
 
-    const openRouterApiKey = process.env.OPENROUTER_API_KEY;
-    if (!openRouterApiKey) {
-      return res.status(500).json({ error: 'OpenRouter API key not configured' });
+    const huggingFaceApiKey = process.env.HUGGINGFACE_API_KEY;
+    if (!huggingFaceApiKey) {
+      return res.status(500).json({ error: 'Hugging Face API key not configured' });
     }
 
     // Create a culturally appropriate prompt for lobola guidance
@@ -31,31 +31,23 @@ Respond in a warm, wise, and respectful tone. Keep responses concise but meaning
 
 Please provide guidance on this lobola-related question. Remember to be culturally sensitive and emphasize the importance of family consultation.`;
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openRouterApiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://my-lobola.vercel.app',
-        'X-Title': 'My Lobola Calculator'
+        'Authorization': `Bearer ${huggingFaceApiKey}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'mistralai/mistral-7b-instruct',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        max_tokens: 500,
-        temperature: 0.7
+        inputs: `<s>[INST] ${systemPrompt}\n\n${userPrompt} [/INST]`
       })
     });
 
     if (!response.ok) {
-      throw new Error(`OpenRouter API error: ${response.status}`);
+      throw new Error(`Hugging Face API error: ${response.status}`);
     }
 
     const data = await response.json();
-    const answer = data.choices[0]?.message?.content || 'I apologize, but I am unable to provide guidance at this time. Please consult with your family elders for the best advice.';
+    const answer = data[0]?.generated_text || 'I apologize, but I am unable to provide guidance at this time. Please consult with your family elders for the best advice.';
 
     res.status(200).json({ 
       answer,
@@ -70,4 +62,4 @@ Please provide guidance on this lobola-related question. Remember to be cultural
       details: error.message 
     });
   }
-} 
+}
