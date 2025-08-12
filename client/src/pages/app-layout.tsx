@@ -2,9 +2,13 @@ import Calculator from "./calculator";
 import { Heart, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import LanguageSelector from "@/components/language-selector";
+import { useState } from "react";
+import type { Language } from "@/lib/simple-translations";
 
 export default function AppLayout() {
   const { toast } = useToast();
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
 
   const shareApp = async () => {
     if (navigator.share) {
@@ -43,6 +47,10 @@ export default function AppLayout() {
             <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">My Lobola</h1>
           </div>
           <div className="flex items-center gap-4">
+            <LanguageSelector 
+              currentLanguage={currentLanguage}
+              onLanguageChange={setCurrentLanguage}
+            />
             <Button 
               onClick={shareApp}
               variant="outline"
@@ -57,7 +65,7 @@ export default function AppLayout() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <Calculator />
+        <Calculator currentLanguage={currentLanguage} />
       </main>
       
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">

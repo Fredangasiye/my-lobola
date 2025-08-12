@@ -4,11 +4,15 @@ import CalculatorForm from "@/components/calculator-form";
 import ResultsDisplay from "@/components/results-display";
 import ShareSection from "@/components/share-section";
 import UncleWisdom from "@/components/uncle-wisdom";
+import NonBlackGuidance from "@/components/non-black-guidance";
 import { Toaster } from "@/components/ui/toaster";
+import type { Language } from "@/lib/simple-translations";
 
-function NonBlackGuidance() { return null; }
+interface CalculatorProps {
+  currentLanguage?: Language;
+}
 
-export default function Calculator() {
+export default function Calculator({ currentLanguage = 'en' }: CalculatorProps) {
   const [results, setResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [selectedCulturalGroup, setSelectedCulturalGroup] = useState('');
@@ -44,7 +48,7 @@ export default function Calculator() {
         )}
       </div>
       <div className="mt-12 space-y-8">
-        <NonBlackGuidance />
+        <NonBlackGuidance currentLanguage={currentLanguage} />
       </div>
       <Toaster />
     </div>

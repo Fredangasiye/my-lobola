@@ -1,19 +1,20 @@
 import { Languages } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Language } from "@/lib/simple-translations";
 
 interface LanguageSelectorProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
+  currentLanguage: Language;
+  onLanguageChange: (language: Language) => void;
 }
 
 export default function LanguageSelector({ currentLanguage, onLanguageChange }: LanguageSelectorProps) {
   const languages = [
-    { code: 'en', name: 'English', nativeName: 'English' },
-    { code: 'zu', name: 'isiZulu', nativeName: 'isiZulu' },
-    { code: 'xh', name: 'isiXhosa', nativeName: 'isiXhosa' },
-    { code: 'nso', name: 'Sepedi', nativeName: 'Sepedi (Northern Sotho)' },
-    { code: 'tn', name: 'Setswana', nativeName: 'Setswana' },
-    { code: 'st', name: 'Sesotho', nativeName: 'Sesotho' },
+    { code: 'en' as Language, name: 'English', nativeName: 'English' },
+    { code: 'zu' as Language, name: 'isiZulu', nativeName: 'isiZulu' },
+    { code: 'xh' as Language, name: 'isiXhosa', nativeName: 'isiXhosa' },
+    { code: 'nso' as Language, name: 'Sepedi', nativeName: 'Sepedi (Northern Sotho)' },
+    { code: 'tn' as Language, name: 'Setswana', nativeName: 'Setswana' },
+    { code: 'st' as Language, name: 'Sesotho', nativeName: 'Sesotho' },
   ];
 
   return (
