@@ -9,6 +9,7 @@ import NotFound from './pages/not-found'
 import PricingPage from './pages/pricing'
 import { queryClient } from './lib/queryClient'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { TranslationProvider } from './lib/translation-context'
 
 // Create contexts for Supabase
 const SupabaseContext = createContext<SupabaseClient | null>(null)
@@ -67,14 +68,16 @@ function SupabaseProvider({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <Switch>
-            <Route path="/" component={AppLayout} />
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
-      </QueryClientProvider>
+      <TranslationProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <Switch>
+              <Route path="/" component={AppLayout} />
+              <Route component={NotFound} />
+            </Switch>
+          </Router>
+        </QueryClientProvider>
+      </TranslationProvider>
     </ErrorBoundary>
   )
 }

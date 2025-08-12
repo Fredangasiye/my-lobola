@@ -4,15 +4,11 @@ import CalculatorForm from "@/components/calculator-form";
 import ResultsDisplay from "@/components/results-display";
 import ShareSection from "@/components/share-section";
 import UncleWisdom from "@/components/uncle-wisdom";
-import NonBlackGuidance from "@/components/non-black-guidance";
 import { Toaster } from "@/components/ui/toaster";
-import type { Language } from "@/lib/simple-translations";
 
-interface CalculatorProps {
-  currentLanguage?: Language;
-}
+function NonBlackGuidance() { return null; }
 
-export default function Calculator({ currentLanguage = 'en' }: CalculatorProps) {
+export default function Calculator() {
   const [results, setResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [selectedCulturalGroup, setSelectedCulturalGroup] = useState('');
@@ -28,17 +24,10 @@ export default function Calculator({ currentLanguage = 'en' }: CalculatorProps) 
   return (
     <div>
       <CulturalDisclaimer />
-      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
-        <div className="space-y-6 lg:order-none order-2">
-          <CalculatorForm 
-            onCalculationComplete={handleCalculationComplete}
-            onCulturalGroupChange={setSelectedCulturalGroup}
-          />
-        </div>
-        <div className="lg:order-none order-1">
-          <UncleWisdom />
-        </div>
-      </div>
+      <CalculatorForm 
+        onCalculationComplete={handleCalculationComplete}
+        onCulturalGroupChange={setSelectedCulturalGroup}
+      />
       <div className="space-y-6 mt-8" id="results-section">
         {showResults && results && (
           <>
@@ -48,7 +37,7 @@ export default function Calculator({ currentLanguage = 'en' }: CalculatorProps) 
         )}
       </div>
       <div className="mt-12 space-y-8">
-        <NonBlackGuidance currentLanguage={currentLanguage} />
+        <NonBlackGuidance />
       </div>
       <Toaster />
     </div>

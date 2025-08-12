@@ -12,7 +12,7 @@ export default function ShareSection({ results }: ShareSectionProps) {
   const { toast } = useToast();
 
   const shareWhatsApp = () => {
-    const message = `My-Lobola price is : ${results.amount} or ${results.cowEquivalent.displayText}.\nCalculated yours at ${window.location.origin}`;
+    const message = `Ubuntu Lobola Guide Results: ${results.amount}\n\nCalculated using respectful cultural guidance. Learn more at ${window.location.origin}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -56,15 +56,15 @@ export default function ShareSection({ results }: ShareSectionProps) {
           onClick={shareWhatsApp}
           className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white"
         >
-          <span className="text-sm">WhatsApp</span>
           <MessageCircle className="h-4 w-4" />
+          <span className="text-sm">WhatsApp</span>
         </Button>
         <Button 
           onClick={shareGeneral}
           className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white"
         >
-          <span className="text-sm">Copy Link</span>
           <Link className="h-4 w-4" />
+          <span className="text-sm">Copy Link</span>
         </Button>
       </div>
     </div>

@@ -33,7 +33,7 @@ export default function ResultsDisplay({ results, culturalGroup, currentLanguage
           <span>Cattle Equivalent</span>
         </div>
         <div className="text-2xl font-bold mt-1">
-          {Math.round(parseInt(results.amount.replace(/[^\d]/g, '')) / 15000)} - {Math.round(parseInt(results.amount.split(' - ')[1]?.replace(/[^\d]/g, '')) / 15000)} cattle
+          {Math.round(parseInt(results.amount.split(' - ')[1]?.replace(/[^\d]/g, '')) / 15000)} cattle
         </div>
         <div className="text-xs text-muted-foreground">
           Market price: R15,000 per cow
