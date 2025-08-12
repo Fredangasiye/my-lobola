@@ -22,7 +22,7 @@ export default function AppLayout() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <Calculator />
+        <Calculator currentLanguage={language} />
       </main>
       
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">
