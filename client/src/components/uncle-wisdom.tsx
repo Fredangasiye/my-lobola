@@ -161,12 +161,17 @@ export default function UncleWisdom() {
   };
 
   return (
-    <Card className="mt-8">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <span role="img" aria-label="wise elder" className="text-2xl">👴🏿</span> 
-          Ask Uncle Wisdom
-          <span className="ml-auto text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+    <Card className="mt-8 bg-white/90 backdrop-blur-sm shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300">
+      <CardHeader className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-t-2xl">
+        <CardTitle className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl">
+            <span role="img" aria-label="wise elder" className="text-2xl">👴🏿</span>
+          </div>
+          <div>
+            <div className="text-xl font-bold text-gray-800">Ask Uncle Wisdom</div>
+            <div className="text-sm text-gray-600">Cultural AI Guide</div>
+          </div>
+          <span className="ml-auto text-xs bg-gradient-to-r from-green-500 to-blue-500 text-white px-3 py-1 rounded-full font-bold shadow-lg">
             AI-Powered
           </span>
         </CardTitle>

@@ -203,10 +203,12 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
         {/* Column 1: Main Form Inputs */}
         <div className="space-y-6">
           {/* Cultural Heritage Card */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Users className="w-5 h-5" />
-              <h3 className="text-lg font-semibold">{t.bridesCulturalHeritage}</h3>
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.bridesCulturalHeritage}</h3>
             </div>
             <div className="space-y-4">
               <div>
@@ -237,10 +239,12 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
           </div>
 
           {/* Education & Career Card */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <GraduationCap className="w-5 h-5" />
-              <h3 className="text-lg font-semibold">{t.bridesEducationCareer}</h3>
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
+                <GraduationCap className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.bridesEducationCareer}</h3>
             </div>
             <div className="space-y-4">
               <div>
@@ -282,10 +286,12 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
           </div>
 
           {/* Additional Bride Info Card */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <User className="w-5 h-5" />
-              <h3 className="text-lg font-semibold">{t.additionalBrideInfo}</h3>
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.additionalBrideInfo}</h3>
             </div>
             <div className="space-y-4">
               <div>
@@ -418,9 +424,9 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
                 <button 
                   type="submit" 
                   disabled={mutation.isPending}
-                  className="w-full text-lg py-6 bg-orange-600 hover:bg-orange-700 text-white rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full text-lg py-6 bg-gradient-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white rounded-2xl font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
                 >
-                  <Calculator className="w-5 h-5" />
+                  <Calculator className="w-6 h-6" />
                   {mutation.isPending ? t.calculating : t.calculateLobolaPrice}
                 </button>
               </form>
@@ -431,10 +437,12 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
         {/* Column 2: AI Chat Interface and Guidance */}
         <div className="space-y-6">
           {/* Uncle Wisdom Chat Interface */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span role="img" aria-label="wise elder" className="text-2xl">👴🏿</span>
-              <h3 className="text-lg font-semibold">Ask Uncle Wisdom</h3>
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl">
+                <span role="img" aria-label="wise elder" className="text-2xl">👴🏿</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">Ask Uncle Wisdom</h3>
             </div>
             <div className="space-y-4">
               <div className="text-center p-4 border rounded-lg bg-secondary">
@@ -538,10 +546,12 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
 
 
           {/* Guidance for Non-Black Partners */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Info className="w-5 h-5" />
-              <h3 className="text-lg font-semibold">{t.guidanceForNonBlackPartners}</h3>
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl">
+                <Info className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.guidanceForNonBlackPartners}</h3>
             </div>
             <div className="space-y-4">
               <p className="text-sm text-gray-600">
@@ -585,8 +595,13 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
           </div>
 
           {/* Learn More Section */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h3 className="font-semibold text-lg mb-4">{t.learnMore}</h3>
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
+                <span className="text-white font-bold">📚</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.learnMore}</h3>
+            </div>
             <div className="space-y-3">
               <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
                 <h4 className="font-medium">{t.understandingLobolaTraditions}</h4>
