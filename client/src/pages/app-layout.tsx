@@ -31,7 +31,7 @@ export default function AppLayout() {
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm text-gray-300 mb-2">This is a vAIb innovation</p>
-          <p className="text-xs text-gray-400">© 2024 My Lobola Guide. All rights reserved.</p>
+          <p className="text-xs text-gray-400">© 2024. All rights reserved.</p>
         </div>
       </footer>
     </div>
