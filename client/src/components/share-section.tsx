@@ -12,7 +12,7 @@ export default function ShareSection({ results }: ShareSectionProps) {
   const { toast } = useToast();
 
   const shareWhatsApp = () => {
-    const message = `Ubuntu Lobola Guide Results: ${results.amount}\n\nCalculated using respectful cultural guidance. Learn more at ${window.location.origin}`;
+    const message = `My Lobola price is : ${results.amount} or 5 whole cows\nCalculated yours at ${window.location.origin}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -21,8 +21,8 @@ export default function ShareSection({ results }: ShareSectionProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Ubuntu Lobola Guide Results',
-          text: 'Check out my cultural guidance results from Ubuntu Lobola Guide',
+          title: 'My Lobola Results',
+          text: 'Check out my lobola calculation results',
           url: window.location.href
         });
       } catch (error) {

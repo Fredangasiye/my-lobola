@@ -9,12 +9,12 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-cream overflow-x-hidden">
-      <header className="bg-primary-green text-white py-6 px-4 shadow-lg">
+      <header className="bg-primary-green text-white py-4 md:py-6 px-4 shadow-lg">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="text-2xl">🇿🇦</div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">
+          <div className="flex items-center space-x-2 md:space-x-3">
+            <div className="text-xl md:text-2xl">🇿🇦</div>
+            <div className="flex items-center gap-2 md:gap-3">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-black drop-shadow-lg">
                 {t.appTitle}
               </h1>
               <div className="flex items-center gap-1">
@@ -23,9 +23,9 @@ export default function AppLayout() {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col items-end gap-1 md:flex-row md:items-center md:gap-4">
             <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
-            <span className="text-white text-sm">{t.demoMode}</span>
+            <span className="text-white text-xs md:text-sm">{t.demoMode}</span>
           </div>
         </div>
       </header>
