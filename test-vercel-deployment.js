@@ -1,7 +1,7 @@
 // Test script for Vercel deployment of Uncle Wisdom OpenRouter
 import fetch from 'node-fetch';
 
-const VERCEL_URL = 'https://my-lobola-app.vercel.app';
+const VERCEL_URL = 'https://my-lobola-git-main-freds-projects-7c342310.vercel.app';
 
 async function testVercelDeployment() {
   console.log('🧪 Testing Vercel Deployment of Uncle Wisdom OpenRouter\n');
