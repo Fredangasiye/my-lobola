@@ -13,9 +13,15 @@ export default function AppLayout() {
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="text-2xl">🇿🇦</div>
-            <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">
-              {t.appTitle} <span className="text-lg md:text-xl">by</span> <GradientTitle className="text-lg md:text-xl" />
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">
+                {t.appTitle}
+              </h1>
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-gray-500">by</span>
+                <GradientTitle />
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />

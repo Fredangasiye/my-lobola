@@ -13,8 +13,8 @@ const GradientTitle: React.FC<GradientTitleProps> = ({
   const animatedClasses = animated ? "animate-pulse" : "";
   
   return (
-    <span className={`${className} cursor-pointer`}>
-      <span className={`${baseClasses} ${animatedClasses}`}>
+    <span className={`${className} cursor-pointer inline-flex items-center`}>
+      <span className={`${baseClasses} ${animatedClasses} text-xs px-2 py-1 rounded-full border border-blue-300/30 bg-blue-50/50 backdrop-blur-sm`}>
         vAIb
       </span>
     </span>
