@@ -2,6 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -170,6 +174,10 @@ app.post('/api/calculate', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+// Import and use the OpenRouter Uncle Wisdom endpoint
+import uncleWisdomOpenRouter from './api/uncle-wisdom-openrouter.js';
+app.post('/api/uncle-wisdom-openrouter', uncleWisdomOpenRouter);
 
 // Serve React app for all other routes (SPA)
 app.get('*', (req, res) => {

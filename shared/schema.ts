@@ -8,12 +8,13 @@ export const calculations = pgTable("calculations", {
   education: text("education").notNull(),
   employment: text("employment").notNull(),
   familyType: text("family_type"),
-  location: text("location"),
-  income: text("income"),
+  locationType: text("location_type"),
+  incomeRange: text("income_range"),
   age: text("age"),
   socialStanding: text("social_standing"),
-  numberOfChildren: text("number_of_children"),
+  childrenCount: text("children_count"),
   virginityStatus: text("virginity_status"),
+  language: text("language"),
   result: text("result").notNull(),
   breakdown: text("breakdown").notNull(), // JSON string
   createdAt: text("created_at").notNull(),
@@ -33,12 +34,13 @@ export const calculatorFormSchema = z.object({
   education: z.string().min(1, "Please select your education level"),
   employment: z.string().min(1, "Please select your employment status"),
   familyType: z.string().optional(),
-  location: z.string().optional(),
-  income: z.string().optional(),
+  locationType: z.string().optional(),
+  incomeRange: z.string().optional(),
   age: z.string().optional(),
   socialStanding: z.string().optional(),
-  numberOfChildren: z.string().optional(),
+  childrenCount: z.string().optional(),
   virginityStatus: z.string().optional(),
+  language: z.string().optional(),
 });
 
 export type CalculatorFormData = z.infer<typeof calculatorFormSchema>;
@@ -49,25 +51,17 @@ export interface CalculationResult {
     base: number;
     education: number;
     career: number;
-    location: number;
-    total: {
-      lower: number;
-      upper: number;
-    };
-  };
-  cowEquivalent: {
-    lowerCows: number;
-    upperCows: number;
-    pricePerCow: number;
-    displayText: string;
+    cultural: number;
+    regional: number;
   };
   insights: {
     title: string;
     description: string;
-    culturalNotes: string[];
-    negotiationTips: string[];
+    traditions: string[];
+    modernConsiderations: string[];
   };
 }
+
 // Add this new table definition to shared/schema.ts
 
 export const users = pgTable("users", {

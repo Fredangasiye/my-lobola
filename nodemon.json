@@ -1,6 +1,6 @@
 {
-  "watch": ["api/"],
-  "ext": "ts,json",
-  "ignore": ["*.test.ts"],
-  "exec": "tsx api/dev-server.ts"
+  "watch": ["api/", "server.js"],
+  "ext": "js,ts,json",
+  "ignore": ["*.test.ts", "*.test.js"],
+  "exec": "node server.js"
 }

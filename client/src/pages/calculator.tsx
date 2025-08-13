@@ -24,17 +24,10 @@ export default function Calculator() {
   return (
     <div>
       <CulturalDisclaimer />
-      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8">
-        <div className="space-y-6 lg:order-none order-2">
-          <CalculatorForm 
-            onCalculationComplete={handleCalculationComplete}
-            onCulturalGroupChange={setSelectedCulturalGroup}
-          />
-        </div>
-        <div className="lg:order-none order-1">
-          <UncleWisdom />
-        </div>
-      </div>
+      <CalculatorForm 
+        onCalculationComplete={handleCalculationComplete}
+        onCulturalGroupChange={setSelectedCulturalGroup}
+      />
       <div className="space-y-6 mt-8" id="results-section">
         {showResults && results && (
           <>

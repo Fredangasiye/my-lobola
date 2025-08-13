@@ -18,7 +18,7 @@ export default function LanguageSelector({ currentLanguage, onLanguageChange }: 
 
   return (
     <div className="flex items-center space-x-2">
-      <Languages className="h-4 w-4 text-black" />
+      <span className="text-sm font-medium text-black">Language</span>
       <Select value={currentLanguage} onValueChange={onLanguageChange}>
         <SelectTrigger className="w-48 focus:ring-2 focus:ring-green-600 focus:border-transparent text-black">
           <SelectValue placeholder="Select language" />

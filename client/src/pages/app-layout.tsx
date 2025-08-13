@@ -1,7 +1,10 @@
 import Calculator from "./calculator";
 import { Heart } from "lucide-react";
+import LanguageSelector from "@/components/language-selector";
+import { useTranslationContext } from "@/lib/translation-context";
 
 export default function AppLayout() {
+  const { language, setLanguage, t } = useTranslationContext();
 
   return (
     <div className="min-h-screen bg-cream">
@@ -9,10 +12,11 @@ export default function AppLayout() {
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="text-2xl">🇿🇦</div>
-            <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">My Lobola</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">{t.appTitle}</h1>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-white text-sm">Demo Mode</span>
+            <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
+            <span className="text-white text-sm">{t.demoMode}</span>
           </div>
         </div>
       </header>
