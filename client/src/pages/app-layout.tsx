@@ -8,7 +8,7 @@ export default function AppLayout() {
   const { language, setLanguage, t } = useTranslationContext();
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-cream overflow-x-hidden">
       <header className="bg-primary-green text-white py-6 px-4 shadow-lg">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -30,7 +30,7 @@ export default function AppLayout() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 overflow-x-hidden">
         <Calculator currentLanguage={language} />
       </main>
       

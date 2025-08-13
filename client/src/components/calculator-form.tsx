@@ -537,6 +537,53 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
 
 
 
+          {/* Guidance for Non-Black Partners */}
+          <div className="bg-white shadow-lg rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Info className="w-5 h-5" />
+              <h3 className="text-lg font-semibold">{t.guidanceForNonBlackPartners}</h3>
+            </div>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                {t.guidanceIntro}
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Approach with deep respect and humility for African traditions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Engage a cultural mediator or elder who can guide you through the process</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Learn about the specific cultural group's traditions and customs</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Understand that lobola is not a purchase but a bridge between families</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Be prepared for extended family involvement in the negotiation process</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Show genuine interest in learning and embracing the culture</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Consider learning basic phrases in the relevant African language</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Respect that some families may have higher expectations due to cultural differences</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
           {/* Learn More Section */}
           <div className="bg-white shadow-lg rounded-lg p-6">
             <h3 className="font-semibold text-lg mb-4">{t.learnMore}</h3>
