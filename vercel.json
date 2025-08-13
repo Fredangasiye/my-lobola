@@ -2,6 +2,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm ci",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/((?!api|assets|_next|favicon.ico).*)",
