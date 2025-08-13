@@ -535,52 +535,7 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
             </div>
           </div>
 
-          {/* Guidance for Non-Black Partners */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Info className="w-5 h-5" />
-              <h3 className="text-lg font-semibold">{t.guidanceForNonBlackPartners}</h3>
-            </div>
-            <div className="space-y-4">
-              <p className="text-sm text-gray-600">
-                {t.guidanceIntro}
-              </p>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint1}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint2}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint3}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint4}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint5}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint6}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint7}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>{t.guidancePoint8}</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+
 
           {/* Learn More Section */}
           <div className="bg-white shadow-lg rounded-lg p-6">
