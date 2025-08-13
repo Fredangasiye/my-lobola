@@ -51,20 +51,20 @@ export default function ShareSection({ results }: ShareSectionProps) {
         <Share2 className="text-warm-orange mr-3" />
         Share Results
       </h2>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="space-y-3">
         <Button 
           onClick={shareWhatsApp}
-          className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white"
+          className="w-full flex items-center justify-start space-x-3 bg-green-600 hover:bg-green-700 text-white py-3 px-4"
         >
-          <MessageCircle className="h-4 w-4" />
-          <span className="text-sm">WhatsApp</span>
+          <MessageCircle className="h-5 w-5" />
+          <span className="text-sm font-medium">Share on WhatsApp</span>
         </Button>
         <Button 
           onClick={shareGeneral}
-          className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white"
+          className="w-full flex items-center justify-start space-x-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4"
         >
-          <Link className="h-4 w-4" />
-          <span className="text-sm">Copy Link</span>
+          <Link className="h-5 w-5" />
+          <span className="text-sm font-medium">Copy Link</span>
         </Button>
       </div>
     </div>
