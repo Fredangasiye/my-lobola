@@ -170,14 +170,14 @@ export const translations: Record<string, Translation> = {
     
     // Guidance content
     guidanceIntro: "If you are not of African heritage and are entering a lobola negotiation, here are important considerations:",
-    guidancePoint1: "• Approach with deep respect and humility for African traditions",
-    guidancePoint2: "• Engage a cultural mediator or elder who can guide you through the process",
-    guidancePoint3: "• Learn about the specific cultural group's traditions and customs",
-    guidancePoint4: "• Understand that lobola is not a purchase but a bridge between families",
-    guidancePoint5: "• Be prepared for extended family involvement in the negotiation process",
-    guidancePoint6: "• Show genuine interest in learning and embracing the culture",
-    guidancePoint7: "• Consider learning basic phrases in the relevant African language",
-    guidancePoint8: "• Respect that some families may have higher expectations due to cultural differences",
+    guidancePoint1: "· Approach with deep respect and humility for African traditions",
+    guidancePoint2: "· Engage a cultural mediator or elder who can guide you through the process",
+    guidancePoint3: "· Learn about the specific cultural group's traditions and customs",
+    guidancePoint4: "· Understand that lobola is not a purchase but a bridge between families",
+    guidancePoint5: "· Be prepared for extended family involvement in the negotiation process",
+    guidancePoint6: "· Show genuine interest in learning and embracing the culture",
+    guidancePoint7: "· Consider learning basic phrases in the relevant African language",
+    guidancePoint8: "· Respect that some families may have higher expectations due to cultural differences",
     
     // Button
     calculateLobolaPrice: "Calculate Lobola Price",
