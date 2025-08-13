@@ -14,7 +14,7 @@ export default function AppLayout() {
           <div className="flex items-center space-x-3">
             <div className="text-2xl">🇿🇦</div>
             <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-lg">
-              {t.appTitle} by <GradientTitle className="text-2xl md:text-3xl" />
+              {t.appTitle} <span className="text-lg md:text-xl">by</span> <GradientTitle className="text-lg md:text-xl" />
             </h1>
           </div>
           <div className="flex items-center gap-4">
@@ -30,7 +30,8 @@ export default function AppLayout() {
       
       <footer className="bg-gray-800 text-white py-8 px-4 mt-12">
         <div className="max-w-4xl mx-auto text-center">
-            {/* ... your footer content ... */}
+          <p className="text-sm text-gray-300 mb-2">This is a vAIb innovation</p>
+          <p className="text-xs text-gray-400">© 2024 My Lobola Guide. All rights reserved.</p>
         </div>
       </footer>
     </div>
