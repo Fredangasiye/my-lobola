@@ -2,11 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm ci",
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node@2.0.0"
-    }
-  },
   "rewrites": [
     {
       "source": "/((?!api|assets|_next|favicon.ico).*)",
