@@ -26,7 +26,7 @@ export default function AppLayout() {
           </div>
           <div className="flex flex-col items-end gap-1 md:flex-row md:items-center md:gap-4">
             <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
-            <span className="text-white/90 text-xs md:text-sm bg-white/10 px-2 py-1 rounded-full">{t.demoMode}</span>
+
           </div>
         </div>
       </header>
