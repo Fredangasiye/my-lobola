@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Lightbulb, Sparkles, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Lightbulb, Sparkles, Loader2, Share2, MessageCircle, Link, Twitter, Facebook } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Textarea } from "./ui/textarea";
@@ -10,16 +10,31 @@ export default function UncleWisdom() {
   const [answer, setAnswer] = useState("");
   const [askedQuestion, setAskedQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [freeAnswersRemaining, setFreeAnswersRemaining] = useState(5);
+  const [freeAnswersRemaining, setFreeAnswersRemaining] = useState(2);
+  const [showUnlockOptions, setShowUnlockOptions] = useState(false);
+  const [completedShares, setCompletedShares] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+
+  // Load completed shares from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('uncle-wisdom-shares');
+    if (saved) {
+      setCompletedShares(new Set(JSON.parse(saved)));
+    }
+  }, []);
+
+  const saveCompletedShares = (shares: Set<string>) => {
+    localStorage.setItem('uncle-wisdom-shares', JSON.stringify([...shares]));
+    setCompletedShares(shares);
+  };
 
   const handleAskQuestion = async () => {
     if (!question.trim()) return;
     if (freeAnswersRemaining <= 0) {
+      setShowUnlockOptions(true);
       toast({
-        title: "No free answers remaining",
-        description: "You've used all your free questions. Please consult with family elders for more guidance.",
-        variant: "destructive",
+        title: "Unlock More Questions",
+        description: "Share the app to unlock more Uncle Wisdom questions!",
       });
       return;
     }
@@ -72,6 +87,79 @@ export default function UncleWisdom() {
     }
   };
 
+  const shareWhatsApp = () => {
+    const message = `🌟 Get cultural wisdom from Uncle Wisdom! Ask questions about lobola traditions and get AI-powered guidance. Try it now: ${window.location.origin}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    unlockQuestions('whatsapp');
+  };
+
+  const shareTwitter = () => {
+    const message = `🌟 Get cultural wisdom from Uncle Wisdom! Ask questions about lobola traditions and get AI-powered guidance. Try it now: ${window.location.origin}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    window.open(twitterUrl, '_blank');
+    unlockQuestions('twitter');
+  };
+
+  const shareFacebook = () => {
+    const message = `🌟 Get cultural wisdom from Uncle Wisdom! Ask questions about lobola traditions and get AI-powered guidance. Try it now: ${window.location.origin}`;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(message)}`;
+    window.open(facebookUrl, '_blank');
+    unlockQuestions('facebook');
+  };
+
+  const shareGeneral = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Uncle Wisdom - Cultural AI Guide',
+          text: '🌟 Get cultural wisdom from Uncle Wisdom! Ask questions about lobola traditions and get AI-powered guidance.',
+          url: window.location.origin
+        });
+        unlockQuestions('native');
+      } catch (error) {
+        // User cancelled sharing
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(`${window.location.origin}\n\n🌟 Get cultural wisdom from Uncle Wisdom! Ask questions about lobola traditions and get AI-powered guidance.`);
+        toast({
+          title: "Link Copied!",
+          description: "Share the link to unlock more questions.",
+        });
+        unlockQuestions('copy');
+      } catch (error) {
+        toast({
+          title: "Copy Failed",
+          description: "Unable to copy link to clipboard.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const unlockQuestions = (method: string) => {
+    if (completedShares.has(method)) {
+      toast({
+        title: "Already Completed",
+        description: "You've already unlocked questions with this method. Try another!",
+      });
+      return;
+    }
+
+    const newShares = new Set(completedShares);
+    newShares.add(method);
+    saveCompletedShares(newShares);
+    
+    setFreeAnswersRemaining(prev => prev + 2);
+    setShowUnlockOptions(false);
+    
+    toast({
+      title: "Questions Unlocked! 🎉",
+      description: `You've unlocked 2 more questions by sharing on ${method}!`,
+    });
+  };
+
   return (
     <Card className="mt-8">
       <CardHeader>
@@ -90,8 +178,13 @@ export default function UncleWisdom() {
             Ask questions about lobola traditions and get culturally sensitive guidance
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Free answers remaining: {freeAnswersRemaining}
+            Questions remaining: {freeAnswersRemaining}
           </p>
+          {completedShares.size > 0 && (
+            <p className="text-xs text-green-600 mt-1">
+              Unlocked {completedShares.size * 2} questions through sharing! 🎉
+            </p>
+          )}
         </div>
         
         <Textarea 
@@ -136,6 +229,65 @@ export default function UncleWisdom() {
                 <p className="text-gray-800">{answer}</p>
               </div>
             )}
+          </div>
+        )}
+
+        {showUnlockOptions && (
+          <div className="mt-4 p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-purple-50">
+            <h3 className="font-semibold text-center mb-3 text-gray-800">
+              🌟 Unlock More Questions!
+            </h3>
+            <p className="text-sm text-center text-gray-600 mb-4">
+              Share Uncle Wisdom with others to unlock 2 more questions per method
+            </p>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <Button 
+                onClick={shareWhatsApp}
+                disabled={completedShares.has('whatsapp')}
+                className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span className="text-xs">WhatsApp</span>
+                {completedShares.has('whatsapp') && <span className="text-xs">✓</span>}
+              </Button>
+              
+              <Button 
+                onClick={shareTwitter}
+                disabled={completedShares.has('twitter')}
+                className="flex items-center justify-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                <Twitter className="h-4 w-4" />
+                <span className="text-xs">Twitter</span>
+                {completedShares.has('twitter') && <span className="text-xs">✓</span>}
+              </Button>
+              
+              <Button 
+                onClick={shareFacebook}
+                disabled={completedShares.has('facebook')}
+                className="flex items-center justify-center space-x-2 bg-blue-700 hover:bg-blue-800 text-white"
+              >
+                <Facebook className="h-4 w-4" />
+                <span className="text-xs">Facebook</span>
+                {completedShares.has('facebook') && <span className="text-xs">✓</span>}
+              </Button>
+              
+              <Button 
+                onClick={shareGeneral}
+                disabled={completedShares.has('native') && completedShares.has('copy')}
+                className="flex items-center justify-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white"
+              >
+                <Share2 className="h-4 w-4" />
+                <span className="text-xs">Share</span>
+                {(completedShares.has('native') || completedShares.has('copy')) && <span className="text-xs">✓</span>}
+              </Button>
+            </div>
+            
+            <div className="mt-3 text-center">
+              <p className="text-xs text-gray-500">
+                Completed: {completedShares.size}/4 methods
+              </p>
+            </div>
           </div>
         )}
       </CardContent>
