@@ -4,7 +4,7 @@ import CalculatorForm from "@/components/calculator-form";
 import ResultsDisplay from "@/components/results-display";
 import ShareSection from "@/components/share-section";
 import UncleWisdom from "@/components/uncle-wisdom";
-import NonBlackGuidance from "@/components/non-black-guidance";
+
 import { Toaster } from "@/components/ui/toaster";
 
 
@@ -36,9 +36,7 @@ export default function Calculator({ currentLanguage }: { currentLanguage: strin
           </>
         )}
       </div>
-      <div className="mt-12 space-y-8">
-        <NonBlackGuidance currentLanguage={currentLanguage} />
-      </div>
+
       <Toaster />
     </div>
   );
