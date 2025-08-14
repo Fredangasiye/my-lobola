@@ -118,13 +118,49 @@ If the question is not about lobola or African marriage traditions, respond with
           errorStatus: response.status,
           errorData: errorData
         }
-      });
+            });
       return;
-      
-      // Enhanced fallback system - so good it feels like AI
-      console.log('🔄 Using enhanced Uncle Wisdom fallback system');
-      const generateResponse = (question, culturalGroup) => {
-        const questionLower = question.toLowerCase();
+    }
+
+    const data = await response.json();
+    console.log('✅ OpenRouter API Response:', JSON.stringify(data, null, 2));
+    
+    // Extract the generated text from the response
+    let answer = '';
+    if (data && data.choices && data.choices[0] && data.choices[0].message) {
+      answer = data.choices[0].message.content.trim();
+      console.log('✅ Extracted answer:', answer);
+    } else {
+      console.log('❌ No valid answer in response structure:', data);
+      // Fallback if response format is unexpected
+      console.log('Unexpected response format, using fallback');
+      answer = "Thank you for your question! As Uncle Wisdom, I remind you that lobola traditions are deeply personal and should be discussed with family elders and cultural advisors. This tool is meant to start conversations, not replace them.";
+    }
+
+    // Additional validation to ensure response is lobola-related
+    const answerLower = answer.toLowerCase();
+    const isAnswerLobolaRelated = lobolaKeywords.some(keyword => 
+      answerLower.includes(keyword)
+    );
+
+    if (!isAnswerLobolaRelated) {
+      answer = "My child, I can only provide wisdom about lobola and African marriage traditions. Please ask me about bride price, cultural marriage customs, or family union practices.";
+    }
+
+    res.status(200).json({
+      answer: answer,
+      source: 'openrouter-mistral',
+      culturalGroup: culturalGroup || 'general',
+      model: 'mistralai/mistral-7b-instruct'
+    });
+
+  } catch (error) {
+    console.error('Uncle Wisdom OpenRouter API Error:', error);
+    
+    // Enhanced fallback system - so good it feels like AI
+    console.log('🔄 Using enhanced Uncle Wisdom fallback system');
+    const generateResponse = (question, culturalGroup) => {
+      const questionLower = question.toLowerCase();
         const group = culturalGroup ? culturalGroup.toLowerCase() : 'general';
         
         // Define response patterns based on question content
