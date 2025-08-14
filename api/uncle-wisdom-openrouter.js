@@ -16,6 +16,13 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Debug: Check environment variable
+    console.log('🔍 API Key Check:', {
+      exists: !!process.env.OPENROUTER_API_KEY,
+      length: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
+      preview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 10) + '...' : 'NOT SET'
+    });
+    
     const { question, culturalGroup } = req.body;
 
     if (!question || !question.trim()) {

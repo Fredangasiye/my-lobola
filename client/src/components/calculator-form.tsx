@@ -34,8 +34,6 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
   const [uncleWisdomAnswer, setUncleWisdomAnswer] = useState("");
   const [uncleWisdomLoading, setUncleWisdomLoading] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState("");
-  const [freeAnswersUsed, setFreeAnswersUsed] = useState(0);
-  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   
   const form = useForm({
     resolver: zodResolver(calculatorFormSchema),
@@ -84,17 +82,11 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
   const askUncleWisdom = async () => {
     if (!uncleWisdomQuestion.trim()) return;
     
-    // Check free answer limit
-    if (freeAnswersUsed >= 1) {
-      setShowUpgradePrompt(true);
-      return;
-    }
-    
     setUncleWisdomLoading(true);
     setAskedQuestion(uncleWisdomQuestion);
     
     try {
-      const response = await fetch('/api/uncle-wisdom', {
+                        const response = await fetch('/api/uncle-wisdom-openrouter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +104,6 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
       const data = await response.json();
       setUncleWisdomAnswer(data.answer);
       setUncleWisdomQuestion("");
-      setFreeAnswersUsed(prev => prev + 1);
     } catch (error) {
       console.error('Uncle Wisdom Error:', error);
       setUncleWisdomAnswer("Thank you for your question! As Uncle Wisdom, I remind you that lobola traditions are deeply personal and should be discussed with family elders and cultural advisors. This tool is meant to start conversations, not replace them.");
@@ -454,19 +445,9 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
                     AI-Powered
                   </span>
                 </div>
-                <p className="text-xs text-orange-600 mt-1">
-                  {freeAnswersUsed === 0 ? "1 free answer remaining" : "Free answers used up"}
+                <p className="text-xs text-green-600 mt-1">
+                  Ask unlimited questions about lobola traditions
                 </p>
-                {freeAnswersUsed > 0 && (
-                  <a 
-                    href="https://buy.stripe.com/test_28o5kQ2Xq8Yq8wM5kk" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-block text-xs text-green-600 mt-1 font-medium hover:text-green-700 underline transition-colors"
-                  >
-                    Get more questions
-                  </a>
-                )}
               </div>
               <textarea 
                 placeholder="Ask Uncle Wisdom anything about lobola traditions..."
@@ -509,37 +490,7 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
                 </div>
               )}
               
-              {showUpgradePrompt && (
-                <div className="mt-4 p-4 border rounded-lg bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
-                  <div className="text-center">
-                    <h4 className="font-semibold text-orange-800 mb-2">✨ Upgrade to Premium</h4>
-                    <p className="text-sm text-orange-700 mb-3">
-                      You've used your free answer. Upgrade to get unlimited AI wisdom from Uncle Wisdom for just R19.99/month!
-                    </p>
-                    <div className="space-y-2">
-                      <a 
-                        href="https://buy.stripe.com/test_28o5kQ2Xq8Yq8wM5kk" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="block w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md transition-colors text-center"
-                      >
-                        Upgrade Now - R19.99/month
-                      </a>
-                      <button 
-                        onClick={() => {
-                          setShowUpgradePrompt(false);
-                          setUncleWisdomQuestion("");
-                          setUncleWisdomAnswer("");
-                          setAskedQuestion("");
-                        }}
-                        className="w-full text-orange-600 hover:text-orange-700 text-sm underline"
-                      >
-                        Maybe Later
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+
             </div>
           </div>
 

@@ -43,7 +43,7 @@ export default function UncleWisdom() {
     setAskedQuestion(question);
     
     try {
-      const response = await fetch('/api/ai-chat', {
+      const response = await fetch('/api/uncle-wisdom-openrouter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
