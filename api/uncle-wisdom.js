@@ -32,12 +32,13 @@ export default async function handler(req, res) {
 
     // For now, return a test response to see if the endpoint works
     res.status(200).json({
-      answer: "Test response - API endpoint is working! API Key: " + (process.env.OPENROUTER_API_KEY ? "SET" : "NOT SET"),
-      source: 'test',
+      answer: "FRESH DEPLOY TEST - API endpoint is working! API Key: " + (process.env.OPENROUTER_API_KEY ? "SET" : "NOT SET"),
+      source: 'fresh-test',
       culturalGroup: culturalGroup || 'general',
       debug: {
         apiKeyExists: !!process.env.OPENROUTER_API_KEY,
-        apiKeyLength: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0
+        apiKeyLength: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
+        timestamp: new Date().toISOString()
       }
     });
 
