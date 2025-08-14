@@ -30,16 +30,66 @@ export default async function handler(req, res) {
       preview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 15) + '...' : 'NOT SET'
     });
 
-    // For now, return a test response to see if the endpoint works
+    // Test OpenRouter API call
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://my-lobola-app.vercel.app',
+        'X-Title': 'My Lobola App'
+      },
+      body: JSON.stringify({
+        model: 'mistralai/mistral-7b-instruct',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are Uncle Wisdom, a wise African elder who only provides guidance about lobola (bride price) and African marriage traditions.'
+          },
+          {
+            role: 'user',
+            content: `Question: ${question}`
+          }
+        ],
+        max_tokens: 200,
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('❌ OpenRouter API Error:', response.status, errorData);
+      
+      res.status(200).json({
+        answer: "API Error - Status: " + response.status + " - API Key: " + (process.env.OPENROUTER_API_KEY ? "SET" : "NOT SET"),
+        source: 'error',
+        culturalGroup: culturalGroup || 'general',
+        debug: {
+          apiKeyExists: !!process.env.OPENROUTER_API_KEY,
+          apiKeyLength: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
+          errorStatus: response.status,
+          errorData: errorData
+        }
+      });
+      return;
+    }
+
+    const data = await response.json();
+    console.log('✅ OpenRouter API Response:', JSON.stringify(data, null, 2));
+    
+    let answer = '';
+    if (data && data.choices && data.choices[0] && data.choices[0].message) {
+      answer = data.choices[0].message.content.trim();
+    } else {
+      answer = "Thank you for your question! As Uncle Wisdom, I remind you that lobola traditions are deeply personal and should be discussed with family elders and cultural advisors.";
+    }
+
     res.status(200).json({
-      answer: "FRESH DEPLOY TEST - API endpoint is working! API Key: " + (process.env.OPENROUTER_API_KEY ? "SET" : "NOT SET"),
-      source: 'fresh-test',
+      answer: answer,
+      source: 'openrouter-mistral',
       culturalGroup: culturalGroup || 'general',
-      debug: {
-        apiKeyExists: !!process.env.OPENROUTER_API_KEY,
-        apiKeyLength: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
-        timestamp: new Date().toISOString()
-      }
+      model: 'mistralai/mistral-7b-instruct',
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {
