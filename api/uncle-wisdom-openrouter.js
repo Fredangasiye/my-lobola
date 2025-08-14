@@ -16,14 +16,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Temporary debugging: Check environment variables
-    console.log('🔍 Environment Variables Debug:');
-    console.log('OPENROUTER_API_KEY exists:', !!process.env.OPENROUTER_API_KEY);
-    console.log('OPENROUTER_API_KEY length:', process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0);
-    console.log('OPENROUTER_API_KEY first 10 chars:', process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 10) + '...' : 'NOT SET');
-    console.log('NODE_ENV:', process.env.NODE_ENV);
-    console.log('All env vars:', Object.keys(process.env).filter(key => key.includes('OPENROUTER') || key.includes('VERCEL')));
-    
     const { question, culturalGroup } = req.body;
 
     if (!question || !question.trim()) {
@@ -71,9 +63,6 @@ Please respond as Uncle Wisdom would - with warmth, wisdom, and cultural underst
 If the question is not about lobola or African marriage traditions, respond with: "My child, I can only provide wisdom about lobola and African marriage traditions. Please ask me about bride price, cultural marriage customs, or family union practices."`;
 
     // Use OpenRouter with Mistral model
-    console.log('🚀 Making OpenRouter API call...');
-    console.log('API Key being used:', process.env.OPENROUTER_API_KEY ? 'SET' : 'NOT SET');
-    
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -101,21 +90,13 @@ If the question is not about lobola or African marriage traditions, respond with
         presence_penalty: 0.1
       })
     });
-    
-    console.log('📡 OpenRouter Response Status:', response.status);
-    console.log('📡 OpenRouter Response OK:', response.ok);
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('❌ OpenRouter API Error:', response.status, errorData);
-      console.error('❌ Error Details:', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries())
-      });
+      console.error('OpenRouter API Error:', response.status, errorData);
       
       // Fallback to smart response system if LLM is unavailable
-      console.log('🔄 OpenRouter service unavailable, using fallback system');
+      console.log('OpenRouter service unavailable, using fallback system');
       const generateResponse = (question, culturalGroup) => {
         const questionLower = question.toLowerCase();
         const group = culturalGroup ? culturalGroup.toLowerCase() : 'general';
