@@ -93,10 +93,15 @@ If the question is not about lobola or African marriage traditions, respond with
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('OpenRouter API Error:', response.status, errorData);
+      console.error('❌ OpenRouter API Error:', response.status, errorData);
+      console.error('❌ API Key Status:', {
+        exists: !!process.env.OPENROUTER_API_KEY,
+        length: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
+        preview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 10) + '...' : 'NOT SET'
+      });
       
       // Fallback to smart response system if LLM is unavailable
-      console.log('OpenRouter service unavailable, using fallback system');
+      console.log('🔄 OpenRouter service unavailable, using fallback system');
       const generateResponse = (question, culturalGroup) => {
         const questionLower = question.toLowerCase();
         const group = culturalGroup ? culturalGroup.toLowerCase() : 'general';
