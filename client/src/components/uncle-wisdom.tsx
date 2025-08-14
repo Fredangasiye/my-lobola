@@ -156,7 +156,7 @@ export default function UncleWisdom() {
     
     toast({
       title: "Questions Unlocked! 🎉",
-      description: `You've unlocked 2 more questions by sharing on ${method}!`,
+      description: `You've unlocked more questions by sharing!`,
     });
   };
 
@@ -182,9 +182,7 @@ export default function UncleWisdom() {
           <p className="text-sm text-gray-600 mt-2">
             Ask questions about lobola traditions and get culturally sensitive guidance
           </p>
-                                <p className="text-xs text-gray-500 mt-1">
-                        Questions remaining: {freeAnswersRemaining}
-                      </p>
+                
           {completedShares.size > 0 && (
             <p className="text-xs text-green-600 mt-1">
               Unlocked {completedShares.size * 2} questions through sharing! 🎉
@@ -243,7 +241,7 @@ export default function UncleWisdom() {
               🌟 Unlock More Questions!
             </h3>
             <p className="text-sm text-center text-gray-600 mb-4">
-              Share Uncle Wisdom with others to unlock 2 more questions per method
+              Share Uncle Wisdom with others to unlock more questions
             </p>
             
             <div className="grid grid-cols-2 gap-3">
