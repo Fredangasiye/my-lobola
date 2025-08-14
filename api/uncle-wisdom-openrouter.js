@@ -63,6 +63,12 @@ Please respond as Uncle Wisdom would - with warmth, wisdom, and cultural underst
 If the question is not about lobola or African marriage traditions, respond with: "My child, I can only provide wisdom about lobola and African marriage traditions. Please ask me about bride price, cultural marriage customs, or family union practices."`;
 
     // Use OpenRouter with Mistral model (which is working based on your logs!)
+    console.log('🔑 API Key Check:', {
+      exists: !!process.env.OPENROUTER_API_KEY,
+      length: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
+      preview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 15) + '...' : 'NOT SET'
+    });
+    
     response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
