@@ -12,7 +12,7 @@ export default function ShareSection({ results }: ShareSectionProps) {
   const { toast } = useToast();
 
   const shareWhatsApp = () => {
-    const message = `My Lobola price is : ${results.amount} or 5 whole cows\nCalculated yours at ${window.location.origin}`;
+    const message = `Ubuntu Lobola Guide Results: ${results.amount}\n\nCalculated using respectful cultural guidance. Learn more at ${window.location.origin}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -21,8 +21,8 @@ export default function ShareSection({ results }: ShareSectionProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'My Lobola Results',
-          text: 'Check out my lobola calculation results',
+          title: 'Ubuntu Lobola Guide Results',
+          text: 'Check out my cultural guidance results from Ubuntu Lobola Guide',
           url: window.location.href
         });
       } catch (error) {
@@ -51,20 +51,20 @@ export default function ShareSection({ results }: ShareSectionProps) {
         <Share2 className="text-warm-orange mr-3" />
         Share Results
       </h2>
-      <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3">
         <Button 
           onClick={shareWhatsApp}
-          className="w-full flex items-center justify-start space-x-3 bg-green-600 hover:bg-green-700 text-white py-3 px-4"
+          className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white"
         >
-          <MessageCircle className="h-5 w-5" />
-          <span className="text-sm font-medium">Share on WhatsApp</span>
+          <MessageCircle className="h-4 w-4" />
+          <span className="text-sm">WhatsApp</span>
         </Button>
         <Button 
           onClick={shareGeneral}
-          className="w-full flex items-center justify-start space-x-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4"
+          className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white"
         >
-          <Link className="h-5 w-5" />
-          <span className="text-sm font-medium">Copy Link</span>
+          <Link className="h-4 w-4" />
+          <span className="text-sm">Copy Link</span>
         </Button>
       </div>
     </div>
