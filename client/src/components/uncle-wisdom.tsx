@@ -10,7 +10,7 @@ export default function UncleWisdom() {
   const [answer, setAnswer] = useState("");
   const [askedQuestion, setAskedQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [freeAnswersRemaining, setFreeAnswersRemaining] = useState(2);
+  const [freeAnswersRemaining, setFreeAnswersRemaining] = useState(1);
   const [showUnlockOptions, setShowUnlockOptions] = useState(false);
   const [completedShares, setCompletedShares] = useState<Set<string>>(new Set());
   const { toast } = useToast();
