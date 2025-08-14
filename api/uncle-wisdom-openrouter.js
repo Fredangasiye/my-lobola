@@ -106,6 +106,21 @@ If the question is not about lobola or African marriage traditions, respond with
         preview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 10) + '...' : 'NOT SET'
       });
       
+      // Always return debug info for now
+      res.status(200).json({
+        answer: "Debug mode - API Key Status: " + (process.env.OPENROUTER_API_KEY ? "SET" : "NOT SET"),
+        source: 'debug',
+        culturalGroup: culturalGroup || 'general',
+        debug: {
+          apiKeyExists: !!process.env.OPENROUTER_API_KEY,
+          apiKeyLength: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.length : 0,
+          apiKeyPreview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 15) + '...' : 'NOT SET',
+          errorStatus: response.status,
+          errorData: errorData
+        }
+      });
+      return;
+      
       // Enhanced fallback system - so good it feels like AI
       console.log('🔄 Using enhanced Uncle Wisdom fallback system');
       const generateResponse = (question, culturalGroup) => {
