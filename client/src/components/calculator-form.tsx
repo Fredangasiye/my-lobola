@@ -86,7 +86,7 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
     setAskedQuestion(uncleWisdomQuestion);
     
     try {
-                        const response = await fetch('/api/wisdom', {
+                        const response = await fetch('/api/uncle-wisdom', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
