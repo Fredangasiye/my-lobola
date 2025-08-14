@@ -10,7 +10,7 @@ export default function UncleWisdom() {
   const [answer, setAnswer] = useState("");
   const [askedQuestion, setAskedQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [freeAnswersRemaining, setFreeAnswersRemaining] = useState(2);
+
   const [showUnlockOptions, setShowUnlockOptions] = useState(false);
   const [completedShares, setCompletedShares] = useState<Set<string>>(new Set());
   const { toast } = useToast();
@@ -30,14 +30,6 @@ export default function UncleWisdom() {
 
   const handleAskQuestion = async () => {
     if (!question.trim()) return;
-    if (freeAnswersRemaining <= 0) {
-      setShowUnlockOptions(true);
-      toast({
-        title: "Unlock More Questions",
-        description: "Share the app to unlock more Uncle Wisdom questions!",
-      });
-      return;
-    }
     
     setIsLoading(true);
     setAskedQuestion(question);
@@ -65,7 +57,6 @@ export default function UncleWisdom() {
       }
 
       setAnswer(data.answer);
-      setFreeAnswersRemaining(prev => prev - 1);
       
       toast({
         title: "Uncle Wisdom has spoken",
@@ -151,7 +142,7 @@ export default function UncleWisdom() {
     newShares.add(method);
     saveCompletedShares(newShares);
     
-    setFreeAnswersRemaining(prev => prev + 2);
+
     setShowUnlockOptions(false);
     
     toast({
@@ -182,9 +173,9 @@ export default function UncleWisdom() {
           <p className="text-sm text-gray-600 mt-2">
             Ask questions about lobola traditions and get culturally sensitive guidance
           </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Questions remaining: {freeAnswersRemaining}
-          </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                        Ask unlimited questions about lobola traditions
+                      </p>
           {completedShares.size > 0 && (
             <p className="text-xs text-green-600 mt-1">
               Unlocked {completedShares.size * 2} questions through sharing! 🎉
@@ -196,13 +187,13 @@ export default function UncleWisdom() {
           placeholder="Ask Uncle Wisdom anything about lobola traditions..." 
           value={question} 
           onChange={(e) => setQuestion(e.target.value)}
-          disabled={isLoading || freeAnswersRemaining <= 0}
+                              disabled={isLoading}
         />
         
         <Button 
           onClick={handleAskQuestion} 
           className="w-full"
-          disabled={isLoading || !question.trim() || freeAnswersRemaining <= 0}
+                              disabled={isLoading || !question.trim()}
         >
           {isLoading ? (
             <>
