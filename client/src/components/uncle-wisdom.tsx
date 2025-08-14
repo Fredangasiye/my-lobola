@@ -30,6 +30,8 @@ export default function UncleWisdom() {
 
   const handleAskQuestion = async () => {
     if (!question.trim()) return;
+    
+    // Check if user has questions remaining
     if (freeAnswersRemaining <= 0) {
       setShowUnlockOptions(true);
       toast({
@@ -200,7 +202,7 @@ export default function UncleWisdom() {
         <Button 
           onClick={handleAskQuestion} 
           className="w-full"
-                              disabled={isLoading || !question.trim() || freeAnswersRemaining <= 0}
+          disabled={isLoading || !question.trim() || freeAnswersRemaining <= 0}
         >
           {isLoading ? (
             <>

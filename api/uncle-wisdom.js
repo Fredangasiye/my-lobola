@@ -41,7 +41,25 @@ export default async function handler(req, res) {
       
       // Define response patterns based on question content
       const responses = {
-        zulu: {
+        // Greetings and introductions
+        greetings: {
+          hi: "Sawubona, my child! I am Uncle Wisdom, a guide for lobola traditions. How may I help you with your questions about African marriage customs?",
+          hello: "Sawubona, my child! I am Uncle Wisdom, here to share wisdom about lobola and African marriage traditions. What would you like to know?",
+          hey: "Sawubona! I am Uncle Wisdom, your guide to understanding lobola traditions. How can I assist you today?",
+          who_are_you: "I am Uncle Wisdom, a wise elder who shares knowledge about African lobola traditions and marriage customs. I am here to guide you with cultural wisdom.",
+          whats_your_name: "I am Uncle Wisdom, my child. I am here to share the wisdom of African marriage traditions and help you understand lobola customs.",
+          are_you_black: "I am Uncle Wisdom, representing the wisdom of African elders and cultural traditions. My role is to guide you in understanding lobola and African marriage customs, regardless of your background.",
+          are_you_ai: "I am Uncle Wisdom, a cultural guide designed to share African marriage wisdom. Whether I am AI or not, the wisdom I share comes from deep understanding of African traditions and cultural values.",
+          what_can_you_do: "I can help you understand lobola traditions, African marriage customs, cultural practices, and provide guidance on how to approach these important family matters with respect and wisdom.",
+          help: "I am here to help you understand lobola traditions and African marriage customs. Ask me about cattle, negotiations, family involvement, cultural practices, or any aspect of traditional African marriage.",
+          thanks: "You are welcome, my child. May your journey with lobola traditions be filled with wisdom and respect. Remember to always consult with family elders for personalized guidance.",
+          thank_you: "You are most welcome, my child. May the wisdom of our ancestors guide you in your lobola journey. Always approach with humility and respect.",
+          bye: "Go well, my child. May the wisdom I've shared help you on your journey. Remember to consult with family elders for your specific situation.",
+          goodbye: "Go well, my child. May your lobola journey be blessed with understanding and respect for our traditions.",
+          default: "Sawubona, my child! I am Uncle Wisdom, here to guide you in understanding African lobola traditions and marriage customs. How may I help you?"
+        },
+        
+                zulu: {
           cattle: "Ah, my child. In Zulu culture, cattle represent wealth and respect. The number of cattle reflects the value placed on the bride's family and her upbringing. Remember, 'umuntu ngumuntu ngabantu' - we are people through other people. Lobola is not a transaction, but a joining of families.",
           negotiation: "My child, in Zulu tradition, patience is key. Like brewing traditional beer, good things take time. Do not rush the negotiations. Let the discussions flow naturally, and always show respect to the elders present. The inkosi yomndeni (head of family) must be consulted.",
           family: "Remember, my child, that modern Zulu families often accept both cattle and money. What matters most is the spirit of the tradition - showing respect, honoring the family, and creating bonds that will last generations.",
@@ -69,7 +87,28 @@ export default async function handler(req, res) {
 
       // Determine the best response based on question content
       let category = 'default';
-      if (questionLower.includes('cattle') || questionLower.includes('cow') || questionLower.includes('livestock')) {
+      let responseGroup = 'general';
+      
+      // Check for greetings and general questions first
+      if (questionLower.includes('hi') || questionLower.includes('hello') || questionLower.includes('hey')) {
+        responseGroup = 'greetings';
+        category = 'hi';
+      } else if (questionLower.includes('who are you') || questionLower.includes('whats your name') || questionLower.includes('what is your name')) {
+        responseGroup = 'greetings';
+        category = 'who_are_you';
+      } else if (questionLower.includes('are you black') || questionLower.includes('are you ai') || questionLower.includes('are you artificial')) {
+        responseGroup = 'greetings';
+        category = 'are_you_black';
+      } else if (questionLower.includes('what can you do') || questionLower.includes('help') || questionLower.includes('how can you help')) {
+        responseGroup = 'greetings';
+        category = 'what_can_you_do';
+      } else if (questionLower.includes('thank') || questionLower.includes('thanks')) {
+        responseGroup = 'greetings';
+        category = 'thanks';
+      } else if (questionLower.includes('bye') || questionLower.includes('goodbye')) {
+        responseGroup = 'greetings';
+        category = 'bye';
+      } else if (questionLower.includes('cattle') || questionLower.includes('cow') || questionLower.includes('livestock')) {
         category = 'cattle';
       } else if (questionLower.includes('negotiate') || questionLower.includes('discuss') || questionLower.includes('talk')) {
         category = 'negotiation';
@@ -86,7 +125,7 @@ export default async function handler(req, res) {
       }
 
       // Get the appropriate response
-      const groupResponses = responses[group] || responses.general;
+      const groupResponses = responses[responseGroup] || responses.general;
       return groupResponses[category] || groupResponses.default;
     };
 
