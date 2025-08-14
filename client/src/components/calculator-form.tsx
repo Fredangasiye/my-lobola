@@ -445,9 +445,7 @@ export default function CalculatorForm({ onCalculationComplete, onCulturalGroupC
                     AI-Powered
                   </span>
                 </div>
-                <p className="text-xs text-green-600 mt-1">
-                  Ask unlimited questions about lobola traditions
-                </p>
+
               </div>
               <textarea 
                 placeholder="Ask Uncle Wisdom anything about lobola traditions..."
