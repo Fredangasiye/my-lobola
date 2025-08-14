@@ -30,6 +30,9 @@ export default async function handler(req, res) {
       preview: process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.substring(0, 15) + '...' : 'NOT SET'
     });
 
+    // Force cache refresh
+    console.log('🔄 CACHE BUST - ' + new Date().toISOString());
+
     // Test OpenRouter API call
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -86,10 +89,11 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       answer: answer,
-      source: 'openrouter-mistral',
+      source: 'openrouter-mistral-fresh',
       culturalGroup: culturalGroup || 'general',
       model: 'mistralai/mistral-7b-instruct',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      deployment: 'fresh-v2'
     });
 
   } catch (error) {
