@@ -45,6 +45,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Proxy to OpenRouter for Uncle Wisdom AI
+  app.post("/api/uncle-wisdom/ask", async (req, res) => {
+    try {
+      const { prompt, model = "openrouter/auto" } = req.body ?? {};
+      if (!prompt || typeof prompt !== "string") {
+        return res.status(400).json({ message: "Missing prompt" });
+      }
+      const apiKey = process.env.OPENROUTER_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ message: "Server not configured for OpenRouter" });
+      }
+
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+          "HTTP-Referer": process.env.OPENROUTER_SITE_URL || "https://my-lobola-working",
+          "X-Title": process.env.OPENROUTER_APP_NAME || "My Lobola",
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system", content: "You are Uncle Wisdom, a culturally-sensitive assistant for Lobola advice. Keep responses concise, respectful, and avoid legal/financial guarantees." },
+            { role: "user", content: prompt },
+          ],
+          temperature: 0.7,
+          max_tokens: 400,
+        }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("OpenRouter error:", response.status, text);
+        return res.status(502).json({ message: "Upstream AI error", status: response.status });
+      }
+
+      const data = await response.json();
+      const content = data?.choices?.[0]?.message?.content ?? "";
+      res.json({ content });
+    } catch (error) {
+      console.error("Uncle Wisdom AI error:", error);
+      res.status(500).json({ message: "Failed to get AI response" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

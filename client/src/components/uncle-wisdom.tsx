@@ -174,6 +174,8 @@ const generalWisdom: WisdomMessage[] = [
 export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en" }: UncleWisdomProps) {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [showWisdom, setShowWisdom] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const t = getSimpleTranslation(currentLanguage);
 
   const getWisdomMessages = () => {
@@ -190,6 +192,25 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
 
   const prevMessage = () => {
     setCurrentMessageIndex((prev) => (prev - 1 + messages.length) % messages.length);
+  };
+
+  const askUncleAI = async () => {
+    try {
+      setAiLoading(true);
+      setAiAnswer(null);
+      const prompt = `Provide culturally respectful lobola guidance for group: ${culturalGroup || "general"}. Focus on: ${currentMessage.title}. Context: ${currentMessage.culturalContext}.`;
+      const res = await fetch("/api/uncle-wisdom/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, model: "openrouter/auto" }),
+      });
+      const data = await res.json();
+      setAiAnswer(data?.content || "");
+    } catch (e) {
+      setAiAnswer("Sorry, I couldn't fetch Uncle Wisdom right now.");
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   const getCategoryLabel = (category: string) => {
@@ -298,6 +319,14 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
             >
               Next Wisdom
             </Button>
+            <Button
+              onClick={askUncleAI}
+              size="sm"
+              className="bg-forest-green text-white"
+              disabled={aiLoading}
+            >
+              {aiLoading ? "Asking Uncle AI..." : "Ask Uncle AI"}
+            </Button>
           </div>
           
           <div className="flex items-center space-x-3">
@@ -314,6 +343,13 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
             </Button>
           </div>
         </div>
+
+        {aiAnswer && (
+          <div className="mt-4 p-4 rounded-lg border bg-white">
+            <h5 className="font-semibold text-gray-800 mb-2">Uncle AI says</h5>
+            <p className="text-gray-700 whitespace-pre-wrap">{aiAnswer}</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
