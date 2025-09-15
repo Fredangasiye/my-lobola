@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MessageCircle, Heart, Lightbulb, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getSimpleTranslation, type Language } from "@/lib/simple-translations";
@@ -176,6 +177,7 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
   const [showWisdom, setShowWisdom] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
+  const [userQuestion, setUserQuestion] = useState("");
   const t = getSimpleTranslation(currentLanguage);
 
   const getWisdomMessages = () => {
@@ -198,7 +200,10 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
     try {
       setAiLoading(true);
       setAiAnswer(null);
-      const prompt = `Provide culturally respectful lobola guidance for group: ${culturalGroup || "general"}. Focus on: ${currentMessage.title}. Context: ${currentMessage.culturalContext}.`;
+      const cleanQuestion = userQuestion.trim();
+      const prompt = cleanQuestion.length > 0
+        ? cleanQuestion
+        : `Provide culturally respectful lobola guidance for group: ${culturalGroup || "general"}.`;
       const res = await fetch("/api/uncle-wisdom/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -212,6 +217,45 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
       setAiLoading(false);
     }
   };
+
+  // When AI answer is present, show AI-only view
+  if (showWisdom && aiAnswer) {
+    return (
+      <Card className="bg-white shadow-lg border-l-4 border-forest-green">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="bg-forest-green/10 p-2 rounded-full">
+                <MessageCircle className="text-forest-green w-5 h-5" />
+              </div>
+              <CardTitle className="text-lg font-semibold text-gray-800">Uncle Wisdom (AI)</CardTitle>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-4 rounded-lg border bg-white">
+            <p className="text-gray-700 whitespace-pre-wrap">{aiAnswer}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Ask a follow-up question"
+              value={userQuestion}
+              onChange={(e) => setUserQuestion(e.target.value)}
+            />
+            <Button onClick={askUncleAI} disabled={aiLoading} className="bg-forest-green text-white">
+              {aiLoading ? "Asking..." : "Ask"}
+            </Button>
+            <Button onClick={() => { setAiAnswer(null); setUserQuestion(""); }} variant="outline">
+              Clear
+            </Button>
+            <Button onClick={() => setShowWisdom(false)} variant="ghost" className="text-gray-500">
+              Close
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const getCategoryLabel = (category: string) => {
     const labels = {
@@ -319,16 +363,20 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
             >
               Next Wisdom
             </Button>
-            <Button
-              onClick={askUncleAI}
-              size="sm"
-              className="bg-forest-green text-white"
-              disabled={aiLoading}
-            >
-              {aiLoading ? "Asking Uncle AI..." : "Ask Uncle AI"}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Input
+              placeholder="Ask Uncle AI a question"
+              value={userQuestion}
+              onChange={(e) => setUserQuestion(e.target.value)}
+              className="w-64"
+            />
+            <Button onClick={askUncleAI} className="bg-forest-green text-white" disabled={aiLoading}>
+              {aiLoading ? "Asking..." : "Ask"}
             </Button>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             <span className="text-sm text-gray-500">
               {currentMessageIndex + 1} of {messages.length}
@@ -343,13 +391,6 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
             </Button>
           </div>
         </div>
-
-        {aiAnswer && (
-          <div className="mt-4 p-4 rounded-lg border bg-white">
-            <h5 className="font-semibold text-gray-800 mb-2">Uncle AI says</h5>
-            <p className="text-gray-700 whitespace-pre-wrap">{aiAnswer}</p>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

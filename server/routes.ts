@@ -69,7 +69,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         body: JSON.stringify({
           model: selectedModel,
           messages: [
-            { role: "system", content: "You are Uncle Wisdom, a culturally-sensitive assistant for Lobola advice. Keep responses concise, respectful, and avoid legal/financial guarantees." },
+            { role: "system", content: "You are Uncle Wisdom, a culturally-sensitive assistant for Lobola advice. Answer ONLY with your own generated guidance, no placeholders or generic disclaimers. Be concise, culturally respectful, and avoid legal/financial guarantees." },
             { role: "user", content: prompt },
           ],
           temperature: 0.7,
