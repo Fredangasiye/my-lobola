@@ -2,409 +2,572 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Users, GraduationCap, Home, Coins, Calculator, User, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { calculatorFormSchema, type CalculationResult } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { calculatorFormSchema, type CalculatorFormData, type CalculationResult } from "@shared/schema";
+import { Users, Home, GraduationCap, User, Info, Calculator, Globe, Loader2 } from "lucide-react";
+import { useTranslationContext } from "@/lib/translation-context";
+
+// Comprehensive form data
+const languages = ["English", "isiZulu", "isiXhosa", "Sesotho", "Setswana", "Tshivenda", "Xitsonga", "isiNdebele", "siSwati"];
+const culturalGroups = ["zulu", "xhosa", "pedi", "tswana", "sotho", "venda", "tsonga", "ndebele", "swazi"];
+const educationLevels = ["no-matric", "matric", "diploma", "degree", "honours", "masters", "phd", "prefer-not-say"];
+const employmentOptions = ["employed", "self-employed", "student", "unemployed", "retired", "prefer-not-say"];
+const familyTypes = ["nuclear", "extended"];
+const locationTypes = ["rural", "township", "suburb", "city-center"];
+const incomeRanges = ["under-5000", "5000-10000", "10000-20000", "20000-35000", "35000-50000", "50000-75000", "over-75000", "prefer-not-say"];
+const ageRanges = ["18-25", "26-30", "31-35", "36-40", "41-45", "46-50", "over-50"];
+const socialStandings = ["lower", "middle", "upper-middle", "upper", "prefer-not-say"];
+const childrenCounts = ["0", "1", "2", "3", "4", "5+"];
+const virginityStatuses = ["virgin", "not-virgin", "prefer-not-say"];
 
 interface CalculatorFormProps {
   onCalculationComplete: (results: CalculationResult) => void;
-  onCulturalGroupChange?: (culturalGroup: string) => void;
+  onCulturalGroupChange: (group: string) => void;
 }
 
 export default function CalculatorForm({ onCalculationComplete, onCulturalGroupChange }: CalculatorFormProps) {
   const { toast } = useToast();
+  const { t } = useTranslationContext();
   
-  const form = useForm<CalculatorFormData>({
+  // Uncle Wisdom state
+  const [uncleWisdomQuestion, setUncleWisdomQuestion] = useState("");
+  const [uncleWisdomAnswer, setUncleWisdomAnswer] = useState("");
+  const [uncleWisdomLoading, setUncleWisdomLoading] = useState(false);
+  const [askedQuestion, setAskedQuestion] = useState("");
+  
+  const form = useForm({
     resolver: zodResolver(calculatorFormSchema),
     defaultValues: {
       culturalGroup: "",
       education: "",
       employment: "",
       familyType: "",
-      location: "",
-      income: "",
+      locationType: "",
+      incomeRange: "",
       age: "",
       socialStanding: "",
-      numberOfChildren: "",
+      childrenCount: "",
       virginityStatus: "",
+      language: "English",
     },
   });
 
-  const calculateMutation = useMutation({
-    mutationFn: async (data: CalculatorFormData) => {
-      const response = await apiRequest("POST", "/api/calculate", data);
-      return response.json() as Promise<CalculationResult>;
+  const mutation = useMutation({
+    mutationFn: (formData: any) =>
+      fetch("/api/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }).then((res) => {
+        if (!res.ok) throw new Error("Calculation failed");
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      onCalculationComplete(data);
     },
-    onSuccess: (results) => {
-      onCalculationComplete(results);
+    onError: () => {
       toast({
-        title: "Calculation Complete",
-        description: "Your cultural guidance results are ready.",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Calculation Failed",
-        description: error.message,
+        title: "Error",
+        description: "Could not complete the calculation. Please try again.",
         variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: CalculatorFormData) => {
-    calculateMutation.mutate(data);
+  const onSubmit = (data: any) => {
+    mutation.mutate(data);
+  };
+
+  // Uncle Wisdom API call
+  const askUncleWisdom = async () => {
+    if (!uncleWisdomQuestion.trim()) return;
+    
+    setUncleWisdomLoading(true);
+    setAskedQuestion(uncleWisdomQuestion);
+    
+    try {
+                        const response = await fetch('/api/uncle-wisdom', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: uncleWisdomQuestion,
+          culturalGroup: form.getValues('culturalGroup')
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get wisdom');
+      }
+
+      const data = await response.json();
+      setUncleWisdomAnswer(data.answer);
+      setUncleWisdomQuestion("");
+    } catch (error) {
+      console.error('Uncle Wisdom Error:', error);
+      setUncleWisdomAnswer("Thank you for your question! As Uncle Wisdom, I remind you that lobola traditions are deeply personal and should be discussed with family elders and cultural advisors. This tool is meant to start conversations, not replace them.");
+    } finally {
+      setUncleWisdomLoading(false);
+    }
+  };
+
+  // Helper function to get translated option text
+  const getOptionText = (key: string, value: string) => {
+    const optionMap: Record<string, Record<string, string>> = {
+      familyType: {
+        nuclear: t.nuclear,
+        extended: t.extended,
+      },
+      locationType: {
+        rural: t.rural,
+        township: t.township,
+        suburb: t.suburb,
+        "city-center": t.cityCenter,
+      },
+      education: {
+        "no-matric": t.noMatric,
+        matric: t.matric,
+        diploma: t.diploma,
+        degree: t.degree,
+        honours: t.honours,
+        masters: t.masters,
+        phd: t.phd,
+        "prefer-not-say": t.preferNotSay,
+      },
+      employment: {
+        employed: t.employed,
+        "self-employed": t.selfEmployed,
+        student: t.student,
+        unemployed: t.unemployed,
+        retired: t.retired,
+        "prefer-not-say": t.preferNotSay,
+      },
+      incomeRange: {
+        "under-5000": t.under5000,
+        "5000-10000": t.fiveToTenThousand,
+        "10000-20000": t.tenToTwentyThousand,
+        "20000-35000": t.twentyToThirtyFiveThousand,
+        "35000-50000": t.thirtyFiveToFiftyThousand,
+        "50000-75000": t.fiftyToSeventyFiveThousand,
+        "over-75000": t.overSeventyFiveThousand,
+        "prefer-not-say": t.preferNotSay,
+      },
+      age: {
+        "18-25": t.eighteenToTwentyFive,
+        "26-30": t.twentySixToThirty,
+        "31-35": t.thirtyOneToThirtyFive,
+        "36-40": t.thirtySixToForty,
+        "41-45": t.fortyOneToFortyFive,
+        "46-50": t.fortySixToFifty,
+        "over-50": t.overFifty,
+      },
+      socialStanding: {
+        lower: t.lower,
+        middle: t.middle,
+        "upper-middle": t.upperMiddle,
+        upper: t.upper,
+        "prefer-not-say": t.preferNotSay,
+      },
+      childrenCount: {
+        "0": t.zero,
+        "1": t.one,
+        "2": t.two,
+        "3": t.three,
+        "4": t.four,
+        "5+": t.fivePlus,
+      },
+      virginityStatus: {
+        virgin: t.virgin,
+        "not-virgin": t.notVirgin,
+        "prefer-not-say": t.preferNotSay,
+      },
+    };
+    
+    return optionMap[key]?.[value] || value;
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Cultural Group Selection */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <Users className="text-warm-orange mr-3" />
-            Bride's Cultural Heritage
-          </h2>
-          <FormField
-            control={form.control}
-            name="culturalGroup"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-700 font-medium">
-                  Cultural Group <span className="text-red-500">*</span>
-                </FormLabel>
-                <Select onValueChange={(value) => {
-                  field.onChange(value);
-                  onCulturalGroupChange?.(value);
-                }} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                      <SelectValue placeholder="Select your cultural group" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="zulu">Zulu</SelectItem>
-                    <SelectItem value="xhosa">Xhosa</SelectItem>
-                    <SelectItem value="pedi">Pedi (Northern Sotho)</SelectItem>
-                    <SelectItem value="tswana">Tswana</SelectItem>
-                    <SelectItem value="sotho">Sotho</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-gray-500">Different cultural groups have varying traditions and customs</p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+    <div className="space-y-6">
+      {/* Main Form Grid - 2 Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Column 1: Main Form Inputs */}
+        <div className="space-y-6">
+          {/* Cultural Heritage Card */}
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.bridesCulturalHeritage}</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.culturalGroup}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("culturalGroup")}
+                  onChange={(e) => {
+                    form.setValue("culturalGroup", e.target.value);
+                    onCulturalGroupChange(e.target.value);
+                  }}
+                >
+                  <option value="">{t.selectCulturalGroup}</option>
+                  {culturalGroups.map(group => (
+                    <option key={group} value={group}>
+                      {group.charAt(0).toUpperCase() + group.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                {form.formState.errors.culturalGroup && (
+                  <p className="text-red-500 text-sm mt-1">{form.formState.errors.culturalGroup.message}</p>
+                )}
+              </div>
+              <p className="text-sm text-gray-600">
+                {t.culturalGroupsDescription}
+              </p>
+            </div>
+          </div>
 
-        {/* Education & Career */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <GraduationCap className="text-warm-orange mr-3" />
-            Bride's Education & Career
-          </h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="education"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
-                    Education Level <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                        <SelectValue placeholder="Select education level" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="no-matric">No Matric</SelectItem>
-                      <SelectItem value="matric">Matric</SelectItem>
-                      <SelectItem value="diploma">Diploma</SelectItem>
-                      <SelectItem value="degree">Bachelor's Degree</SelectItem>
-                      <SelectItem value="honours">Honours</SelectItem>
-                      <SelectItem value="masters">Master's Degree</SelectItem>
-                      <SelectItem value="phd">PhD/Doctorate</SelectItem>
-                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="employment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
-                    Employment Status <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                        <SelectValue placeholder="Select employment status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="employed">Employed</SelectItem>
-                      <SelectItem value="self-employed">Self-employed</SelectItem>
-                      <SelectItem value="unemployed">Unemployed</SelectItem>
-                      <SelectItem value="retired">Retired</SelectItem>
-                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          {/* Education & Career Card */}
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
+                <GraduationCap className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.bridesEducationCareer}</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.educationLevel}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("education")}
+                >
+                  <option value="">{t.selectEducationLevel}</option>
+                  {educationLevels.map(level => (
+                    <option key={level} value={level}>
+                      {getOptionText('education', level)}
+                    </option>
+                  ))}
+                </select>
+                {form.formState.errors.education && (
+                  <p className="text-red-500 text-sm mt-1">{form.formState.errors.education.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.employmentStatus}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("employment")}
+                >
+                  <option value="">{t.selectEmploymentStatus}</option>
+                  {employmentOptions.map(status => (
+                    <option key={status} value={status}>
+                      {getOptionText('employment', status)}
+                    </option>
+                  ))}
+                </select>
+                {form.formState.errors.employment && (
+                  <p className="text-red-500 text-sm mt-1">{form.formState.errors.employment.message}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Bride Info Card */}
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.additionalBrideInfo}</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.bridesAge}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("age")}
+                >
+                  <option value="">{t.selectAgeRange}</option>
+                  {ageRanges.map(age => (
+                    <option key={age} value={age}>
+                      {getOptionText('age', age)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.familySocialStanding}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("socialStanding")}
+                >
+                  <option value="">{t.selectSocialStanding}</option>
+                  {socialStandings.map(standing => (
+                    <option key={standing} value={standing}>
+                      {getOptionText('socialStanding', standing)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.numberOfChildren}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("childrenCount")}
+                >
+                  <option value="">{t.selectChildrenCount}</option>
+                  {childrenCounts.map(count => (
+                    <option key={count} value={count}>
+                      {getOptionText('childrenCount', count)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.virginityStatus}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("virginityStatus")}
+                >
+                  <option value="">{t.selectVirginityStatus}</option>
+                  {virginityStatuses.map(status => (
+                    <option key={status} value={status}>
+                      {getOptionText('virginityStatus', status)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Family & Location Card */}
+          <div className="bg-white shadow-lg rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Home className="w-5 h-5" />
+              <h3 className="text-lg font-semibold">{t.bridesFamilyLocation}</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.familyType}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("familyType")}
+                >
+                  <option value="">{t.selectFamilyType}</option>
+                  {familyTypes.map(type => (
+                    <option key={type} value={type}>
+                      {getOptionText('familyType', type)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.locationType}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("locationType")}
+                >
+                  <option value="">{t.selectLocationType}</option>
+                  {locationTypes.map(type => (
+                    <option key={type} value={type}>
+                      {getOptionText('locationType', type)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Income Information Card */}
+          <div className="bg-white shadow-lg rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Calculator className="w-5 h-5" />
+              <h3 className="text-lg font-semibold">{t.groomsIncomeInfo}</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.monthlyIncomeRange}</label>
+                <select 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...form.register("incomeRange")}
+                >
+                  <option value="">{t.selectIncomeRange}</option>
+                  {incomeRanges.map(range => (
+                    <option key={range} value={range}>
+                      {getOptionText('incomeRange', range)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <p className="text-sm text-gray-600">
+                {t.incomeInfoDescription}
+              </p>
+
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <button 
+                  type="submit" 
+                  disabled={mutation.isPending}
+                  className="w-full text-lg py-6 bg-gradient-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white rounded-2xl font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
+                >
+                  <Calculator className="w-6 h-6" />
+                  {mutation.isPending ? t.calculating : t.calculateLobolaPrice}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
-        {/* Additional Bride Information */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <User className="text-warm-orange mr-3" />
-            Additional Bride Information
-          </h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="age"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
-                    Bride's Age <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                        <SelectValue placeholder="Select age range" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="18-22">18-22 years</SelectItem>
-                      <SelectItem value="23-27">23-27 years</SelectItem>
-                      <SelectItem value="28-32">28-32 years</SelectItem>
-                      <SelectItem value="33-37">33-37 years</SelectItem>
-                      <SelectItem value="38-plus">38+ years</SelectItem>
-                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="socialStanding"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
-                    Bride's Family Social Standing <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                        <SelectValue placeholder="Select social standing" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="working-class">Working Class</SelectItem>
-                      <SelectItem value="middle-class">Middle Class</SelectItem>
-                      <SelectItem value="upper-middle-class">Upper Middle Class</SelectItem>
-                      <SelectItem value="prominent-family">Prominent Family</SelectItem>
-                      <SelectItem value="traditional-leaders">Traditional Leaders</SelectItem>
-                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {/* Column 2: AI Chat Interface and Guidance */}
+        <div className="space-y-6">
+          {/* Uncle Wisdom Chat Interface */}
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl">
+                <span role="img" aria-label="wise elder" className="text-2xl">👴🏿</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">Ask Uncle Wisdom</h3>
+            </div>
+            <div className="space-y-4">
+              <div className="text-center p-4 border rounded-lg bg-secondary">
+                <p className="text-sm text-gray-600 mt-2">
+                  <strong>Ask a question about lobola traditions</strong>
+                </p>
+                <div className="mt-1">
+                  <span className="inline-block px-2 py-1 text-xs font-bold text-white bg-gradient-to-r from-green-500 to-orange-500 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200">
+                    AI-Powered
+                  </span>
+                </div>
 
-            <FormField
-              control={form.control}
-              name="numberOfChildren"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-medium">
-                    Number of Children <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                        <SelectValue placeholder="Select number of children" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      <SelectItem value="one">1 child</SelectItem>
-                      <SelectItem value="two">2 children</SelectItem>
-                      <SelectItem value="three">3 children</SelectItem>
-                      <SelectItem value="four-plus">4+ children</SelectItem>
-                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
+              </div>
+              <textarea 
+                placeholder="Ask Uncle Wisdom anything about lobola traditions..."
+                value={uncleWisdomQuestion}
+                onChange={(e) => setUncleWisdomQuestion(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[120px] resize-none"
+                disabled={uncleWisdomLoading}
+              />
+              <button 
+                onClick={askUncleWisdom}
+                disabled={uncleWisdomLoading || !uncleWisdomQuestion.trim()}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {uncleWisdomLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Thinking...
+                  </>
+                ) : (
+                  'Ask Uncle Wisdom'
+                )}
+              </button>
+              
+              {(askedQuestion || uncleWisdomAnswer) && (
+                <div className="mt-4 p-4 border rounded-lg space-y-4">
+                  {askedQuestion && (
+                    <div>
+                      <p className="font-semibold text-sm text-gray-600">Your Question:</p>
+                      <p className="text-gray-800">{askedQuestion}</p>
+                    </div>
+                  )}
+                  {uncleWisdomAnswer && (
+                    <div>
+                      <p className="font-semibold text-sm text-gray-600 flex items-center gap-2">
+                        <span role="img" aria-label="wise elder">👴🏿</span> Uncle Wisdom's Answer:
+                      </p>
+                      <p className="text-gray-800">{uncleWisdomAnswer}</p>
+                    </div>
+                  )}
+                </div>
               )}
-            />
+              
 
-            <FormField
-              control={form.control}
-              name="virginityStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Virginity Status (Optional)</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                        <SelectValue placeholder="Select status (optional)" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
-                      <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-gray-500 mt-1">This is optional and based on personal choice</p>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            </div>
+          </div>
+
+
+
+          {/* Guidance for Non-Black Partners */}
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl">
+                <Info className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.guidanceForNonBlackPartners}</h3>
+            </div>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                {t.guidanceIntro}
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Approach with deep respect and humility for African traditions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Engage a cultural mediator or elder who can guide you through the process</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Learn about the specific cultural group's traditions and customs</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Understand that lobola is not a purchase but a bridge between families</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Be prepared for extended family involvement in the negotiation process</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Show genuine interest in learning and embracing the culture</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Consider learning basic phrases in the relevant African language</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">•</span>
+                  <span>Respect that some families may have higher expectations due to cultural differences</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Learn More Section */}
+          <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 border border-white/20 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
+                <span className="text-white font-bold">📚</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">{t.learnMore}</h3>
+            </div>
+            <div className="space-y-3">
+              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                <h4 className="font-medium">{t.understandingLobolaTraditions}</h4>
+                <p className="text-sm text-gray-600">{t.understandingLobolaTraditionsDesc}</p>
+              </div>
+              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                <h4 className="font-medium">{t.modernConsiderations}</h4>
+                <p className="text-sm text-gray-600">{t.modernConsiderationsDesc}</p>
+              </div>
+              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                <h4 className="font-medium">{t.familyMediationResources}</h4>
+                <p className="text-sm text-gray-600">{t.familyMediationResourcesDesc}</p>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Bride's Family & Location */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <Home className="text-warm-orange mr-3" />
-            Bride's Family & Location
-          </h2>
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="familyType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="mb-3 text-gray-700 font-medium">
-                    Family Type <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="grid grid-cols-2 gap-3"
-                    >
-                      <div className="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-cream transition-colors">
-                        <RadioGroupItem value="nuclear" id="nuclear" className="text-warm-orange" />
-                        <label htmlFor="nuclear" className="text-sm cursor-pointer">Nuclear Family</label>
-                      </div>
-                      <div className="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-cream transition-colors">
-                        <RadioGroupItem value="extended" id="extended" className="text-warm-orange" />
-                        <label htmlFor="extended" className="text-sm cursor-pointer">Extended Family</label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="mb-3 text-gray-700 font-medium">
-                    Location Type <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="grid grid-cols-2 gap-3"
-                    >
-                      <div className="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-cream transition-colors">
-                        <RadioGroupItem value="rural" id="rural" className="text-warm-orange" />
-                        <label htmlFor="rural" className="text-sm cursor-pointer">Rural</label>
-                      </div>
-                      <div className="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-cream transition-colors">
-                        <RadioGroupItem value="township" id="township" className="text-warm-orange" />
-                        <label htmlFor="township" className="text-sm cursor-pointer">Township</label>
-                      </div>
-                      <div className="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-cream transition-colors">
-                        <RadioGroupItem value="suburb" id="suburb" className="text-warm-orange" />
-                        <label htmlFor="suburb" className="text-sm cursor-pointer">Suburb</label>
-                      </div>
-                      <div className="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-cream transition-colors">
-                        <RadioGroupItem value="city" id="city" className="text-warm-orange" />
-                        <label htmlFor="city" className="text-sm cursor-pointer">City Center</label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Income Range */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <Coins className="text-warm-orange mr-3" />
-            Groom's Income Information
-          </h2>
-          <FormField
-            control={form.control}
-            name="income"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Monthly Income Range (Optional)</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="focus:ring-2 focus:ring-warm-orange focus:border-transparent">
-                      <SelectValue placeholder="Select income range" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="under-5000">Under R5,000</SelectItem>
-                    <SelectItem value="5000-10000">R5,000 - R10,000</SelectItem>
-                    <SelectItem value="10000-20000">R10,000 - R20,000</SelectItem>
-                    <SelectItem value="20000-35000">R20,000 - R35,000</SelectItem>
-                    <SelectItem value="35000-50000">R35,000 - R50,000</SelectItem>
-                    <SelectItem value="50000-plus">R50,000+</SelectItem>
-                    <SelectItem value="prefer-not-say">Prefer not to say</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-gray-500 mt-1">This information helps provide culturally appropriate guidance</p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Calculate Button */}
-        <Button 
-          type="submit" 
-          className="w-full bg-orange-600 hover:bg-orange-700 border-2 border-orange-800 text-white font-semibold py-4 px-6 shadow-lg transition-colors duration-200"
-          disabled={calculateMutation.isPending}
-        >
-          <Calculator className="mr-2 h-4 w-4" />
-          {calculateMutation.isPending ? "Calculating..." : "Calculate Lobola Price"}
-        </Button>
-      </form>
-    </Form>
+      </div>
+    </div>
   );
 }

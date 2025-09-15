@@ -19,7 +19,6 @@ export const simpleTranslations = {
     marketPrice: "Market price:",
     perCow: "per cow",
     culturalInsights: "Cultural Insights",
-    shareResults: "Share Results",
     nonBlackGuidanceTitle: "Guidance for Non-Black Partners",
     nonBlackGuidanceContent: "If you are not of African heritage and are entering a lobola negotiation, here are important considerations:",
     nonBlackTips: [

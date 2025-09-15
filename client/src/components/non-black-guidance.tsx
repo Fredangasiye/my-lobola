@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-import { getSimpleTranslation, type Language } from "@/lib/simple-translations";
+import { getSimpleTranslation, type Language } from "../lib/simple-translations";
 
 interface NonBlackGuidanceProps {
   currentLanguage: Language;

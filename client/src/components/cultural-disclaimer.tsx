@@ -8,8 +8,8 @@ export default function CulturalDisclaimer() {
         <div>
           <h3 className="font-semibold text-gray-800 mb-2">Cultural Sensitivity Notice</h3>
           <p className="text-gray-600 text-sm leading-relaxed">
-            This tool is designed to provide educational guidance about lobola traditions across South African cultures. 
-            It should not replace family discussions or cultural elders' advice. Every family and situation is unique, 
+            This tool is designed to provide educational guidance about lobola traditions across South African cultures.
+            It should not replace family discussions or cultural elders' advice. Every family and situation is unique,
             and this calculator serves as a starting point for respectful dialogue.
           </p>
         </div>
