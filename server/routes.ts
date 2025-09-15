@@ -48,7 +48,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Proxy to OpenRouter for Uncle Wisdom AI
   app.post("/api/uncle-wisdom/ask", async (req, res) => {
     try {
-      const { prompt, model = "openrouter/auto" } = req.body ?? {};
+      const { prompt, model } = req.body ?? {};
       if (!prompt || typeof prompt !== "string") {
         return res.status(400).json({ message: "Missing prompt" });
       }
@@ -56,6 +56,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!apiKey) {
         return res.status(500).json({ message: "Server not configured for OpenRouter" });
       }
+      const selectedModel = (typeof model === "string" && model) || process.env.OPENROUTER_MODEL || "openrouter/auto";
 
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -66,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           "X-Title": process.env.OPENROUTER_APP_NAME || "My Lobola",
         },
         body: JSON.stringify({
-          model,
+          model: selectedModel,
           messages: [
             { role: "system", content: "You are Uncle Wisdom, a culturally-sensitive assistant for Lobola advice. Keep responses concise, respectful, and avoid legal/financial guarantees." },
             { role: "user", content: prompt },

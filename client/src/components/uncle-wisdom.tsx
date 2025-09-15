@@ -202,7 +202,7 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
       const res = await fetch("/api/uncle-wisdom/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, model: "openrouter/auto" }),
+        body: JSON.stringify({ prompt }),
       });
       const data = await res.json();
       setAiAnswer(data?.content || "");
