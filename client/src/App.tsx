@@ -2,6 +2,7 @@ import { createClient, type Session, type SupabaseClient } from '@supabase/supab
 import { createContext, useContext, useEffect, useState } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Router, Route, Switch } from 'wouter'
+import { Analytics } from '@vercel/analytics/react'
 import AppLayout from './pages/app-layout'
 import AuthPage from './pages/AuthPage'
 import AuthCallback from './pages/auth-callback'
@@ -76,6 +77,7 @@ function App() {
               <Route component={NotFound} />
             </Switch>
           </Router>
+          <Analytics />
         </QueryClientProvider>
       </TranslationProvider>
     </ErrorBoundary>
