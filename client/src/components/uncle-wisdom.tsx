@@ -204,10 +204,10 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
       const prompt = cleanQuestion.length > 0
         ? cleanQuestion
         : `Provide culturally respectful lobola guidance for group: ${culturalGroup || "general"}.`;
-      const res = await fetch("/api/uncle-wisdom/ask", {
+      const res = await fetch("/api/uncle-wisdom-openrouter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ question: prompt, culturalGroup }),
       });
       const data = await res.json();
       setAiAnswer(data?.content || "");
