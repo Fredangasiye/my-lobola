@@ -210,7 +210,7 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
         body: JSON.stringify({ question: prompt, culturalGroup }),
       });
       const data = await res.json();
-      setAiAnswer(data?.content || "");
+      setAiAnswer(data?.answer || "");
     } catch (e) {
       setAiAnswer("Sorry, I couldn't fetch Uncle Wisdom right now.");
     } finally {
