@@ -279,25 +279,44 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
 
   if (!showWisdom) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-forest-green">
-        <div className="flex items-center justify-between">
+      <Card className="bg-white shadow-lg border-l-4 border-forest-green">
+        <CardHeader className="pb-4">
           <div className="flex items-center space-x-3">
-            <div className="bg-forest-green/10 p-3 rounded-full">
-              <MessageCircle className="text-forest-green w-6 h-6" />
+            <div className="bg-forest-green/10 p-2 rounded-full">
+              <MessageCircle className="text-forest-green w-5 h-5" />
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-800">Uncle Wisdom Mode</h3>
-              <p className="text-sm text-gray-600">Get traditional advice and cultural insights</p>
+            <CardTitle className="text-lg font-semibold text-gray-800">👴🏿 Ask Uncle Wisdom</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-4 rounded-lg border bg-gray-50">
+            <p className="text-gray-700 mb-4">Ask Uncle Wisdom anything about lobola, marriage traditions, or cultural guidance.</p>
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="Ask Uncle Wisdom a question..."
+                value={userQuestion}
+                onChange={(e) => setUserQuestion(e.target.value)}
+                className="flex-1"
+                onKeyPress={(e) => e.key === 'Enter' && askUncleAI()}
+              />
+              <Button onClick={askUncleAI} className="bg-forest-green text-white" disabled={aiLoading || !userQuestion.trim()}>
+                {aiLoading ? "Asking..." : "Ask"}
+              </Button>
             </div>
           </div>
-          <Button 
-            onClick={() => setShowWisdom(true)}
-            className="bg-forest-green hover:bg-forest-green/90 text-white"
-          >
-            Get Wisdom
-          </Button>
-        </div>
-      </div>
+          {aiAnswer && (
+            <div className="p-4 rounded-lg border bg-white">
+              <h4 className="font-semibold text-gray-800 mb-2">👴🏿 Uncle Wisdom's Answer:</h4>
+              <p className="text-gray-700 whitespace-pre-wrap">{aiAnswer}</p>
+              <div className="mt-3 flex gap-2">
+                <Button onClick={() => { setAiAnswer(null); setUserQuestion(""); }} variant="outline" size="sm">
+                  Ask Another Question
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     );
   }
 
