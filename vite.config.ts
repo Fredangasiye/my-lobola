@@ -22,9 +22,17 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     cssCodeSplit: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       output: {
         sourcemap: false,
+        manualChunks: undefined,
       },
     },
   },
@@ -33,5 +41,8 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+  },
+  define: {
+    'process.env.NODE_ENV': '"production"',
   },
 });

@@ -1,5 +1,3 @@
-node_modules
-.git
-.env.local
-*.log
-dist-old
+*.map
+sourcemaps/
+.map
