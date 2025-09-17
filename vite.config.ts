@@ -21,6 +21,12 @@ export default defineConfig({
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
     sourcemap: false,
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        sourcemap: false,
+      },
+    },
   },
   server: {
     fs: {
