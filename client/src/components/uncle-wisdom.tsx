@@ -413,4 +413,4 @@ export default function UncleWisdom({ culturalGroup = "", currentLanguage = "en"
       </CardContent>
     </Card>
   );
-}
+}// Force fresh deployment Wed Sep 17 20:24:10 SAST 2025
