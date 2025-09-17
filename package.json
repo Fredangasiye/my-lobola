@@ -4,13 +4,13 @@
   "type": "module",
   "license": "MIT",
   "engines": {
-    "node": "22.x"
+    "node": "18.x"
   },
   "scripts": {
     "dev": "concurrently --kill-others \"npm:dev:api\" \"npm:dev:client\"",
     "dev:client": "dotenv -e .env -- vite",
     "dev:api": "nodemon",
-    "build": "ROLLUP_NO_NATIVE=true vite build --config vite.config.ts --mode production && find dist -name '*.map' -delete 2>/dev/null || true",
+    "build": "ROLLUP_NO_NATIVE=true vite build --config vite.config.ts --mode production",
     "start": "NODE_ENV=production node server.js",
     "check": "tsc",
     "db:push": "drizzle-kit push --config=drizzle.config.ts"
@@ -95,6 +95,7 @@
     "nodemon": "^3.1.4",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
+    "terser": "^5.44.0",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "vite": "^5.3.3"
